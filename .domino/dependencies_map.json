@@ -1,0 +1,27 @@
+{
+    "group0": {
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "pieces": [
+            "AddAdvancedMeteoPiece",
+            "AddSunPiece",
+            "CiselnikyPiece",
+            "ConvertTimePiece",
+            "DayOfTheYearPiece",
+            "FVEPiece",
+            "InferenceModelPiece",
+            "IsDayPiece",
+            "MeteoPiece",
+            "Meteo_FVEPiece",
+            "MinOfTheDayPiece",
+            "RemoveUnusedMeteoPiece",
+            "RenameColumnPiece",
+            "TrainRandomForestRegressorPiece",
+            "TrainTestSplitPiece"
+        ],
+        "secrets": [],
+        "source_image": "ghcr.io/pakoselo/spice_repository_pieces:0.1.0-group0"
+    }
+}

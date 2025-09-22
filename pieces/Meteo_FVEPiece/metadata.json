@@ -1,0 +1,24 @@
+{
+    "name": "Meteo_FVEPiece",
+    "description": "This join the FVE and Meteo Data",
+    "dependency": {
+        "requirements_file": "requirements_0.txt"
+    },
+    "container_resources": {
+        "requests": {
+            "cpu": 100,
+            "memory": 128
+        },
+        "limits": {
+            "cpu": 500,
+            "memory": 512
+        }
+    },
+    "tags": [
+        "SQL join for Meteo and FVE Data piece"
+    ],
+    "style": {
+        "node_label": "Meteo and FVE Data Piece",
+        "icon_class_name": "fa-solid:database"
+    }
+}

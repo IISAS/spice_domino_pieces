@@ -1,0 +1,18 @@
+{
+    "name": "TrainRandomForestRegressorPiece",
+    "description": "Train Random Forest Regressor over the input data",
+    "dependency": {
+        "requirements_file": "requirements_0.txt"
+    },
+    "tags": [
+        "machine learning",
+        "modelling"
+    ],
+    "style": {
+        "node_label": "Train Random Forest Regressor",
+        "node_style": {
+            "backgroundColor": "#b3cde8"
+        },
+        "icon_class_name": "icon-park-outline:split"
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "name": "AddSunPiece",
+    "description": "Add is day probability attribute to joined Meteo and FVE data",
+    "dependency": {
+        "requirements_file": "requirements_0.txt"
+    },
+    "container_resources": {
+        "requests": {
+            "cpu": 100,
+            "memory": 128
+        },
+        "limits": {
+            "cpu": 500,
+            "memory": 512
+        }
+    },
+    "tags": [
+        "Add is day probability attribute column"
+    ],
+    "style": {
+        "node_label": "AddSun Piece",
+        "icon_class_name": "fa-solid:database"
+    }
+}

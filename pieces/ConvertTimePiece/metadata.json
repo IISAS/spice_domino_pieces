@@ -1,0 +1,24 @@
+{
+    "name": "ConvertTimePiece",
+    "description": "Convert joined Meteo and FVE data DateTime column to the format=\"%d.%m.%Y %H:%M\"",
+    "dependency": {
+        "requirements_file": "requirements_0.txt"
+    },
+    "container_resources": {
+        "requests": {
+            "cpu": 100,
+            "memory": 128
+        },
+        "limits": {
+            "cpu": 500,
+            "memory": 512
+        }
+    },
+    "tags": [
+        "Convert DateTime column/attribute"
+    ],
+    "style": {
+        "node_label": "ConvertTime Piece",
+        "icon_class_name": "fa-solid:database"
+    }
+}
