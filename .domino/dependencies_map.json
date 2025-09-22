@@ -5,22 +5,23 @@
             "requirements_file": "requirements_0.txt"
         },
         "pieces": [
-            "AddAdvancedMeteoPiece",
+            "TrainTestSplitPiece",
             "AddSunPiece",
+            "RemoveUnusedMeteoPiece",
             "CiselnikyPiece",
-            "ConvertTimePiece",
-            "DayOfTheYearPiece",
-            "FVEPiece",
+            "TrainRandomForestRegressorPiece",
             "InferenceModelPiece",
             "IsDayPiece",
-            "MeteoPiece",
+            "FVEPiece",
+            "AddAdvancedMeteoPiece",
             "Meteo_FVEPiece",
-            "MinOfTheDayPiece",
-            "RemoveUnusedMeteoPiece",
             "RenameColumnPiece",
-            "TrainRandomForestRegressorPiece",
-            "TrainTestSplitPiece"
+            "DayOfTheYearPiece",
+            "ConvertTimePiece",
+            "MinOfTheDayPiece",
+            "MeteoPiece"
         ],
-        "secrets": []
+        "secrets": [],
+        "source_image": "ghcr.io/iisas/spice_domino_pieces:0.1.0-group0"
     }
 }
