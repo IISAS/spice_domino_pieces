@@ -68,7 +68,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/AddAdvancedMeteoPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/AddAdvancedMeteoPiece"
     },
     "AddSunPiece": {
         "name": "AddSunPiece",
@@ -145,7 +145,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/AddSunPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/AddSunPiece"
     },
     "CiselnikyPiece": {
         "name": "CiselnikyPiece",
@@ -220,7 +220,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/CiselnikyPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/CiselnikyPiece"
     },
     "ConvertTimePiece": {
         "name": "ConvertTimePiece",
@@ -291,7 +291,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/ConvertTimePiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/ConvertTimePiece"
     },
     "DayOfTheYearPiece": {
         "name": "DayOfTheYearPiece",
@@ -362,7 +362,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/DayOfTheYearPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/DayOfTheYearPiece"
     },
     "FVEPiece": {
         "name": "FVEPiece",
@@ -437,7 +437,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/FVEPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/FVEPiece"
     },
     "InferenceModelPiece": {
         "name": "InferenceModelPiece",
@@ -511,7 +511,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/InferenceModelPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/InferenceModelPiece"
     },
     "IsDayPiece": {
         "name": "IsDayPiece",
@@ -582,7 +582,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/IsDayPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/IsDayPiece"
     },
     "MeteoPiece": {
         "name": "MeteoPiece",
@@ -659,7 +659,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/MeteoPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/MeteoPiece"
     },
     "Meteo_FVEPiece": {
         "name": "Meteo_FVEPiece",
@@ -736,7 +736,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/Meteo_FVEPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/Meteo_FVEPiece"
     },
     "MinOfTheDayPiece": {
         "name": "MinOfTheDayPiece",
@@ -807,7 +807,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/MinOfTheDayPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/MinOfTheDayPiece"
     },
     "RemoveUnusedMeteoPiece": {
         "name": "RemoveUnusedMeteoPiece",
@@ -878,7 +878,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/RemoveUnusedMeteoPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/RemoveUnusedMeteoPiece"
     },
     "RenameColumnPiece": {
         "name": "RenameColumnPiece",
@@ -961,7 +961,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/RenameColumnPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/RenameColumnPiece"
     },
     "TrainRandomForestRegressorPiece": {
         "name": "TrainRandomForestRegressorPiece",
@@ -1114,7 +1114,7 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/TrainRandomForestRegressorPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/TrainRandomForestRegressorPiece"
     },
     "TrainTestSplitPiece": {
         "name": "TrainTestSplitPiece",
@@ -1200,6 +1200,6 @@
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/TrainTestSplitPiece"
+        "source_url": "https://github.com/iisas/spice_domino_pieces/tree/main/pieces/TrainTestSplitPiece"
     }
 }
