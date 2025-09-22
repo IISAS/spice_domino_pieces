@@ -5,7 +5,7 @@ REGISTRY_NAME = "iisas"
 
 # The name of this Pieces repository
 REPOSITORY_NAME = "spice_domino_pieces"
-REPOSITORY_LABEL = "SPICE Domino Pieces for SEPS usecase"
+REPOSITORY_LABEL = "SPICE Domino Pieces for  SEPS usecase"
 
 # The version of this Pieces release
 # Attention: changing this will create a new release
