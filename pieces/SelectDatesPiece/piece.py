@@ -8,7 +8,7 @@ class SelectDatesPiece(BasePiece):
 
     def piece_function(self, input_data: InputModel):
 
-        df_data = pd.read_csv(input_data.fve_input_file,  parse_dates=['DateTime'])
+        df_data = pd.read_csv(input_data.fve_input_file, parse_dates=['DateTime'])
 
         df_sel_data = (df_data['DateTime'] > input_data.date_start) & (df_data['DateTime'] <= input_data.date_end)
 
