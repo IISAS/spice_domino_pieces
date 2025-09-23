@@ -12,8 +12,8 @@ class SelectDatesPiece(BasePiece):
 
         df_sel_data = (df_data['DateTime'] > input_data.date_start) & (df_data['DateTime'] <= input_data.date_end)
 
-        message = f"FVE data successfully filtered by dates"
-        file_path = str(Path(self.results_path) / "FVE_filtered.csv")
+        message = f"Data successfully filtered by start and end dates"
+        file_path = str(Path(self.results_path) / "data_filtered.csv")
         df_sel_data.to_csv(file_path, index=False)
 
         # Set display result
