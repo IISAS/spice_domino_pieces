@@ -1,0 +1,25 @@
+{
+    "name": "SelectDatesPiece",
+    "description": "Select dates from FVE data",
+    "dependency": {
+        "requirements_file": "requirements_0.txt"
+    },
+    "container_resources": {
+        "requests": {
+            "cpu": 100,
+            "memory": 128
+        },
+        "limits": {
+            "cpu": 500,
+            "memory": 512
+        }
+    },
+    "tags": [
+        "SQL",
+        "data processing"
+    ],
+    "style": {
+        "node_label": "SelectDates Piece",
+        "icon_class_name": "fa-solid:database"
+    }
+}
