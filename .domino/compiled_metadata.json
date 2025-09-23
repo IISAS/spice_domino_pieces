@@ -1054,6 +1054,92 @@
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/ConvertTimePiece"
     },
+    "SelectDatesPiece": {
+        "name": "SelectDatesPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "SQL",
+            "data processing"
+        ],
+        "style": {
+            "node_label": "SelectDates Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Select dates from FVE data",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "SelectDates Piece Input Model",
+            "properties": {
+                "fve_input_file": {
+                    "description": "The path to the joined Meteo and FVE data",
+                    "title": "FVE data",
+                    "type": "string"
+                },
+                "date_start": {
+                    "description": "Start date for FVE data",
+                    "format": "date",
+                    "title": "Start date",
+                    "type": "string"
+                },
+                "date_end": {
+                    "description": "End date for FVE data",
+                    "format": "date",
+                    "title": "End date",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "fve_input_file",
+                "date_start",
+                "date_end"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "SelectDates Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the filtered FVE data by the entered dates",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/SelectDatesPiece"
+    },
     "MinOfTheDayPiece": {
         "name": "MinOfTheDayPiece",
         "dependency": {
