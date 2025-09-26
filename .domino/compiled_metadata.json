@@ -85,6 +85,756 @@
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/TrainTestSplitPiece"
     },
+    "MinOfTheDayPiece": {
+        "name": "MinOfTheDayPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "Add min of the day column"
+        ],
+        "style": {
+            "node_label": "MinOfTheDay Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Add day of the year column to joined Meteo and FVE data",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "MinOfTheDay Piece Input Model",
+            "properties": {
+                "meteo_fve_input_file": {
+                    "description": "The path to the joined Meteo and FVE data",
+                    "title": "Meteo and FVE data",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "meteo_fve_input_file"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "MinOfTheDay Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the Meteo and FVE data with added min of the day column",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/MinOfTheDayPiece"
+    },
+    "DayOfTheYearPiece": {
+        "name": "DayOfTheYearPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "Add day of the year column"
+        ],
+        "style": {
+            "node_label": "DayOfTheYear Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Add day of the year column to joined Meteo and FVE data",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "DayOfTheYear Piece Input Model",
+            "properties": {
+                "meteo_fve_input_file": {
+                    "description": "The path to the joined Meteo and FVE data",
+                    "title": "Meteo and FVE data",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "meteo_fve_input_file"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "DayOfTheYear Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the Meteo and FVE data with added day of the year column",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/DayOfTheYearPiece"
+    },
+    "IsDayPiece": {
+        "name": "IsDayPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "Add is day column"
+        ],
+        "style": {
+            "node_label": "IsDay Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Add is day column to joined Meteo and FVE data",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "IsDay Piece Input Model",
+            "properties": {
+                "meteo_fve_input_file": {
+                    "description": "The path to the joined Meteo and FVE data",
+                    "title": "Meteo and FVE data",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "meteo_fve_input_file"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "IsDay Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the Meteo and FVE data with added is day column",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/IsDayPiece"
+    },
+    "MeteoPiece": {
+        "name": "MeteoPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "Meteo Data piece"
+        ],
+        "style": {
+            "node_label": "Meteo Data Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "This loads the Meteo Data and filter them by the location from Ciselniky Data",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "Meteo Piece Input Model",
+            "properties": {
+                "meteo_input_file": {
+                    "default": "/home/shared_storage/meteo_2021+2022upr.csv",
+                    "description": "The path to the Meteo Data",
+                    "title": "Meteo data",
+                    "type": "string"
+                },
+                "ciselniky_input_file": {
+                    "description": "Output from Ciselniky Data piece",
+                    "title": "Filtered Ciselniky data",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ciselniky_input_file"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "Meteo Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the filtered Meteo file by the specified Ciselniky Data",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/MeteoPiece"
+    },
+    "InferenceModelPiece": {
+        "name": "InferenceModelPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "modeling",
+            "machine_learning"
+        ],
+        "style": {
+            "node_label": "Inference Model Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#38b2be"
+            },
+            "useIcon": true,
+            "icon_class_name": "carbon:machine-learning-model",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Load a trained model and use it to make predictions on new data.",
+        "input_schema": {
+            "description": "InferenceModel Piece Input Model",
+            "properties": {
+                "test_data_path": {
+                    "description": "Data path to inference on.",
+                    "title": "Data path",
+                    "type": "string"
+                },
+                "trained_model_path": {
+                    "description": "Path to the model to use for inference.",
+                    "title": "Model path",
+                    "type": "string"
+                },
+                "target_column": {
+                    "default": "FVE",
+                    "description": "The name of the target column.",
+                    "title": "Target column",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "test_data_path",
+                "trained_model_path"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "InferenceModel Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "data_path": {
+                    "description": "The path to the predicted values.",
+                    "title": "Data Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "data_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/InferenceModelPiece"
+    },
+    "FVEPiece": {
+        "name": "FVEPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "FVE Data piece"
+        ],
+        "style": {
+            "node_label": "FVE Data Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "This loads the FVE Data and filter them by the location",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "FVE Piece Input Model",
+            "properties": {
+                "fve_input_file": {
+                    "default": "/home/shared_storage/FVE_2021+2022upr.csv",
+                    "description": "The path to the FVE Data",
+                    "title": "FVE input data",
+                    "type": "string"
+                },
+                "location": {
+                    "default": "Loc01",
+                    "description": "Location to filter the FVE Data",
+                    "title": "Choose the location",
+                    "type": "string"
+                }
+            },
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "FVE Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the filtered FVE file by the specified Location",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/FVEPiece"
+    },
+    "RenameColumnPiece": {
+        "name": "RenameColumnPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "Rename selected column"
+        ],
+        "style": {
+            "node_label": "RenameColumn Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Rename selected column in joined Meteo and FVE data",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "RenameColumn Piece Input Model",
+            "properties": {
+                "meteo_fve_input_file": {
+                    "description": "The path to the joined Meteo and FVE data",
+                    "title": "Meteo and FVE data",
+                    "type": "string"
+                },
+                "original_column_name": {
+                    "default": "Loc01",
+                    "description": "The name of original column",
+                    "title": "Original column name",
+                    "type": "string"
+                },
+                "new_column_name": {
+                    "default": "FVE",
+                    "description": "The name of the renamed column",
+                    "title": "New column name",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "meteo_fve_input_file"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "RenameColumn Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the Meteo and FVE data with renamed column",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/RenameColumnPiece"
+    },
+    "ConvertTimePiece": {
+        "name": "ConvertTimePiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "Convert DateTime column/attribute"
+        ],
+        "style": {
+            "node_label": "ConvertTime Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Convert joined Meteo and FVE data DateTime column to the format=\"%d.%m.%Y %H:%M\"",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "ConvertTime Piece Input Model",
+            "properties": {
+                "meteo_fve_input_file": {
+                    "description": "The path to the joined Meteo and FVE data",
+                    "title": "Meteo and FVE data",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "meteo_fve_input_file"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "ConvertTime Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the Meteo and FVE data with changed DateTime format",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/ConvertTimePiece"
+    },
+    "SelectDatesPiece": {
+        "name": "SelectDatesPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "SQL",
+            "data processing"
+        ],
+        "style": {
+            "node_label": "SelectDates Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Select dates from FVE data",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "SelectDates Piece Input Model",
+            "properties": {
+                "fve_input_file": {
+                    "description": "The path to the joined Meteo and FVE data",
+                    "title": "FVE data",
+                    "type": "string"
+                },
+                "date_start": {
+                    "description": "Start date for FVE data",
+                    "format": "date-time",
+                    "title": "Start date",
+                    "type": "string"
+                },
+                "date_end": {
+                    "description": "End date for FVE data",
+                    "format": "date-time",
+                    "title": "End date",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "fve_input_file",
+                "date_start",
+                "date_end"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "SelectDates Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the filtered FVE data by the entered dates",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/SelectDatesPiece"
+    },
+    "RemoveUnusedMeteoPiece": {
+        "name": "RemoveUnusedMeteoPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "Remove unused meteo columns"
+        ],
+        "style": {
+            "node_label": "RemoveUnusedMeteo Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Remove unused meteo columns to joined Meteo and FVE data",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "RemoveUnusedMeteo Piece Input Model",
+            "properties": {
+                "meteo_fve_input_file": {
+                    "description": "The path to the joined Meteo and FVE data",
+                    "title": "Meteo and FVE data",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "meteo_fve_input_file"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "RemoveUnusedMeteo Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the Meteo and FVE data with added advanced meteo columns",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/RemoveUnusedMeteoPiece"
+    },
     "AddSunPiece": {
         "name": "AddSunPiece",
         "dependency": {
@@ -162,77 +912,6 @@
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/AddSunPiece"
     },
-    "RemoveUnusedMeteoPiece": {
-        "name": "RemoveUnusedMeteoPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "Remove unused meteo columns"
-        ],
-        "style": {
-            "node_label": "RemoveUnusedMeteo Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:database",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Remove unused meteo columns to joined Meteo and FVE data",
-        "container_resources": {
-            "requests": {
-                "cpu": 100,
-                "memory": 128
-            },
-            "limits": {
-                "cpu": 500,
-                "memory": 512
-            }
-        },
-        "input_schema": {
-            "description": "RemoveUnusedMeteo Piece Input Model",
-            "properties": {
-                "meteo_fve_input_file": {
-                    "description": "The path to the joined Meteo and FVE data",
-                    "title": "Meteo and FVE data",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "meteo_fve_input_file"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "RemoveUnusedMeteo Piece Output Model",
-            "properties": {
-                "message": {
-                    "default": "",
-                    "description": "Output message to log",
-                    "title": "Message",
-                    "type": "string"
-                },
-                "file_path": {
-                    "description": "The path to the Meteo and FVE data with added advanced meteo columns",
-                    "title": "File Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/RemoveUnusedMeteoPiece"
-    },
     "CiselnikyPiece": {
         "name": "CiselnikyPiece",
         "dependency": {
@@ -307,6 +986,77 @@
         },
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/CiselnikyPiece"
+    },
+    "AddAdvancedMeteoPiece": {
+        "name": "AddAdvancedMeteoPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "Add advanced meteo columns"
+        ],
+        "style": {
+            "node_label": "AddAdvancedMeteo Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Add advanced meteo columns to joined Meteo and FVE data",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "AddAdvancedMeteo Piece Input Model",
+            "properties": {
+                "meteo_fve_input_file": {
+                    "description": "The path to the joined Meteo and FVE data",
+                    "title": "Meteo and FVE data",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "meteo_fve_input_file"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "AddAdvancedMeteo Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the Meteo and FVE data with added advanced meteo columns",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/AddAdvancedMeteoPiece"
     },
     "TrainRandomForestRegressorPiece": {
         "name": "TrainRandomForestRegressorPiece",
@@ -461,297 +1211,6 @@
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/TrainRandomForestRegressorPiece"
     },
-    "InferenceModelPiece": {
-        "name": "InferenceModelPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "modeling",
-            "machine_learning"
-        ],
-        "style": {
-            "node_label": "Inference Model Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#38b2be"
-            },
-            "useIcon": true,
-            "icon_class_name": "carbon:machine-learning-model",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Load a trained model and use it to make predictions on new data.",
-        "input_schema": {
-            "description": "InferenceModel Piece Input Model",
-            "properties": {
-                "test_data_path": {
-                    "description": "Data path to inference on.",
-                    "title": "Data path",
-                    "type": "string"
-                },
-                "trained_model_path": {
-                    "description": "Path to the model to use for inference.",
-                    "title": "Model path",
-                    "type": "string"
-                },
-                "target_column": {
-                    "default": "FVE",
-                    "description": "The name of the target column.",
-                    "title": "Target column",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "test_data_path",
-                "trained_model_path"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "InferenceModel Piece Output Model",
-            "properties": {
-                "message": {
-                    "default": "",
-                    "description": "Output message to log",
-                    "title": "Message",
-                    "type": "string"
-                },
-                "data_path": {
-                    "description": "The path to the predicted values.",
-                    "title": "Data Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "data_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/InferenceModelPiece"
-    },
-    "IsDayPiece": {
-        "name": "IsDayPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "Add is day column"
-        ],
-        "style": {
-            "node_label": "IsDay Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:database",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Add is day column to joined Meteo and FVE data",
-        "container_resources": {
-            "requests": {
-                "cpu": 100,
-                "memory": 128
-            },
-            "limits": {
-                "cpu": 500,
-                "memory": 512
-            }
-        },
-        "input_schema": {
-            "description": "IsDay Piece Input Model",
-            "properties": {
-                "meteo_fve_input_file": {
-                    "description": "The path to the joined Meteo and FVE data",
-                    "title": "Meteo and FVE data",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "meteo_fve_input_file"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "IsDay Piece Output Model",
-            "properties": {
-                "message": {
-                    "default": "",
-                    "description": "Output message to log",
-                    "title": "Message",
-                    "type": "string"
-                },
-                "file_path": {
-                    "description": "The path to the Meteo and FVE data with added is day column",
-                    "title": "File Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/IsDayPiece"
-    },
-    "FVEPiece": {
-        "name": "FVEPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "FVE Data piece"
-        ],
-        "style": {
-            "node_label": "FVE Data Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:database",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "This loads the FVE Data and filter them by the location",
-        "container_resources": {
-            "requests": {
-                "cpu": 100,
-                "memory": 128
-            },
-            "limits": {
-                "cpu": 500,
-                "memory": 512
-            }
-        },
-        "input_schema": {
-            "description": "FVE Piece Input Model",
-            "properties": {
-                "fve_input_file": {
-                    "default": "/home/shared_storage/FVE_2021+2022upr.csv",
-                    "description": "The path to the FVE Data",
-                    "title": "FVE input data",
-                    "type": "string"
-                },
-                "location": {
-                    "default": "Loc01",
-                    "description": "Location to filter the FVE Data",
-                    "title": "Choose the location",
-                    "type": "string"
-                }
-            },
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "FVE Piece Output Model",
-            "properties": {
-                "message": {
-                    "default": "",
-                    "description": "Output message to log",
-                    "title": "Message",
-                    "type": "string"
-                },
-                "file_path": {
-                    "description": "The path to the filtered FVE file by the specified Location",
-                    "title": "File Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/FVEPiece"
-    },
-    "AddAdvancedMeteoPiece": {
-        "name": "AddAdvancedMeteoPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "Add advanced meteo columns"
-        ],
-        "style": {
-            "node_label": "AddAdvancedMeteo Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:database",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Add advanced meteo columns to joined Meteo and FVE data",
-        "container_resources": {
-            "requests": {
-                "cpu": 100,
-                "memory": 128
-            },
-            "limits": {
-                "cpu": 500,
-                "memory": 512
-            }
-        },
-        "input_schema": {
-            "description": "AddAdvancedMeteo Piece Input Model",
-            "properties": {
-                "meteo_fve_input_file": {
-                    "description": "The path to the joined Meteo and FVE data",
-                    "title": "Meteo and FVE data",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "meteo_fve_input_file"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "AddAdvancedMeteo Piece Output Model",
-            "properties": {
-                "message": {
-                    "default": "",
-                    "description": "Output message to log",
-                    "title": "Message",
-                    "type": "string"
-                },
-                "file_path": {
-                    "description": "The path to the Meteo and FVE data with added advanced meteo columns",
-                    "title": "File Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/AddAdvancedMeteoPiece"
-    },
     "Meteo_FVEPiece": {
         "name": "Meteo_FVEPiece",
         "dependency": {
@@ -828,464 +1287,5 @@
         },
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/Meteo_FVEPiece"
-    },
-    "RenameColumnPiece": {
-        "name": "RenameColumnPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "Rename selected column"
-        ],
-        "style": {
-            "node_label": "RenameColumn Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:database",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Rename selected column in joined Meteo and FVE data",
-        "container_resources": {
-            "requests": {
-                "cpu": 100,
-                "memory": 128
-            },
-            "limits": {
-                "cpu": 500,
-                "memory": 512
-            }
-        },
-        "input_schema": {
-            "description": "RenameColumn Piece Input Model",
-            "properties": {
-                "meteo_fve_input_file": {
-                    "description": "The path to the joined Meteo and FVE data",
-                    "title": "Meteo and FVE data",
-                    "type": "string"
-                },
-                "original_column_name": {
-                    "default": "Loc01",
-                    "description": "The name of original column",
-                    "title": "Original column name",
-                    "type": "string"
-                },
-                "new_column_name": {
-                    "default": "FVE",
-                    "description": "The name of the renamed column",
-                    "title": "New column name",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "meteo_fve_input_file"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "RenameColumn Piece Output Model",
-            "properties": {
-                "message": {
-                    "default": "",
-                    "description": "Output message to log",
-                    "title": "Message",
-                    "type": "string"
-                },
-                "file_path": {
-                    "description": "The path to the Meteo and FVE data with renamed column",
-                    "title": "File Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/RenameColumnPiece"
-    },
-    "DayOfTheYearPiece": {
-        "name": "DayOfTheYearPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "Add day of the year column"
-        ],
-        "style": {
-            "node_label": "DayOfTheYear Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:database",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Add day of the year column to joined Meteo and FVE data",
-        "container_resources": {
-            "requests": {
-                "cpu": 100,
-                "memory": 128
-            },
-            "limits": {
-                "cpu": 500,
-                "memory": 512
-            }
-        },
-        "input_schema": {
-            "description": "DayOfTheYear Piece Input Model",
-            "properties": {
-                "meteo_fve_input_file": {
-                    "description": "The path to the joined Meteo and FVE data",
-                    "title": "Meteo and FVE data",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "meteo_fve_input_file"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "DayOfTheYear Piece Output Model",
-            "properties": {
-                "message": {
-                    "default": "",
-                    "description": "Output message to log",
-                    "title": "Message",
-                    "type": "string"
-                },
-                "file_path": {
-                    "description": "The path to the Meteo and FVE data with added day of the year column",
-                    "title": "File Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/DayOfTheYearPiece"
-    },
-    "ConvertTimePiece": {
-        "name": "ConvertTimePiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "Convert DateTime column/attribute"
-        ],
-        "style": {
-            "node_label": "ConvertTime Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:database",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Convert joined Meteo and FVE data DateTime column to the format=\"%d.%m.%Y %H:%M\"",
-        "container_resources": {
-            "requests": {
-                "cpu": 100,
-                "memory": 128
-            },
-            "limits": {
-                "cpu": 500,
-                "memory": 512
-            }
-        },
-        "input_schema": {
-            "description": "ConvertTime Piece Input Model",
-            "properties": {
-                "meteo_fve_input_file": {
-                    "description": "The path to the joined Meteo and FVE data",
-                    "title": "Meteo and FVE data",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "meteo_fve_input_file"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "ConvertTime Piece Output Model",
-            "properties": {
-                "message": {
-                    "default": "",
-                    "description": "Output message to log",
-                    "title": "Message",
-                    "type": "string"
-                },
-                "file_path": {
-                    "description": "The path to the Meteo and FVE data with changed DateTime format",
-                    "title": "File Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/ConvertTimePiece"
-    },
-    "SelectDatesPiece": {
-        "name": "SelectDatesPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "SQL",
-            "data processing"
-        ],
-        "style": {
-            "node_label": "SelectDates Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:database",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Select dates from FVE data",
-        "container_resources": {
-            "requests": {
-                "cpu": 100,
-                "memory": 128
-            },
-            "limits": {
-                "cpu": 500,
-                "memory": 512
-            }
-        },
-        "input_schema": {
-            "description": "SelectDates Piece Input Model",
-            "properties": {
-                "fve_input_file": {
-                    "description": "The path to the joined Meteo and FVE data",
-                    "title": "FVE data",
-                    "type": "string"
-                },
-                "date_start": {
-                    "description": "Start date for FVE data",
-                    "format": "date",
-                    "title": "Start date",
-                    "type": "string"
-                },
-                "date_end": {
-                    "description": "End date for FVE data",
-                    "format": "date",
-                    "title": "End date",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "fve_input_file",
-                "date_start",
-                "date_end"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "SelectDates Piece Output Model",
-            "properties": {
-                "message": {
-                    "default": "",
-                    "description": "Output message to log",
-                    "title": "Message",
-                    "type": "string"
-                },
-                "file_path": {
-                    "description": "The path to the filtered FVE data by the entered dates",
-                    "title": "File Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/SelectDatesPiece"
-    },
-    "MinOfTheDayPiece": {
-        "name": "MinOfTheDayPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "Add min of the day column"
-        ],
-        "style": {
-            "node_label": "MinOfTheDay Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:database",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Add day of the year column to joined Meteo and FVE data",
-        "container_resources": {
-            "requests": {
-                "cpu": 100,
-                "memory": 128
-            },
-            "limits": {
-                "cpu": 500,
-                "memory": 512
-            }
-        },
-        "input_schema": {
-            "description": "MinOfTheDay Piece Input Model",
-            "properties": {
-                "meteo_fve_input_file": {
-                    "description": "The path to the joined Meteo and FVE data",
-                    "title": "Meteo and FVE data",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "meteo_fve_input_file"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "MinOfTheDay Piece Output Model",
-            "properties": {
-                "message": {
-                    "default": "",
-                    "description": "Output message to log",
-                    "title": "Message",
-                    "type": "string"
-                },
-                "file_path": {
-                    "description": "The path to the Meteo and FVE data with added min of the day column",
-                    "title": "File Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/MinOfTheDayPiece"
-    },
-    "MeteoPiece": {
-        "name": "MeteoPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "Meteo Data piece"
-        ],
-        "style": {
-            "node_label": "Meteo Data Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:database",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "This loads the Meteo Data and filter them by the location from Ciselniky Data",
-        "container_resources": {
-            "requests": {
-                "cpu": 100,
-                "memory": 128
-            },
-            "limits": {
-                "cpu": 500,
-                "memory": 512
-            }
-        },
-        "input_schema": {
-            "description": "Meteo Piece Input Model",
-            "properties": {
-                "meteo_input_file": {
-                    "default": "/home/shared_storage/meteo_2021+2022upr.csv",
-                    "description": "The path to the Meteo Data",
-                    "title": "Meteo data",
-                    "type": "string"
-                },
-                "ciselniky_input_file": {
-                    "description": "Output from Ciselniky Data piece",
-                    "title": "Filtered Ciselniky data",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "ciselniky_input_file"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "Meteo Piece Output Model",
-            "properties": {
-                "message": {
-                    "default": "",
-                    "description": "Output message to log",
-                    "title": "Message",
-                    "type": "string"
-                },
-                "file_path": {
-                    "description": "The path to the filtered Meteo file by the specified Ciselniky Data",
-                    "title": "File Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/MeteoPiece"
     }
 }
