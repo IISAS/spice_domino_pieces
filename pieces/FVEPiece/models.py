@@ -8,13 +8,13 @@ class InputModel(BaseModel):
 
     fve_input_file: str = Field(
         title="FVE input data",
-        default='/home/shared_storage/FVE_2021+2022upr.csv',
+        # default='/home/shared_storage/FVE_2021+2022upr.csv',
         description="The path to the FVE Data",
     )
 
     location: str = Field(
         title="Choose the location",
-        default='Loc01',
+        # default='Loc01',
         description="Location to filter the FVE Data",
     )
 

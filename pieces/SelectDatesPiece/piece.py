@@ -12,7 +12,7 @@ class SelectDatesPiece(BasePiece):
         # self.logger.info("MY LOG", df_data.iloc[0]['DateTime'], input_data.date_start, input_data.date_end)
         # print("MY LOG", df_data.iloc[0]['DateTime'], pd.to_datetime(input_data.date_start), pd.to_datetime(input_data.date_end))
 
-        mask = (df_data['DateTime'] >= pd.to_datetime(input_data.date_start)) & (df_data['DateTime'] <= pd.to_datetime(input_data.date_end))
+        mask = (df_data['DateTime'] >= pd.to_datetime(input_data.date_start)) & (df_data['DateTime'] < pd.to_datetime(input_data.date_end))
 
         df_sel_data = df_data.loc[mask]
 

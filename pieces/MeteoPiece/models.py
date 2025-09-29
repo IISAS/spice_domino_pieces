@@ -8,7 +8,7 @@ class InputModel(BaseModel):
 
     meteo_input_file: str = Field(
         title='Meteo data',
-        default='/home/shared_storage/meteo_2021+2022upr.csv',
+        # default='/home/shared_storage/meteo_2021+2022upr.csv',
         description="The path to the Meteo Data",
     )
 

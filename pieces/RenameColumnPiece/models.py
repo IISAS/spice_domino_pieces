@@ -14,7 +14,7 @@ class InputModel(BaseModel):
 
     original_column_name: str = Field(
         title="Original column name",
-        default="Loc01",
+        # default="Loc01",
         description="The name of original column"
     )
 

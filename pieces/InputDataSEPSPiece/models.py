@@ -26,21 +26,19 @@ class InputModel(BaseModel):
     )
 
     ciselniky_input_file: str = Field(
-        title="Filtered Ciselniky data",
-        description="Output from Ciselniky Data piece",
-        # json_schema_extra={"from_upstream": "always"}
+        title="Ciselniky input data",
+        default='/home/shared_storage/lokality_FVE_ciselnik.csv',
+        description="The path to the Ciselniky Data",
     )
 
     date_start: date = Field(
         title="Start date",
         description="Start date for FVE data",
-        # json_schema_extra={"from_upstream": "always"}
     )
 
     date_end: date = Field(
         title="End date",
         description="End date for FVE data",
-        # json_schema_extra={"from_upstream": "always"}
     )
 
 
