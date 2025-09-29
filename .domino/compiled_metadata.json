@@ -334,7 +334,6 @@
             "description": "Meteo Piece Input Model",
             "properties": {
                 "meteo_input_file": {
-                    "default": "/home/shared_storage/meteo_2021+2022upr.csv",
                     "description": "The path to the Meteo Data",
                     "title": "Meteo data",
                     "type": "string"
@@ -346,6 +345,7 @@
                 }
             },
             "required": [
+                "meteo_input_file",
                 "ciselniky_input_file"
             ],
             "title": "InputModel",
@@ -485,18 +485,20 @@
             "description": "FVE Piece Input Model",
             "properties": {
                 "fve_input_file": {
-                    "default": "/home/shared_storage/FVE_2021+2022upr.csv",
                     "description": "The path to the FVE Data",
                     "title": "FVE input data",
                     "type": "string"
                 },
                 "location": {
-                    "default": "Loc01",
                     "description": "Location to filter the FVE Data",
                     "title": "Choose the location",
                     "type": "string"
                 }
             },
+            "required": [
+                "fve_input_file",
+                "location"
+            ],
             "title": "InputModel",
             "type": "object"
         },
@@ -565,7 +567,6 @@
                     "type": "string"
                 },
                 "original_column_name": {
-                    "default": "Loc01",
                     "description": "The name of original column",
                     "title": "Original column name",
                     "type": "string"
@@ -578,7 +579,8 @@
                 }
             },
             "required": [
-                "meteo_fve_input_file"
+                "meteo_fve_input_file",
+                "original_column_name"
             ],
             "title": "InputModel",
             "type": "object"
@@ -818,8 +820,9 @@
                     "type": "string"
                 },
                 "ciselniky_input_file": {
-                    "description": "Output from Ciselniky Data piece",
-                    "title": "Filtered Ciselniky data",
+                    "default": "/home/shared_storage/lokality_FVE_ciselnik.csv",
+                    "description": "The path to the Ciselniky Data",
+                    "title": "Ciselniky input data",
                     "type": "string"
                 },
                 "date_start": {
@@ -836,7 +839,6 @@
                 }
             },
             "required": [
-                "ciselniky_input_file",
                 "date_start",
                 "date_end"
             ],
@@ -1077,18 +1079,20 @@
             "description": "Ciselniky Piece Input Model",
             "properties": {
                 "ciselniky_input_file": {
-                    "default": "/home/shared_storage/lokality_FVE_ciselnik.csv",
                     "description": "The path to the Ciselniky Data",
                     "title": "Ciselniky input data",
                     "type": "string"
                 },
                 "location": {
-                    "default": "Loc01",
                     "description": "Location to filter the Ciselniky Data",
                     "title": "Choose the location",
                     "type": "string"
                 }
             },
+            "required": [
+                "ciselniky_input_file",
+                "location"
+            ],
             "title": "InputModel",
             "type": "object"
         },
