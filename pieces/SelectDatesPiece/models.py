@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from datetime import datetime
+from datetime import date
 
 
 class InputModel(BaseModel):
@@ -13,13 +13,13 @@ class InputModel(BaseModel):
         # json_schema_extra={"from_upstream": "always"}
     )
 
-    date_start: datetime = Field(
+    date_start: date = Field(
         title="Start date",
         description="Start date for FVE data",
         # json_schema_extra={"from_upstream": "always"}
     )
 
-    date_end: datetime = Field(
+    date_end: date = Field(
         title="End date",
         description="End date for FVE data",
         # json_schema_extra={"from_upstream": "always"}
