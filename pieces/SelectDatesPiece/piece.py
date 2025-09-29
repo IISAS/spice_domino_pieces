@@ -2,14 +2,16 @@ from domino.base_piece import BasePiece
 from .models import InputModel, OutputModel
 import pandas as pd
 from pathlib import Path
-from datetime import date, timezone
+from datetime import datetime
 
 
 class SelectDatesPiece(BasePiece):
 
     def piece_function(self, input_data: InputModel):
 
-        df_data = pd.read_csv(input_data.fve_input_file, parse_dates=['DateTime'])
+        dateparse = lambda x: datetime.strptime(x, '%dd.%mm.%yyyy %hh:%mm')
+
+        df_data = pd.read_csv(input_data.fve_input_file, parse_dates=['DateTime'], date_parser=dateparse)
         self.logger.info("MY LOG", df_data.iloc[0]['DateTime'], input_data.date_start, input_data.date_end)
         print("MY LOG", df_data.iloc[0]['DateTime'], input_data.date_start, input_data.date_end)
 
