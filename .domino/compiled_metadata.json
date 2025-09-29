@@ -721,13 +721,13 @@
                 },
                 "date_start": {
                     "description": "Start date for FVE data",
-                    "format": "date-time",
+                    "format": "date",
                     "title": "Start date",
                     "type": "string"
                 },
                 "date_end": {
                     "description": "End date for FVE data",
-                    "format": "date-time",
+                    "format": "date",
                     "title": "End date",
                     "type": "string"
                 }
