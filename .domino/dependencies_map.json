@@ -15,6 +15,7 @@
             "RenameColumnPiece",
             "ConvertTimePiece",
             "SelectDatesPiece",
+            "InputDataSEPSPiece",
             "RemoveUnusedMeteoPiece",
             "AddSunPiece",
             "CiselnikyPiece",

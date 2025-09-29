@@ -764,6 +764,135 @@
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/SelectDatesPiece"
     },
+    "InputDataSEPSPiece": {
+        "name": "InputDataSEPSPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "input data"
+        ],
+        "style": {
+            "node_label": "InputDataSEPS Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Input data for the SEPS usecase",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "InputDataSEPS Piece Input Model",
+            "properties": {
+                "fve_input_file": {
+                    "default": "/home/shared_storage/FVE_2021+2022upr.csv",
+                    "description": "The path to the FVE Data",
+                    "title": "FVE input data",
+                    "type": "string"
+                },
+                "location": {
+                    "default": "Loc01",
+                    "description": "Location to filter the FVE Data",
+                    "title": "Choose the location",
+                    "type": "string"
+                },
+                "meteo_input_file": {
+                    "default": "/home/shared_storage/meteo_2021+2022upr.csv",
+                    "description": "The path to the Meteo Data",
+                    "title": "Meteo data",
+                    "type": "string"
+                },
+                "ciselniky_input_file": {
+                    "description": "Output from Ciselniky Data piece",
+                    "title": "Filtered Ciselniky data",
+                    "type": "string"
+                },
+                "date_start": {
+                    "description": "Start date for FVE data",
+                    "format": "date",
+                    "title": "Start date",
+                    "type": "string"
+                },
+                "date_end": {
+                    "description": "End date for FVE data",
+                    "format": "date",
+                    "title": "End date",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ciselniky_input_file",
+                "date_start",
+                "date_end"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "InputDataSEPS Piece Output Model",
+            "properties": {
+                "fve_input_file": {
+                    "description": "The path to the FVE Data",
+                    "title": "Fve Input File",
+                    "type": "string"
+                },
+                "location": {
+                    "description": "Location to filter the FVE Data",
+                    "title": "Location",
+                    "type": "string"
+                },
+                "meteo_input_file": {
+                    "description": "The path to the Meteo Data",
+                    "title": "Meteo Input File",
+                    "type": "string"
+                },
+                "ciselniky_input_file": {
+                    "description": "Output from Ciselniky Data piece",
+                    "title": "Ciselniky Input File",
+                    "type": "string"
+                },
+                "date_start": {
+                    "description": "Start date for FVE data",
+                    "format": "date",
+                    "title": "Date Start",
+                    "type": "string"
+                },
+                "date_end": {
+                    "description": "End date for FVE data",
+                    "format": "date",
+                    "title": "Date End",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "fve_input_file",
+                "location",
+                "meteo_input_file",
+                "ciselniky_input_file",
+                "date_start",
+                "date_end"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/InputDataSEPSPiece"
+    },
     "RemoveUnusedMeteoPiece": {
         "name": "RemoveUnusedMeteoPiece",
         "dependency": {
