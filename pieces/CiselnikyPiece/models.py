@@ -11,6 +11,7 @@ class InputModel(BaseModel):
         default='/home/shared_storage/lokality_FVE_ciselnik.csv',
         description="The path to the Ciselniky Data",
     )
+
     location: str = Field(
         title="Choose the location",
         default='Loc01',

@@ -11,6 +11,7 @@ class InputModel(BaseModel):
         default='/home/shared_storage/FVE_2021+2022upr.csv',
         description="The path to the FVE Data",
     )
+
     location: str = Field(
         title="Choose the location",
         default='Loc01',
