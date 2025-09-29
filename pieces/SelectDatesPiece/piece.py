@@ -12,7 +12,7 @@ class SelectDatesPiece(BasePiece):
         self.logger.info("MY LOG", df_data.iloc[0]['DateTime'], input_data.date_start, input_data.date_end)
         print("MY LOG", df_data.iloc[0]['DateTime'], input_data.date_start, input_data.date_end)
 
-        df_sel_data = (df_data['DateTime'] > input_data.date_start) & (df_data['DateTime'] <= input_data.date_end)
+        df_sel_data = (df_data['DateTime'] > pd.to_datetime(input_data.date_start)) & (df_data['DateTime'] <= pd.to_datetime(input_data.date_end))
 
         message = f"Data successfully filtered by start and end dates"
         file_path = str(Path(self.results_path) / "data_filtered.csv")
