@@ -1,2 +1,2 @@
 # SPICE Pieces repository
-Pieces used and velepod for the SPICE project
+Pieces used and developed for the SPICE project
