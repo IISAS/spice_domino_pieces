@@ -1,7 +1,7 @@
 FROM ghcr.io/tauffer-consulting/domino-base-piece:latest
 # Install specific requirements to run ShellExecute Piece
-RUN apt-get update
-RUN apt install iputils-ping
+# RUN apt-get update
+# RUN apt install iputils-ping
 
 # Need to copy pieces source code
 COPY config.toml domino/pieces_repository/
