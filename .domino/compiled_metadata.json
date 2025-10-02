@@ -526,6 +526,78 @@
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/FVEPiece"
     },
+    "ExecuteShellPiece": {
+        "name": "ExecuteShellPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "shell",
+            "command"
+        ],
+        "style": {
+            "node_label": "ExecuteShell Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "This loads the FVE Data and filter them by the location",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "ExecuteShell Piece Input Model",
+            "properties": {
+                "fve_input_file": {
+                    "description": "The path to the Input Data",
+                    "title": "Input data",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "fve_input_file"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "ExecuteShell Piece Output Model",
+            "properties": {
+                "message": {
+                    "default": "",
+                    "description": "Output message to log",
+                    "title": "Message",
+                    "type": "string"
+                },
+                "file_path": {
+                    "description": "The path to the Output Data",
+                    "title": "File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/ExecuteShellPiece"
+    },
     "RenameColumnPiece": {
         "name": "RenameColumnPiece",
         "dependency": {
@@ -864,7 +936,7 @@
                     "type": "string"
                 },
                 "ciselniky_input_file": {
-                    "description": "Output from Ciselniky Data piece",
+                    "description": "The path to the Ciselniky Data",
                     "title": "Ciselniky Input File",
                     "type": "string"
                 },
