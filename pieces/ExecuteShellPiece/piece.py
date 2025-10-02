@@ -29,7 +29,7 @@ class ExecuteShellPiece(BasePiece):
                     print(output.strip())
                 break
 
-        message = f"FVE filtered for location: {input_data.location} executed successfully"
+        message = f"Netstat executed successfully"
         file_path = str(Path(self.results_path) / "output.txt")
         with open(file_path, "a") as f:
             f.write(all_output)
