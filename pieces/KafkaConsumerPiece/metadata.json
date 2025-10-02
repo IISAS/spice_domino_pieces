@@ -1,0 +1,26 @@
+{
+    "name": "KafkaConsumerPiece",
+    "description": "Consumer for Kafka to read streaming data",
+    "dependency": {
+        "requirements_file": "requirements_0.txt"
+    },
+    "container_resources": {
+        "requests": {
+            "cpu": 100,
+            "memory": 128
+        },
+        "limits": {
+            "cpu": 500,
+            "memory": 512
+        }
+    },
+    "tags": [
+        "Kafka",
+        "consumer",
+        "stream"
+    ],
+    "style": {
+        "node_label": "Kafka Consumer Piece",
+        "icon_class_name": "fa-duotone fa-solid fa-right-to-bracket"
+    }
+}
