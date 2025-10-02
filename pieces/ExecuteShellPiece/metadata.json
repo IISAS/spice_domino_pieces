@@ -1,0 +1,25 @@
+{
+    "name": "ExecuteShellPiece",
+    "description": "This loads the FVE Data and filter them by the location",
+    "dependency": {
+        "dockerfile": "Dockerfile_1"
+    },
+    "container_resources": {
+        "requests": {
+            "cpu": 100,
+            "memory": 128
+        },
+        "limits": {
+            "cpu": 500,
+            "memory": 512
+        }
+    },
+    "tags": [
+        "shell",
+        "command"
+    ],
+    "style": {
+        "node_label": "ExecuteShell Piece",
+        "icon_class_name": "fa-solid:database"
+    }
+}

@@ -59,7 +59,7 @@ class OutputModel(BaseModel):
     )
 
     ciselniky_input_file: str = Field(
-        description="Output from Ciselniky Data piece",
+        description="The path to the Ciselniky Data",
     )
 
     date_start: date = Field(
