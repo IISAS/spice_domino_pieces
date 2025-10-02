@@ -2,7 +2,7 @@
     "name": "ExecuteShellPiece",
     "description": "This loads the FVE Data and filter them by the location",
     "dependency": {
-        "requirements_file": "requirements_0.txt"
+        "dockerfile": "Dockerfile_1"
     },
     "container_resources": {
         "requests": {
