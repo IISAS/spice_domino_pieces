@@ -8,7 +8,7 @@ class ExecuteShellPiece(BasePiece):
 
     def piece_function(self, input_data: InputModel):
 
-        process = subprocess.Popen(['/usr/sbin/ping', '-c 4', 'python.org'],
+        process = subprocess.Popen(['/usr/bin/ping', '-c 4', 'python.org'],
                                    stdout=subprocess.PIPE,
                                    universal_newlines=True)
 
