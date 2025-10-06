@@ -339,8 +339,8 @@
                     "type": "string"
                 },
                 "ciselniky_input_file": {
-                    "description": "Output from Ciselniky Data piece",
-                    "title": "Filtered Ciselniky data",
+                    "description": "The path to the Ciselniky Data",
+                    "title": "Ciselniky data",
                     "type": "string"
                 }
             },
@@ -680,6 +680,162 @@
         },
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/RenameColumnPiece"
+    },
+    "KafkaConsumerPiece": {
+        "name": "KafkaConsumerPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "Kafka",
+            "consumer",
+            "stream"
+        ],
+        "style": {
+            "node_label": "Kafka Consumer Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-duotone fa-solid fa-right-to-bracket",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Consumer for Kafka to read streaming data",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "KafkaConsumer Piece Input Model",
+            "properties": {
+                "topics": {
+                    "default": [
+                        "default-topic"
+                    ],
+                    "description": "Topic name",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "topic name",
+                    "type": "array"
+                },
+                "bootstrap_servers": {
+                    "default": "localhost:9093",
+                    "description": "The Kafka broker address",
+                    "title": "Bootstrap Servers",
+                    "type": "string"
+                },
+                "security_protocol": {
+                    "default": "SSL",
+                    "description": "Security protocol",
+                    "title": "Security Protocol",
+                    "type": "string"
+                },
+                "group_id": {
+                    "default": "default-group",
+                    "description": "Kafka consumer group",
+                    "title": "Group Id",
+                    "type": "string"
+                },
+                "auto_offset_reset": {
+                    "default": "earliest",
+                    "description": "Kafka consumer auto reset offset",
+                    "enum": [
+                        "smallest",
+                        "earliest",
+                        "beginning",
+                        "largest",
+                        "latest",
+                        "end",
+                        "error"
+                    ],
+                    "title": "Auto Offset Reset",
+                    "type": "string"
+                },
+                "message_polling_timeout": {
+                    "default": 5.0,
+                    "description": "Timeout in seconds for polling messages.",
+                    "title": "Message Polling Timeout",
+                    "type": "number"
+                },
+                "no_message_timeout": {
+                    "default": 10.0,
+                    "description": "Timeout in seconds to stop polling if there are no messages arriving.",
+                    "title": "No Message Timeout",
+                    "type": "number"
+                },
+                "output_format": {
+                    "default": "message",
+                    "description": "Output format",
+                    "enum": [
+                        "message",
+                        "message_value_decoded"
+                    ],
+                    "title": "Output Format",
+                    "type": "string"
+                }
+            },
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "KafkaConsumer Piece Output Model",
+            "properties": {
+                "messages_file_path": {
+                    "description": "File with consumed messages.",
+                    "title": "Messages File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "messages_file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": {
+            "properties": {
+                "KAFKA_CA_CERT_PEM": {
+                    "description": "CA certificate in PEM format",
+                    "format": "password",
+                    "title": "Kafka Ca Cert Pem",
+                    "type": "string",
+                    "writeOnly": true
+                },
+                "KAFKA_CERT_PEM": {
+                    "description": "Client's certificate in PEM format",
+                    "format": "password",
+                    "title": "Kafka Cert Pem",
+                    "type": "string",
+                    "writeOnly": true
+                },
+                "KAFKA_KEY_PEM": {
+                    "description": "Client's private key in PEM format",
+                    "format": "password",
+                    "title": "Kafka Key Pem",
+                    "type": "string",
+                    "writeOnly": true
+                }
+            },
+            "required": [
+                "KAFKA_CA_CERT_PEM",
+                "KAFKA_CERT_PEM",
+                "KAFKA_KEY_PEM"
+            ],
+            "title": "SecretsModel",
+            "type": "object"
+        },
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/KafkaConsumerPiece"
     },
     "ConvertTimePiece": {
         "name": "ConvertTimePiece",
