@@ -34,8 +34,8 @@ def run_piece(
 
 def test_kafka_consumer_piece():
     piece_kwargs = {
-        "topics": ['test-topic1', 'test-topic2'],
-        "bootstrap_servers": 'kafka-broker-1.stevo.fedcloud.eu:9093',
+        "topics": ['test-topic1'],
+        "bootstrap_servers": 'spice-kafka-broker-1.stevo.fedcloud.eu:9093',
         "group_id": "test-group",
         "security_protocol": "SSL",
     }

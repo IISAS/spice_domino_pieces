@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field, SecretStr
 _DEFAULT_MESSAGE_POLLING_TIMEOUT = 5.0
 _DEFAULT_NO_MESSAGE_TIMEOUT = 10.0
 
+
 class SecretsModel(BaseModel):
     KAFKA_CA_CERT_PEM: SecretStr = Field(
         description="CA certificate in PEM format",
@@ -57,11 +58,6 @@ class InputModel(BaseModel):
     no_message_timeout: float = Field(
         default=_DEFAULT_NO_MESSAGE_TIMEOUT,
         description="Timeout in seconds to stop polling if there are no messages arriving.",
-    )
-
-    output_format: Literal["message", "message_value_decoded"] = Field(
-        default="message",
-        description="Output format",
     )
 
 

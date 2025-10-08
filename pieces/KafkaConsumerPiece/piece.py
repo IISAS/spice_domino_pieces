@@ -1,4 +1,4 @@
-import pickle as pk
+import json
 import time
 from pathlib import Path
 
@@ -39,8 +39,8 @@ class KafkaConsumerPiece(BasePiece):
             input_data.no_message_timeout = _DEFAULT_NO_MESSAGE_TIMEOUT
 
         conf = {
-            'debug': 'security,conf',
-            'log_level': 7,
+            # 'debug': 'security,broker,conf',
+            # 'log_level': 7,
             'auto.offset.reset': input_data.auto_offset_reset,
             'bootstrap.servers': input_data.bootstrap_servers,
             'group.id': input_data.group_id,
@@ -54,14 +54,9 @@ class KafkaConsumerPiece(BasePiece):
         c = Consumer(conf)
         c.subscribe(topics=input_data.topics)
 
-        if input_data.output_format == "message":
-            messages_file_path = str(Path(self.results_path) / "messages.pkl")
-            self.logger.info("creating output file for polled messages: {}".format(messages_file_path))
-            fp = open(messages_file_path, "wb")
-        else:
-            messages_file_path = str(Path(self.results_path) / "messages.txt")
-            self.logger.info("creating output file for polled messages: {}".format(messages_file_path))
-            fp = open(messages_file_path, "w", encoding="utf-8")
+        messages_file_path = str(Path(self.results_path) / "messages.jsonl")
+        self.logger.info("creating output file for polled messages: {}".format(messages_file_path))
+        fp = open(messages_file_path, "w", encoding="utf-8")
 
         self.logger.info("Waiting for messages...")
         start_time = time.time()
@@ -80,13 +75,20 @@ class KafkaConsumerPiece(BasePiece):
                     self.logger.error(f"Consumer error: {msg.error()}")
                     break
             else:
-                msg_value_decoded = msg.value().decode("utf-8")
+                msg_value = msg.value()
+                msg_value_decoded = msg_value.decode('utf-8') if msg_value else None
                 self.logger.info(f"Consumed message: {msg_value_decoded} from topic {msg.topic()}")
-                if input_data.output_format == "message":
-                    pk.dump(msg, fp)
-                else:
-                    fp.write(msg_value_decoded)
-            break
+                data = {
+                    'topic': msg.topic(),
+                    'headers': msg.headers(),
+                    'key': msg.key().decode('utf-8') if msg.key() else None,
+                    'latency': msg.latency(),
+                    'leader_epoch': msg.leader_epoch(),
+                    'offset': msg.offset(),
+                    'partition': msg.partition(),
+                    'value': msg_value_decoded
+                }
+                fp.write(json.dumps(data) + '\n')
 
         fp.close()
         c.close()
