@@ -13,8 +13,8 @@ class InputModel(BaseModel):
     )
 
     ciselniky_input_file: str = Field(
-        title="Filtered Ciselniky data",
-        description="Output from Ciselniky Data piece",
+        title="Ciselniky data",
+        description="The path to the Ciselniky Data",
         # json_schema_extra={"from_upstream": "always"}
     )
 

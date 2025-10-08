@@ -13,6 +13,7 @@
             "InferenceModelPiece",
             "FVEPiece",
             "RenameColumnPiece",
+            "KafkaConsumerPiece",
             "ConvertTimePiece",
             "SelectDatesPiece",
             "InputDataSEPSPiece",
@@ -23,7 +24,11 @@
             "TrainRandomForestRegressorPiece",
             "Meteo_FVEPiece"
         ],
-        "secrets": [],
+        "secrets": [
+            "KAFKA_CA_CERT_PEM",
+            "KAFKA_KEY_PEM",
+            "KAFKA_CERT_PEM"
+        ],
         "source_image": "ghcr.io/iisas/spice_domino_pieces:0.2.0-group0"
     },
     "group1": {
