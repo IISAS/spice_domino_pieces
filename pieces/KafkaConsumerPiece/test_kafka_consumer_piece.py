@@ -10,9 +10,9 @@ def run_piece(
     group_id: str,
     security_protocol: str
 ):
-    KAFKA_CA_CERT_PEM = os.environ.get('KAFKA_CA_CERT_PEM').replace("\\n", "\n")
-    KAFKA_CERT_PEM = os.environ.get('KAFKA_CERT_PEM').replace("\\n", "\n")
-    KAFKA_KEY_PEM = os.environ.get('KAFKA_KEY_PEM').replace("\\n", "\n")
+    KAFKA_CA_CERT_PEM = os.environ.get('KAFKA_CA_CERT_PEM', '').replace("\\n", "\n")
+    KAFKA_CERT_PEM = os.environ.get('KAFKA_CERT_PEM', '').replace("\\n", "\n")
+    KAFKA_KEY_PEM = os.environ.get('KAFKA_KEY_PEM', '').replace("\\n", "\n")
 
     return piece_dry_run(
         piece_name="KafkaConsumerPiece",
