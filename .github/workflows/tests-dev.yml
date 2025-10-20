@@ -37,7 +37,7 @@ jobs:
 
       - name: Run organize and build images
         run: |
-          domino pieces organize --build-images --source-url=https://github.com/${{github.repository}} --tag-overwrite=development
+          domino piece-repository organize --build-images --source-url=https://github.com/${{github.repository}} --tag-overwrite=development
 
       - name: Install Tests Dependencies
         run: pip install -r requirements-tests.txt
@@ -57,7 +57,7 @@ jobs:
       - name: Publish images
         env:
           GHCR_USERNAME: ${{ github.actor }}
-        run: domino pieces publish-images --registry-token ${{ secrets.GITHUB_TOKEN }}
+        run: domino piece-repository publish-images --registry-token ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit files
         id: commit_files
@@ -84,5 +84,5 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          domino pieces delete-release --tag-name=development
-          domino pieces release --tag-name=development --commit-sha=$commit_sha
+          domino piece-repository delete-release --tag-name=development
+          domino piece-repository release --tag-name=development --commit-sha=$commit_sha
