@@ -1,0 +1,29 @@
+{
+    "name": "AIKeras1DCNNPiece",
+    "description": "1D CNN model implemented in Keras",
+    "dependency": {
+        "dockerile": "Dockerfile.tensorflow-gpu",
+        "requirements_file": "requirements_0.txt"
+    },
+    "container_resources": {
+        "requests": {
+            "cpu": 100,
+            "memory": 128
+        },
+        "limits": {
+            "cpu": 500,
+            "memory": 512
+        }
+    },
+    "tags": [
+        "AI",
+        "Keras",
+        "Tensorflow",
+        "CNN",
+        "1D"
+    ],
+    "style": {
+        "node_label": "1D CNN Keras Piece",
+        "icon_class_name": "fa-duotone fa-solid fa-right-to-bracket"
+    }
+}
