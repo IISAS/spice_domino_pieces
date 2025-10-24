@@ -79,6 +79,7 @@ class KafkaConsumerPiece(BasePiece):
                 msg_value_decoded = msg_value.decode('utf-8') if msg_value else None
                 self.logger.info(f"Consumed message: {msg_value_decoded} from topic {msg.topic()}")
                 data = {
+                    'timestamp': msg.timestamp(),
                     'topic': msg.topic(),
                     'headers': msg.headers(),
                     'key': msg.key().decode('utf-8') if msg.key() else None,
