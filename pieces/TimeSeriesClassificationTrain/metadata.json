@@ -3,7 +3,7 @@
     "description": "Time series classification model\n\n A 1D CNN model implemented in Keras. For more information see:\nhttps://keras.io/examples/timeseries/timeseries_classification_from_scratch/",
     "dependency": {
         "dockerile": "Dockerfile.tensorflow-gpu",
-        "requirements_file": "requirements_0.txt"
+        "requirements_file": "requirements_tensorflow-gpu.txt"
     },
     "container_resources": {
         "requests": {
