@@ -1,2 +1,0 @@
--r requirements_tensorflow-gpu.txt
-tensorflow[and-cuda]==2.20.0
