@@ -4,7 +4,6 @@ import numpy as np
 from domino.testing import piece_dry_run
 from tensorflow import keras
 from tensorflow.keras.layers import Conv1D
-from tensorflow.python.layers.convolutional import conv1d
 
 
 def run_piece(
