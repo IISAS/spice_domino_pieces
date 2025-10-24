@@ -48,8 +48,11 @@ class InputModel(BaseModel):
 
 class OutputModel(BaseModel):
     """
-    AIKeras1DCNNTrain Piece Output Model
+    TimeSeriesClassificationTrain Piece Output Model
     """
-    model_file_path: str = Field(
-        description="Path to the saved model."
+    best_model_file_path: str = Field(
+        description="Path to the saved best model."
+    )
+    last_model_file_path: str = Field(
+        description="Path to the saved last model."
     )

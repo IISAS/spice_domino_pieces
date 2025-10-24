@@ -39,7 +39,7 @@ def test_AIKeras1DCNNPiece():
     output = run_piece(
         **piece_kwargs
     )
-    m = keras.models.load_model(output['model_file_path'])
+    m = keras.models.load_model(output['best_model_file_path'])
     conv1D_layers = [layer for layer in m.layers if isinstance(layer, Conv1D)]
     assert len(conv1D_layers) == piece_kwargs['num_layers']
     for layer, filters, kernel_size in zip(

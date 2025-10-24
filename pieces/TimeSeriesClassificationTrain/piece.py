@@ -120,9 +120,10 @@ class TimeSeriesClassificationTrain(BasePiece):
             kernel_sizes=input_data.kernel_sizes,
         )
 
+        best_model_file_path = os.path.join(Path(self.results_path), 'best_model.h5')
         callbacks = [
             keras.callbacks.ModelCheckpoint(
-                "best_model.keras", save_best_only=True, monitor="val_loss"
+                best_model_file_path, save_best_only=True, monitor="val_loss"
             ),
             keras.callbacks.ReduceLROnPlateau(
                 monitor="val_loss", factor=0.5, patience=20, min_lr=0.0001
@@ -140,8 +141,8 @@ class TimeSeriesClassificationTrain(BasePiece):
             verbose=1,
         )
 
-        model_file_path = os.path.join(Path(self.results_path), 'model.h5')
-        m.save(model_file_path)
+        last_model_file_path = os.path.join(Path(self.results_path), 'last_model.h5')
+        m.save(last_model_file_path)
 
         metric = "sparse_categorical_accuracy"
         plt.figure()
@@ -164,5 +165,6 @@ class TimeSeriesClassificationTrain(BasePiece):
 
         # Return output
         return OutputModel(
-            model_file_path=model_file_path
+            best_model_file_path=best_model_file_path,
+            last_model_file_path=last_model_file_path,
         )
