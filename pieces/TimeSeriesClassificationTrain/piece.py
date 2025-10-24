@@ -1,3 +1,4 @@
+import logging
 import os
 from pathlib import Path
 
@@ -5,32 +6,43 @@ import matplotlib.pyplot as plt
 import numpy as np
 from domino.base_piece import BasePiece
 from tensorflow import keras
-from tensorflow.keras.layers import BatchNormalization, Conv1D, GlobalAveragePooling1D, Dense, Input
+from tensorflow.keras.layers import BatchNormalization, Conv1D, GlobalAveragePooling1D, Dense, Input, ReLU
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.optimizers import Adam
 
 from .models import InputModel, OutputModel
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,  # Set default level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",  # Log format
+    datefmt="%Y-%m-%d %H:%M:%S",  # Timestamp format
+    handlers=[
+        logging.FileHandler("app.log"),  # Log to file
+        logging.StreamHandler()  # Also log to console
+    ]
+)
 
-class AIKeras1DCNNPiece(BasePiece):
+logger = logging.getLogger(__name__)
+
+
+class TimeSeriesClassificationTrain(BasePiece):
     """
     based on https://keras.io/examples/timeseries/timeseries_classification_from_scratch/
     """
 
     def _readucr(self, filename):
         data = np.loadtxt(filename, delimiter="\t")
-        y = data[:, 0]
         x = data[:, 1:]
+        y = data[:, 0]
         return x, y.astype(int)
 
     def _build_model(
         self,
         input_shape: tuple,
+        num_classes,
         num_layers=3,
-        filters_per_layer=[32, 64, 128],
-        kernels_per_layer=[3, 3, 3],
-        num_classes=10,
-        learning_rate=1e-3,
+        filters_per_layer=[64] * 3,
+        kernel_sizes=[3] * 3,
     ):
         """
         Builds a generic, parameterized 1D CNN model.
@@ -38,16 +50,16 @@ class AIKeras1DCNNPiece(BasePiece):
         Args:
             input_shape (tuple): Shape of input data (timesteps, features).
             num_layers (int): Number of convolutional layers.
-            filters_per_layer (list): Number of filters for each conv layer.
-            kernels_per_layer (list): Kernel size for each conv layer.
             num_classes (int): Number of output classes.
+            filters_per_layer (list): Number of filters for each conv layer.
+            kernel_sizes (list): Kernel size for each conv layer.
 
         Returns:
             keras.Model: Compiled Keras 1D CNN model.
         """
 
         assert len(filters_per_layer) == num_layers, "filters_per_layer length must match num_layers"
-        assert len(kernels_per_layer) == num_layers, "kernels_per_layer length must match num_layers"
+        assert len(kernel_sizes) == num_layers, "kernel_sizes length must match num_layers"
 
         model = Sequential(name="Generic1DCNN")
         model.add(Input(shape=input_shape))
@@ -56,11 +68,12 @@ class AIKeras1DCNNPiece(BasePiece):
         for i in range(num_layers):
             model.add(Conv1D(
                 filters=filters_per_layer[i],
-                kernel_size=kernels_per_layer[i],
+                kernel_size=kernel_sizes[i],
                 padding='same',
                 name=f'conv_{i + 1}'
             ))
             model.add(BatchNormalization(name=f'bn_{i + 1}'))
+            model.add(ReLU(name=f'relu_{i + 1}'))
 
         model.add(GlobalAveragePooling1D())
 
@@ -69,24 +82,42 @@ class AIKeras1DCNNPiece(BasePiece):
 
         # Compile
         model.compile(
-            optimizer=Adam(learning_rate=learning_rate),
+            optimizer='adam',
             loss='sparse_categorical_crossentropy',
-            metrics=['sparse_categorical_accuracy']
+            metrics=['sparse_categorical_accuracy'],
         )
 
         return model
 
     def piece_function(self, input_data: InputModel):
+        logger.debug('piece function')
+
+        # load data
         x_train, y_train = self._readucr(input_data.train_data_path)
+
+        logger.info(f'x_train.shape: {x_train.shape}')
+        logger.info(f'y_train.shape: {y_train.shape}')
+
+        # reshape to multivariate
         x_train = x_train.reshape((x_train.shape[0], x_train.shape[1], 1))
+
+        # infer the number of classes
         num_classes = len(np.unique(y_train))
+
+        # shuffle
+        idx = np.random.permutation(len(x_train))
+        x_train = x_train[idx]
+        y_train = y_train[idx]
+
+        # standardize
+        y_train[y_train == -1] = 0
 
         m = self._build_model(
             input_shape=x_train.shape[1:],
             num_layers=input_data.num_layers,
+            num_classes=num_classes,
             filters_per_layer=input_data.filters_per_layer,
-            kernels_per_layer=input_data.kernels_per_layer,
-            num_classes=num_classes
+            kernel_sizes=input_data.kernel_sizes,
         )
 
         callbacks = [
