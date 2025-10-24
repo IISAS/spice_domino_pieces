@@ -1,7 +1,17 @@
 import os
+from datetime import datetime
+from random import randint
+from time import sleep
 from typing import List
+from unittest.mock import patch
 
 from domino.testing import piece_dry_run
+from mockafka import FakeConsumer, FakeProducer, FakeAdminClientImpl
+from mockafka.admin_client import NewTopic
+
+
+def get_cls_full_name(cls):
+    return cls.__module__ + '.' + cls.__name__
 
 
 def run_piece(
@@ -34,11 +44,43 @@ def run_piece(
 
 def test_kafka_consumer_piece():
     piece_kwargs = {
-        "topics": ['test-topic1'],
+        "topics": ['test-topic1', 'test-topic2'],
         "bootstrap_servers": 'spice-kafka-broker-1.stevo.fedcloud.eu:9093',
         "group_id": "test-group",
         "security_protocol": "SSL",
     }
-    output = run_piece(
-        **piece_kwargs
-    )
+
+    num_partitions = 5
+
+    # Create topics
+    admin = FakeAdminClientImpl()
+    admin.create_topics([
+        NewTopic(topic=topic, num_partitions=num_partitions) for topic in piece_kwargs['topics']
+    ])
+
+    # Produce messages
+    producer = FakeProducer()
+    for i in range(0, 10):
+        topic = piece_kwargs['topics'][randint(0, len(piece_kwargs['topics']) - 1)]
+        key = f'test_key{randint(0, 3)}'
+        value = f'test_value{i}'
+        partition = randint(0, num_partitions - 1)
+        timestamp = int(datetime.now().timestamp() * 1000)
+        producer.produce(
+            topic=topic,
+            key=key,
+            value=value,
+            partition=partition,
+            timestamp=timestamp
+        )
+        sleep(randint(1, 3))
+
+    # Subscribe consumer
+    consumer = FakeConsumer()
+    consumer.subscribe(topics=piece_kwargs['topics'])
+
+    with patch('confluent_kafka.Consumer', new=FakeConsumer):
+        output = run_piece(
+            **piece_kwargs
+        )
+        print(output)
