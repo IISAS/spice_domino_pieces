@@ -2,7 +2,7 @@
     "name": "TimeSeriesClassificationTrain",
     "description": "Piece for training a time series classification model based on a 1D CNN architecture. The model is implemented in Keras. For more information see:\nhttps://keras.io/examples/timeseries/timeseries_classification_from_scratch/",
     "dependency": {
-        "dockerile": "Dockerfile.tensorflow-gpu",
+        "dockefile": "Dockerfile.tensorflow-gpu",
         "requirements_file": "requirements_tensorflow-gpu.txt"
     },
     "container_resources": {
