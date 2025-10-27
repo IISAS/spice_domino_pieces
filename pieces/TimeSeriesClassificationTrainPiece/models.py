@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 class InputModel(BaseModel):
     """
-    AIKeras1DCNNTrain Piece Input Model
+    TimeSeriesClassificationTrainPiece Input Model
     """
 
     train_data_path: str = Field(
@@ -48,7 +48,7 @@ class InputModel(BaseModel):
 
 class OutputModel(BaseModel):
     """
-    TimeSeriesClassificationTrain Piece Output Model
+    TimeSeriesClassificationTrainPiece Output Model
     """
     best_model_file_path: str = Field(
         description="Path to the saved best model."
