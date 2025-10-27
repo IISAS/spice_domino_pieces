@@ -27,7 +27,7 @@ def run_piece(
     )
 
 
-def test_AIKeras1DCNNPiece():
+def test_TimeSeriesClassificationTrainPiece():
     piece_kwargs = {
         'train_data_path': 'https://raw.githubusercontent.com/hfawaz/cd-diagram/master/FordA/FordA_TRAIN.tsv',
         'num_layers': 3,

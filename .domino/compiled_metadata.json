@@ -1433,7 +1433,7 @@
             "time series"
         ],
         "style": {
-            "node_label": "1D CNN Keras Piece",
+            "node_label": "Time Series Classification - 1D CNN (Train)",
             "node_type": "default",
             "node_style": {
                 "backgroundColor": "#ebebeb"
