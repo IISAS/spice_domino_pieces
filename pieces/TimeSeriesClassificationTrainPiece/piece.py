@@ -25,7 +25,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class TimeSeriesClassificationTrain(BasePiece):
+class TimeSeriesClassificationTrainPiece(BasePiece):
     """
     based on https://keras.io/examples/timeseries/timeseries_classification_from_scratch/
     """

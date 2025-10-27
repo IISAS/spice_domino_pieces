@@ -15,7 +15,7 @@ def run_piece(
     epochs: int,
 ):
     return piece_dry_run(
-        piece_name="TimeSeriesClassificationTrain",
+        piece_name="TimeSeriesClassificationTrainPiece",
         input_data={
             'train_data_path': train_data_path,
             'num_layers': num_layers,
