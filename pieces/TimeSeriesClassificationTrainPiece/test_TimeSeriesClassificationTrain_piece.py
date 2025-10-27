@@ -2,6 +2,7 @@ from typing import List
 
 import numpy as np
 from domino.testing import piece_dry_run
+from domino.testing.utils import skip_envs
 from tensorflow import keras
 from tensorflow.keras.layers import Conv1D
 
@@ -27,6 +28,7 @@ def run_piece(
     )
 
 
+@skip_envs('github')
 def test_TimeSeriesClassificationTrainPiece():
     piece_kwargs = {
         'train_data_path': 'https://raw.githubusercontent.com/hfawaz/cd-diagram/master/FordA/FordA_TRAIN.tsv',
@@ -48,4 +50,4 @@ def test_TimeSeriesClassificationTrainPiece():
         piece_kwargs['kernel_sizes']
     ):
         assert layer.filters == filters
-        assert layer.kernel_size == np.reshape(kernel_size, shape=(1))
+        assert layer.kernel_size == np.reshape(kernel_size, (1))
