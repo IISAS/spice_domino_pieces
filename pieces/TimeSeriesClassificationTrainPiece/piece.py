@@ -120,7 +120,7 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
             kernel_sizes=input_data.kernel_sizes,
         )
 
-        best_model_file_path = os.path.join(Path(self.results_path), 'best_model.h5')
+        best_model_file_path = os.path.join(Path(self.results_path), 'best_model.keras')
         callbacks = [
             keras.callbacks.ModelCheckpoint(
                 best_model_file_path, save_best_only=True, monitor="val_loss"
@@ -141,7 +141,7 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
             verbose=1,
         )
 
-        last_model_file_path = os.path.join(Path(self.results_path), 'last_model.h5')
+        last_model_file_path = os.path.join(Path(self.results_path), 'last_model.keras')
         m.save(last_model_file_path)
 
         metric = "sparse_categorical_accuracy"

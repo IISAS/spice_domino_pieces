@@ -48,4 +48,4 @@ def test_TimeSeriesClassificationTrainPiece():
         piece_kwargs['kernel_sizes']
     ):
         assert layer.filters == filters
-        assert layer.kernel_size == np.reshape(kernel_size, shape=(1))
+        assert layer.kernel_size == np.reshape(kernel_size, (1))
