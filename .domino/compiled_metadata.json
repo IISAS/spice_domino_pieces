@@ -1261,6 +1261,125 @@
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/AddSunPiece"
     },
+    "TimeSeriesClassificationTrainPiece": {
+        "name": "TimeSeriesClassificationTrainPiece",
+        "dependency": {
+            "dockerfile": "Dockerfile.tensorflow-gpu",
+            "requirements_file": "requirements_TimeSeriesClassification-gpu.txt"
+        },
+        "tags": [
+            "AI",
+            "Keras",
+            "Tensorflow",
+            "CNN",
+            "1D",
+            "classification",
+            "time series"
+        ],
+        "style": {
+            "node_label": "1D CNN Keras Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-duotone fa-solid fa-right-to-bracket",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Piece for training a time series classification model based on a 1D CNN architecture. The model is implemented in Keras. For more information see:\nhttps://keras.io/examples/timeseries/timeseries_classification_from_scratch/",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "TimeSeriesClassificationTrainPiece Input Model",
+            "properties": {
+                "train_data_path": {
+                    "default": "https://raw.githubusercontent.com/hfawaz/cd-diagram/master/FordA/",
+                    "description": "Path to the train data.",
+                    "title": "train data path",
+                    "type": "string"
+                },
+                "num_layers": {
+                    "default": 3,
+                    "description": "Number of convolutional layers.",
+                    "title": "number of layers",
+                    "type": "integer"
+                },
+                "filters_per_layer": {
+                    "default": [
+                        64,
+                        64,
+                        64
+                    ],
+                    "description": "Number of filters for each convolutional layer.",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "title": "number of filters",
+                    "type": "array"
+                },
+                "kernel_sizes": {
+                    "default": [
+                        3,
+                        3,
+                        3
+                    ],
+                    "description": "Kernel size for each convolutional layer.",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "title": "kernel sizes",
+                    "type": "array"
+                },
+                "batch_size": {
+                    "default": 32,
+                    "description": "Batch size.",
+                    "title": "batch size",
+                    "type": "integer"
+                },
+                "epochs": {
+                    "default": 500,
+                    "description": "Number of epochs.",
+                    "title": "epochs",
+                    "type": "integer"
+                }
+            },
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "TimeSeriesClassificationTrainPiece Output Model",
+            "properties": {
+                "best_model_file_path": {
+                    "description": "Path to the saved best model.",
+                    "title": "Best Model File Path",
+                    "type": "string"
+                },
+                "last_model_file_path": {
+                    "description": "Path to the saved last model.",
+                    "title": "Last Model File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "best_model_file_path",
+                "last_model_file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/TimeSeriesClassificationTrainPiece"
+    },
     "CiselnikyPiece": {
         "name": "CiselnikyPiece",
         "dependency": {
