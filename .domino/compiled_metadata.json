@@ -1303,7 +1303,7 @@
             "description": "TimeSeriesClassificationTrainPiece Input Model",
             "properties": {
                 "train_data_path": {
-                    "default": "https://raw.githubusercontent.com/hfawaz/cd-diagram/master/FordA/",
+                    "default": "https://raw.githubusercontent.com/hfawaz/cd-diagram/master/FordA/FordA_TRAIN.tsv",
                     "description": "Path to the train data.",
                     "title": "train data path",
                     "type": "string"
