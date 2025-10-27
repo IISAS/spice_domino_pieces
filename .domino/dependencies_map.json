@@ -1,6 +1,38 @@
 {
     "group0": {
         "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "pieces": [
+            "TrainTestSplitPiece",
+            "MinOfTheDayPiece",
+            "DayOfTheYearPiece",
+            "IsDayPiece",
+            "MeteoPiece",
+            "InferenceModelPiece",
+            "FVEPiece",
+            "RenameColumnPiece",
+            "KafkaConsumerPiece",
+            "ConvertTimePiece",
+            "SelectDatesPiece",
+            "InputDataSEPSPiece",
+            "RemoveUnusedMeteoPiece",
+            "AddSunPiece",
+            "CiselnikyPiece",
+            "AddAdvancedMeteoPiece",
+            "TrainRandomForestRegressorPiece",
+            "Meteo_FVEPiece"
+        ],
+        "secrets": [
+            "KAFKA_KEY_PEM",
+            "KAFKA_CA_CERT_PEM",
+            "KAFKA_CERT_PEM"
+        ],
+        "source_image": "ghcr.io/iisas/spice_domino_pieces:development-group0"
+    },
+    "group1": {
+        "dependency": {
             "dockerfile": "Dockerfile_1",
             "requirements_file": null
         },
@@ -8,38 +40,6 @@
             "ExecuteShellPiece"
         ],
         "secrets": [],
-        "source_image": "ghcr.io/iisas/spice_domino_pieces:development-group0"
-    },
-    "group1": {
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "pieces": [
-            "MeteoPiece",
-            "Meteo_FVEPiece",
-            "DayOfTheYearPiece",
-            "InferenceModelPiece",
-            "MinOfTheDayPiece",
-            "InputDataSEPSPiece",
-            "FVEPiece",
-            "AddAdvancedMeteoPiece",
-            "RemoveUnusedMeteoPiece",
-            "TrainTestSplitPiece",
-            "AddSunPiece",
-            "CiselnikyPiece",
-            "TrainRandomForestRegressorPiece",
-            "RenameColumnPiece",
-            "SelectDatesPiece",
-            "ConvertTimePiece",
-            "IsDayPiece",
-            "KafkaConsumerPiece"
-        ],
-        "secrets": [
-            "KAFKA_KEY_PEM",
-            "KAFKA_CA_CERT_PEM",
-            "KAFKA_CERT_PEM"
-        ],
         "source_image": "ghcr.io/iisas/spice_domino_pieces:development-group1"
     },
     "group2": {
