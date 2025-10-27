@@ -11,7 +11,7 @@ class InputModel(BaseModel):
     train_data_path: str = Field(
         title="train data path",
         description="Path to the train data.",
-        default="https://raw.githubusercontent.com/hfawaz/cd-diagram/master/FordA/"
+        default="https://raw.githubusercontent.com/hfawaz/cd-diagram/master/FordA/FordA_TRAIN.tsv"
         # json_schema_extra={"from_upstream": "always"}
     )
 
