@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy as np
 from domino.testing import piece_dry_run
 from domino.testing.utils import skip_envs
@@ -8,23 +6,11 @@ from tensorflow.keras.layers import Conv1D
 
 
 def run_piece(
-    train_data_path: str,
-    num_layers: int,
-    filters_per_layer: List[int],
-    kernel_sizes: List[int],
-    batch_size: int,
-    epochs: int,
+    **kwargs
 ):
     return piece_dry_run(
         piece_name="TimeSeriesClassificationTrainPiece",
-        input_data={
-            'train_data_path': train_data_path,
-            'num_layers': num_layers,
-            'filters_per_layer': filters_per_layer,
-            'kernel_sizes': kernel_sizes,
-            'batch_size': batch_size,
-            'epochs': epochs
-        }
+        input_data=kwargs
     )
 
 

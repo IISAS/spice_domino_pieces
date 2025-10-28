@@ -43,6 +43,7 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
         num_layers=3,
         filters_per_layer=[64] * 3,
         kernel_sizes=[3] * 3,
+        loss_function_name='sparse_categorical_crossentropy'
     ):
         """
         Builds a generic, parameterized 1D CNN model.
@@ -53,6 +54,7 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
             num_classes (int): Number of output classes.
             filters_per_layer (list): Number of filters for each conv layer.
             kernel_sizes (list): Kernel size for each conv layer.
+            loss_function_name (str): Loss function name.
 
         Returns:
             keras.Model: Compiled Keras 1D CNN model.
@@ -83,44 +85,94 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
         # Compile
         model.compile(
             optimizer='adam',
-            loss='sparse_categorical_crossentropy',
+            loss=loss_function_name,
             metrics=['sparse_categorical_accuracy'],
         )
 
         return model
 
+    def _reshape_to_multivariate(self, x, num_vars=1):
+        return x.reshape((x.shape[0], x.shape[1], num_vars))
+
+    def _shuffle_data(self, x, y):
+        idx = np.random.permutation(len(x))
+        return x[idx], y[idx]
+
+    def _standardize_labels(self, labels):
+        unique_labels, standardized = np.unique(labels, return_inverse=True)
+        mapping = {label: i + 1 for i, label in enumerate(unique_labels)}
+        logger.debug('Standardized labels: %s' % str(standardized))
+        logger.debug('Mapping: %s' % str(mapping))
+        return standardized, mapping
+
     def piece_function(self, input_data: InputModel):
+
         logger.debug('piece function')
 
-        # load data
+        # load training data
         x_train, y_train = self._readucr(input_data.train_data_path)
-
         logger.info(f'x_train.shape: {x_train.shape}')
         logger.info(f'y_train.shape: {y_train.shape}')
 
-        # reshape to multivariate
-        x_train = x_train.reshape((x_train.shape[0], x_train.shape[1], 1))
+        # load validation data
+        x_val = y_val = None
+        if input_data.validation_data_path is not None and not input_data.validation_data_path.isspace():
+            x_val, y_val = self._readucr(input_data.validation_data_path)
+            logger.info(f'x_val.shape: {x_val.shape}')
+            logger.info(f'y_val.shape: {y_val.shape}')
 
-        # infer the number of classes
-        num_classes = len(np.unique(y_train))
+        # reshape to multivariate (train)
+        if len(x_train.shape) < 3:
+            x_train = self._reshape_to_multivariate(x_train, num_vars=1)
 
-        # shuffle
-        idx = np.random.permutation(len(x_train))
-        x_train = x_train[idx]
-        y_train = y_train[idx]
+        # reshape to multivariate (val)
+        if x_val is not None and y_val is not None:
+            if len(x_val.shape) < 3:
+                x_val = self._reshape_to_multivariate(x_val, num_vars=1)
+            # number of variables in val must be equal to that of train
+            assert x_val.shape[1:] == x_train.shape[1:]
 
-        # standardize
-        y_train[y_train == -1] = 0
+        # resolve unique labels
+        if x_val is not None and y_val is not None:
+            # train + val
+            unique_labels = np.unique(np.concatenate([y_train, y_val]))
+        else:
+            # train
+            unique_labels = np.unique(y_train)
+
+        # infer the number of labels
+        num_unique_labels = len(unique_labels)
+
+        # standardize labels
+        label_mapping_file_path = None
+        if input_data.standardize_labels:
+            y_train, label_mapping = self._standardize_labels(y_train)
+            # save label mapping to a file
+            label_mapping_file_path = os.path.join(
+                Path(self.results_path),
+                OutputModel.model_fields['label_mapping_file_path'].default
+            )
+            np.save(label_mapping_file_path, label_mapping)
+            # transform labels in val data to standard form
+            if x_val is not None and y_val is not None:
+                y_val = np.vectorize(label_mapping.get)(y_val)
+
+        loss_function_name = 'sparse_categorical_crossentropy'
 
         m = self._build_model(
             input_shape=x_train.shape[1:],
             num_layers=input_data.num_layers,
-            num_classes=num_classes,
+            num_classes=num_unique_labels,
             filters_per_layer=input_data.filters_per_layer,
             kernel_sizes=input_data.kernel_sizes,
+            loss_function_name=loss_function_name
         )
 
-        best_model_file_path = os.path.join(Path(self.results_path), 'best_model.keras')
+        best_model_file_path = os.path.join(
+            Path(self.results_path),
+            OutputModel.model_fields['best_model_file_path'].default
+        )
+
         callbacks = [
             keras.callbacks.ModelCheckpoint(
                 best_model_file_path, save_best_only=True, monitor="val_loss"
@@ -131,31 +183,54 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
             keras.callbacks.EarlyStopping(monitor="val_loss", patience=50, verbose=1),
         ]
 
+        # shuffle train data
+        if input_data.shuffle:
+            x_train, y_train = self._shuffle_data(x_train, y_train)
+
         history = m.fit(
             x_train,
             y_train,
             batch_size=input_data.batch_size,
             epochs=input_data.epochs,
             callbacks=callbacks,
-            validation_split=0.2,
             verbose=1,
+            shuffle=input_data.shuffle_before_epoch,
+            **(
+                {
+                    'validation_data': (x_val, y_val),
+                } if x_val is not None and y_val is not None else {
+                    'validation_split': input_data.validation_split,
+                }
+            )
         )
 
-        last_model_file_path = os.path.join(Path(self.results_path), 'last_model.keras')
+        last_model_file_path = os.path.join(
+            Path(self.results_path),
+            OutputModel.model_fields['last_model_file_path'].default
+        )
         m.save(last_model_file_path)
 
-        metric = "sparse_categorical_accuracy"
-        plt.figure()
-        plt.plot(history.history[metric])
-        plt.plot(history.history["val_" + metric])
-        plt.title("Model " + metric)
-        plt.ylabel(metric, fontsize="large")
-        plt.xlabel("epoch", fontsize="large")
-        plt.legend(["train", "val"], loc="best")
+        metrics = ['sparse_categorical_accuracy', 'loss']
 
-        fig_path = os.path.join(Path(self.results_path), f"training_{metric}.png")
+        # Create a single figure with one subplot per metric
+        fig, axes = plt.subplots(len(metrics), 1, figsize=(8, 6))  # stacked vertically
+
+        for i, metric in enumerate(metrics):
+            metric_label = f'loss ({loss_function_name})' if metric == 'loss' else metric
+            ax = axes[i] if len(metrics) > 1 else axes
+            ax.plot(history.history[metric])
+            ax.plot(history.history["val_" + metric])
+            ax.set_title(f"Model {metric_label}")
+            ax.set_ylabel(metric, fontsize="large")
+            ax.set_xlabel("epoch", fontsize="large")
+            ax.legend(["train", "val"], loc="best")
+
+        plt.tight_layout()
+
+        # Save single image with both graphs
+        fig_path = os.path.join(Path(self.results_path), "training_metrics.png")
         plt.savefig(fig_path, dpi=300, bbox_inches="tight")
-        plt.close()
+        plt.close(fig)
 
         # Set display result
         self.display_result = {
@@ -167,4 +242,9 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
         return OutputModel(
             best_model_file_path=best_model_file_path,
             last_model_file_path=last_model_file_path,
+            **(
+                {
+                    'label_mapping_file_path': label_mapping_file_path
+                } if input_data.standardize_labels else {}
+            ),
         )
