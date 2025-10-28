@@ -1303,15 +1303,21 @@
             "description": "TimeSeriesClassificationTrainPiece Input Model",
             "properties": {
                 "train_data_path": {
-                    "default": "https://raw.githubusercontent.com/hfawaz/cd-diagram/master/FordA/",
+                    "default": "https://raw.githubusercontent.com/hfawaz/cd-diagram/master/FordA/FordA_TRAIN.tsv",
                     "description": "Path to the train data.",
-                    "title": "train data path",
+                    "title": "train_data_path",
+                    "type": "string"
+                },
+                "validation_data_path": {
+                    "default": null,
+                    "description": "Path to the validation data.",
+                    "title": "validation_data_path",
                     "type": "string"
                 },
                 "num_layers": {
                     "default": 3,
                     "description": "Number of convolutional layers.",
-                    "title": "number of layers",
+                    "title": "num_layers",
                     "type": "integer"
                 },
                 "filters_per_layer": {
@@ -1324,7 +1330,7 @@
                     "items": {
                         "type": "integer"
                     },
-                    "title": "number of filters",
+                    "title": "filters_per_layer",
                     "type": "array"
                 },
                 "kernel_sizes": {
@@ -1337,13 +1343,13 @@
                     "items": {
                         "type": "integer"
                     },
-                    "title": "kernel sizes",
+                    "title": "kernel_sizes",
                     "type": "array"
                 },
                 "batch_size": {
                     "default": 32,
                     "description": "Batch size.",
-                    "title": "batch size",
+                    "title": "batch_size",
                     "type": "integer"
                 },
                 "epochs": {
@@ -1351,6 +1357,30 @@
                     "description": "Number of epochs.",
                     "title": "epochs",
                     "type": "integer"
+                },
+                "shuffle": {
+                    "default": true,
+                    "description": "Shuffle data before training.",
+                    "title": "shuffle",
+                    "type": "boolean"
+                },
+                "shuffle_before_epoch": {
+                    "default": false,
+                    "description": "Shuffle training data before each epoch.",
+                    "title": "shuffle_before_epoch",
+                    "type": "boolean"
+                },
+                "validation_split": {
+                    "default": 0.2,
+                    "description": "Validation split if no validation data provided.",
+                    "title": "validation_split",
+                    "type": "number"
+                },
+                "standardize_labels": {
+                    "default": true,
+                    "description": "Standardize labels before training and provide label mapping.",
+                    "title": "standardize_labels",
+                    "type": "boolean"
                 }
             },
             "title": "InputModel",
@@ -1360,20 +1390,24 @@
             "description": "TimeSeriesClassificationTrainPiece Output Model",
             "properties": {
                 "best_model_file_path": {
+                    "default": "best_model.keras",
                     "description": "Path to the saved best model.",
-                    "title": "Best Model File Path",
+                    "title": "best_model_file_path",
                     "type": "string"
                 },
                 "last_model_file_path": {
+                    "default": "last_model.keras",
                     "description": "Path to the saved last model.",
-                    "title": "Last Model File Path",
+                    "title": "last_model_file_path",
+                    "type": "string"
+                },
+                "label_mapping_file_path": {
+                    "default": "label_mapping.npy",
+                    "description": "Path to the label mapping file produced when standardize_labels is True.",
+                    "title": "label_mapping_file_path",
                     "type": "string"
                 }
             },
-            "required": [
-                "best_model_file_path",
-                "last_model_file_path"
-            ],
             "title": "OutputModel",
             "type": "object"
         },
