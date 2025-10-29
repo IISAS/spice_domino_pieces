@@ -1,0 +1,31 @@
+{
+  "name": "TimeSeriesClassificationInferencePiece",
+  "description": "Piece for performing an inference with a time series classification model based on a 1D CNN architecture. The model is implemented in Keras. For more information see:\nhttps://keras.io/examples/timeseries/timeseries_classification_from_scratch/",
+  "dependency": {
+    "dockerfile": "Dockerfile.tensorflow-gpu",
+    "requirements_file": "requirements_TimeSeriesClassification-gpu.txt"
+  },
+  "container_resources": {
+    "requests": {
+      "cpu": 100,
+      "memory": 128
+    },
+    "limits": {
+      "cpu": 500,
+      "memory": 512
+    }
+  },
+  "tags": [
+    "AI",
+    "Keras",
+    "Tensorflow",
+    "CNN",
+    "1D",
+    "classification",
+    "time series"
+  ],
+  "style": {
+    "node_label": "Time Series Classification - 1D CNN (Train)",
+    "icon_class_name": "fa-duotone fa-solid fa-right-to-bracket"
+  }
+}
