@@ -1277,7 +1277,7 @@
             "time series"
         ],
         "style": {
-            "node_label": "Time Series Classification - 1D CNN (Train)",
+            "node_label": "Time Series Classification - 1D CNN (Inference)",
             "node_type": "default",
             "node_style": {
                 "backgroundColor": "#ebebeb"
@@ -1419,10 +1419,17 @@
                     "type": "string"
                 },
                 "validation_data_path": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
                     "default": null,
                     "description": "Path to the validation data.",
-                    "title": "validation_data_path",
-                    "type": "string"
+                    "title": "validation_data_path"
                 },
                 "target_column_idx": {
                     "default": -1,
@@ -1431,11 +1438,13 @@
                     "type": "integer"
                 },
                 "skiprows_train": {
+                    "default": 0,
                     "description": "The number of rows to skip in the train data",
                     "title": "skiprows_train",
                     "type": "integer"
                 },
                 "skiprows_val": {
+                    "default": 0,
                     "description": "The number of rows to skip in the validation data (if specified)",
                     "title": "skiprows_val",
                     "type": "integer"
@@ -1497,10 +1506,6 @@
                     "type": "number"
                 }
             },
-            "required": [
-                "skiprows_train",
-                "skiprows_val"
-            ],
             "title": "InputModel",
             "type": "object"
         },
