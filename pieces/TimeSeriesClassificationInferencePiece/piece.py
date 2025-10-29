@@ -39,7 +39,9 @@ class TimeSeriesClassificationInferencePiece(BasePiece):
 
     def piece_function(self, input_data: InputModel):
 
+        self.logger.info("Loading model...")
         m = keras.models.load_model(input_data.model_file_path)
+        self.logger.info("Model loaded.")
 
         # load input data
         x_input, y_input = self._load_tsv_data(
