@@ -25,7 +25,7 @@
     "time series"
   ],
   "style": {
-    "node_label": "Time Series Classification - 1D CNN (Train)",
+    "node_label": "Time Series Classification - 1D CNN (Inference)",
     "icon_class_name": "fa-duotone fa-solid fa-right-to-bracket"
   }
 }
