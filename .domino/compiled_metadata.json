@@ -1313,6 +1313,7 @@
                     "type": "string"
                 },
                 "skiprows": {
+                    "default": 0,
                     "description": "The number of rows to skip in the input data.",
                     "title": "skiprows_train",
                     "type": "integer"
@@ -1343,8 +1344,7 @@
             },
             "required": [
                 "model_file_path",
-                "input_data_path",
-                "skiprows"
+                "input_data_path"
             ],
             "title": "InputModel",
             "type": "object"
