@@ -21,6 +21,7 @@ class InputModel(BaseModel):
     skiprows: int = Field(
         title="skiprows_train",
         description="The number of rows to skip in the input data.",
+        default=0
     )
 
     target_column_idx: int | None = Field(
