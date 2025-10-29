@@ -1261,6 +1261,116 @@
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/AddSunPiece"
     },
+    "TimeSeriesClassificationInferencePiece": {
+        "name": "TimeSeriesClassificationInferencePiece",
+        "dependency": {
+            "dockerfile": "Dockerfile.tensorflow-gpu",
+            "requirements_file": "requirements_TimeSeriesClassification-gpu.txt"
+        },
+        "tags": [
+            "AI",
+            "Keras",
+            "Tensorflow",
+            "CNN",
+            "1D",
+            "classification",
+            "time series"
+        ],
+        "style": {
+            "node_label": "Time Series Classification - 1D CNN (Train)",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-duotone fa-solid fa-right-to-bracket",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Piece for performing an inference with a time series classification model based on a 1D CNN architecture. The model is implemented in Keras. For more information see:\nhttps://keras.io/examples/timeseries/timeseries_classification_from_scratch/",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "TimeSeriesClassificationInferencePiece Input Model",
+            "properties": {
+                "model_file_path": {
+                    "description": "Path to the model file.",
+                    "title": "model_file_path",
+                    "type": "string"
+                },
+                "input_data_path": {
+                    "description": "Path to the data to be used for inference.",
+                    "title": "input_data_path",
+                    "type": "string"
+                },
+                "skiprows": {
+                    "description": "The number of rows to skip in the input data.",
+                    "title": "skiprows_train",
+                    "type": "integer"
+                },
+                "target_column_idx": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Index of the target column if present (e.g. in a test dataset).",
+                    "title": "target_column_idx"
+                },
+                "output_format": {
+                    "default": "probabilities",
+                    "description": "Output format for predictions.",
+                    "enum": [
+                        "probabilities",
+                        "classes"
+                    ],
+                    "title": "output_format",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "model_file_path",
+                "input_data_path",
+                "skiprows"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "TimeSeriesClassificationInferencePiece Output Model",
+            "properties": {
+                "inference_output_data_path": {
+                    "default": "output_inference.tsv",
+                    "description": "Path to be used for saving the inference output.",
+                    "title": "inference_output_data_path",
+                    "type": "string"
+                },
+                "evaluation_output_file_path": {
+                    "default": "output_evaluation.json",
+                    "description": "Path to be used for saving the evaluation output.",
+                    "title": "evaluation_output_file_path",
+                    "type": "string"
+                }
+            },
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/TimeSeriesClassificationInferencePiece"
+    },
     "TimeSeriesClassificationTrainPiece": {
         "name": "TimeSeriesClassificationTrainPiece",
         "dependency": {
@@ -1314,6 +1424,22 @@
                     "title": "validation_data_path",
                     "type": "string"
                 },
+                "target_column_idx": {
+                    "default": -1,
+                    "description": "Index of the target column.",
+                    "title": "target_column_idx",
+                    "type": "integer"
+                },
+                "skiprows_train": {
+                    "description": "The number of rows to skip in the train data",
+                    "title": "skiprows_train",
+                    "type": "integer"
+                },
+                "skiprows_val": {
+                    "description": "The number of rows to skip in the validation data (if specified)",
+                    "title": "skiprows_val",
+                    "type": "integer"
+                },
                 "num_layers": {
                     "default": 3,
                     "description": "Number of convolutional layers.",
@@ -1359,15 +1485,9 @@
                     "type": "integer"
                 },
                 "shuffle": {
-                    "default": true,
-                    "description": "Shuffle data before training.",
-                    "title": "shuffle",
-                    "type": "boolean"
-                },
-                "shuffle_before_epoch": {
                     "default": false,
                     "description": "Shuffle training data before each epoch.",
-                    "title": "shuffle_before_epoch",
+                    "title": "shuffle",
                     "type": "boolean"
                 },
                 "validation_split": {
@@ -1375,14 +1495,12 @@
                     "description": "Validation split if no validation data provided.",
                     "title": "validation_split",
                     "type": "number"
-                },
-                "standardize_labels": {
-                    "default": true,
-                    "description": "Standardize labels before training and provide label mapping.",
-                    "title": "standardize_labels",
-                    "type": "boolean"
                 }
             },
+            "required": [
+                "skiprows_train",
+                "skiprows_val"
+            ],
             "title": "InputModel",
             "type": "object"
         },
@@ -1399,12 +1517,6 @@
                     "default": "last_model.keras",
                     "description": "Path to the saved last model.",
                     "title": "last_model_file_path",
-                    "type": "string"
-                },
-                "label_mapping_file_path": {
-                    "default": "label_mapping.npy",
-                    "description": "Path to the label mapping file produced when standardize_labels is True.",
-                    "title": "label_mapping_file_path",
                     "type": "string"
                 }
             },
