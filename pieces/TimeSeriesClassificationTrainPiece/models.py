@@ -21,6 +21,22 @@ class InputModel(BaseModel):
         default=None
     )
 
+    target_column_idx: int = Field(
+        title="target_column_idx",
+        description="Index of the target column.",
+        default=-1
+    )
+
+    skiprows_train: int = Field(
+        title="skiprows_train",
+        description="The number of rows to skip in the train data",
+    )
+
+    skiprows_val: int = Field(
+        title="skiprows_val",
+        description="The number of rows to skip in the validation data (if specified)",
+    )
+
     num_layers: int = Field(
         title="num_layers",
         default=3,
@@ -53,12 +69,6 @@ class InputModel(BaseModel):
 
     shuffle: bool = Field(
         title="shuffle",
-        default=True,
-        description="Shuffle data before training."
-    )
-
-    shuffle_before_epoch: bool = Field(
-        title="shuffle_before_epoch",
         default=False,
         description="Shuffle training data before each epoch."
     )
@@ -67,12 +77,6 @@ class InputModel(BaseModel):
         title="validation_split",
         default=0.2,
         description="Validation split if no validation data provided."
-    )
-
-    standardize_labels: bool = Field(
-        title="standardize_labels",
-        default=True,
-        description="Standardize labels before training and provide label mapping."
     )
 
 
@@ -89,9 +93,4 @@ class OutputModel(BaseModel):
         title="last_model_file_path",
         default="last_model.keras",
         description="Path to the saved last model."
-    )
-    label_mapping_file_path: str = Field(
-        title="label_mapping_file_path",
-        default="label_mapping.npy",
-        description="Path to the label mapping file produced when standardize_labels is True."
     )

@@ -1,4 +1,3 @@
-import logging
 import os
 from pathlib import Path
 
@@ -11,30 +10,41 @@ from tensorflow.keras.models import Sequential
 
 from .models import InputModel, OutputModel
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,  # Set default level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",  # Log format
-    datefmt="%Y-%m-%d %H:%M:%S",  # Timestamp format
-    handlers=[
-        logging.FileHandler("app.log"),  # Log to file
-        logging.StreamHandler()  # Also log to console
-    ]
-)
 
-logger = logging.getLogger(__name__)
-
-
+# TODO: support for multivariate time series
 class TimeSeriesClassificationTrainPiece(BasePiece):
-    """
-    based on https://keras.io/examples/timeseries/timeseries_classification_from_scratch/
-    """
 
-    def _readucr(self, filename):
-        data = np.loadtxt(filename, delimiter="\t")
-        x = data[:, 1:]
-        y = data[:, 0]
-        return x, y.astype(int)
+    def _shuffle_data(self, x, y):
+        self.logger.info("Shuffling data...")
+        idx = np.random.permutation(len(x))
+        self.logger.info("Shuffling data done.")
+        return x[idx], y[idx]
+
+    def _load_tsv_data(self, filename, target_column_idx: int = -1, skiprows: int = 0):
+        self.logger.info("Loading TSV data: %s", filename)
+        data = np.loadtxt(filename, delimiter="\t", skiprows=skiprows)
+        Y = data[:, target_column_idx]
+        self.logger.info("Shape Y: %s", Y.shape)
+        X = np.delete(data, target_column_idx, axis=1)
+        self.logger.info("Shape X: %s", X.shape)
+        input_shape = X.shape[1:]
+        # reshape
+        if len(input_shape) > 3:
+            msg = f"Input shape {input_shape} is not supported."
+            self.logger.error(msg)
+            raise Exception(msg)
+        elif len(input_shape) == 2:
+            X = np.reshape(X, (-1, input_shape[0], input_shape[1]))
+            self.logger.info('X reshaped to: %s', X.shape)
+        elif len(input_shape) == 1:
+            X = np.reshape(X, (-1, input_shape[0], 1))
+            self.logger.info('X reshaped to: %s', X.shape)
+        else:
+            msg = f"Invalid input shape {input_shape}."
+            self.logger.error(msg)
+            raise Exception(msg)
+        self.logger.info('TSV data sucessfully loaded.')
+        return X, Y
 
     def _build_model(
         self,
@@ -43,7 +53,7 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
         num_layers=3,
         filters_per_layer=[64] * 3,
         kernel_sizes=[3] * 3,
-        loss_function_name='sparse_categorical_crossentropy'
+        loss_function=keras.losses.SparseCategoricalCrossentropy()
     ):
         """
         Builds a generic, parameterized 1D CNN model.
@@ -54,14 +64,23 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
             num_classes (int): Number of output classes.
             filters_per_layer (list): Number of filters for each conv layer.
             kernel_sizes (list): Kernel size for each conv layer.
-            loss_function_name (str): Loss function name.
+            loss_function (keras.losses.Loss): Loss function.
 
         Returns:
             keras.Model: Compiled Keras 1D CNN model.
         """
 
-        assert len(filters_per_layer) == num_layers, "filters_per_layer length must match num_layers"
-        assert len(kernel_sizes) == num_layers, "kernel_sizes length must match num_layers"
+        self.logger.info("Building CNN model...")
+
+        if len(filters_per_layer) != num_layers:
+            msg = "filters_per_layer length must match num_layers"
+            self.logger.error(msg)
+            raise Exception(msg)
+
+        if len(kernel_sizes) != num_layers:
+            msg = "kernel_sizes length must match num_layers"
+            self.logger.error(msg)
+            raise Exception(msg)
 
         model = Sequential(name="Generic1DCNN")
         model.add(Input(shape=input_shape))
@@ -84,53 +103,41 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
 
         # Compile
         model.compile(
-            optimizer='adam',
-            loss=loss_function_name,
-            metrics=['sparse_categorical_accuracy'],
+            optimizer=keras.optimizers.Adam(),
+            loss=loss_function,
+            metrics=[
+                keras.metrics.SparseCategoricalAccuracy()
+            ],
         )
+
+        self.logger.info('Model compiled.')
 
         return model
 
-    def _reshape_to_multivariate(self, x, num_vars=1):
-        return x.reshape((x.shape[0], x.shape[1], num_vars))
-
-    def _shuffle_data(self, x, y):
-        idx = np.random.permutation(len(x))
-        return x[idx], y[idx]
-
-    def _standardize_labels(self, labels):
-        unique_labels, standardized = np.unique(labels, return_inverse=True)
-        mapping = {label: i + 1 for i, label in enumerate(unique_labels)}
-        logger.debug('Standardized labels: %s' % str(standardized))
-        logger.debug('Mapping: %s' % str(mapping))
-        return standardized, mapping
-
     def piece_function(self, input_data: InputModel):
 
-        logger.debug('piece function')
-
         # load training data
-        x_train, y_train = self._readucr(input_data.train_data_path)
-        logger.info(f'x_train.shape: {x_train.shape}')
-        logger.info(f'y_train.shape: {y_train.shape}')
+        x_train, y_train = self._load_tsv_data(
+            input_data.train_data_path,
+            target_column_idx=input_data.target_column_idx,
+            skiprows=input_data.skiprows_train
+        )
 
         # load validation data
         x_val = y_val = None
         if input_data.validation_data_path is not None and not input_data.validation_data_path.isspace():
-            x_val, y_val = self._readucr(input_data.validation_data_path)
-            logger.info(f'x_val.shape: {x_val.shape}')
-            logger.info(f'y_val.shape: {y_val.shape}')
+            x_val, y_val = self._load_tsv_data(
+                input_data.validation_data_path,
+                target_column_idx=input_data.target_column_idx,
+                skiprows=input_data.skiprows_val
+            )
 
-        # reshape to multivariate (train)
-        if len(x_train.shape) < 3:
-            x_train = self._reshape_to_multivariate(x_train, num_vars=1)
-
-        # reshape to multivariate (val)
         if x_val is not None and y_val is not None:
-            if len(x_val.shape) < 3:
-                x_val = self._reshape_to_multivariate(x_val, num_vars=1)
             # number of variables in val must be equal to that of train
-            assert x_val.shape[1:] == x_train.shape[1:]
+            if x_val.shape[1:] != x_train.shape[1:]:
+                msg = 'train and validation datasets must have the same shape of samples'
+                self.logger.error(msg)
+                raise Exception(msg)
 
         # resolve unique labels
         if x_val is not None and y_val is not None:
@@ -139,25 +146,13 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
         else:
             # train
             unique_labels = np.unique(y_train)
+        self.logger.info("Unique labels: %s", unique_labels)
 
         # infer the number of labels
         num_unique_labels = len(unique_labels)
+        self.logger.info('Number of unique labels: %s', num_unique_labels)
 
-        # standardize labels
-        label_mapping_file_path = None
-        if input_data.standardize_labels:
-            y_train, label_mapping = self._standardize_labels(y_train)
-            # save label mapping to a file
-            label_mapping_file_path = os.path.join(
-                Path(self.results_path),
-                OutputModel.model_fields['label_mapping_file_path'].default
-            )
-            np.save(label_mapping_file_path, label_mapping)
-            # transform labels in val data to standard form
-            if x_val is not None and y_val is not None:
-                y_val = np.vectorize(label_mapping.get)(y_val)
-
-        loss_function_name = 'sparse_categorical_crossentropy'
+        loss_function = keras.losses.SparseCategoricalCrossentropy()
 
         m = self._build_model(
             input_shape=x_train.shape[1:],
@@ -165,7 +160,7 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
             num_classes=num_unique_labels,
             filters_per_layer=input_data.filters_per_layer,
             kernel_sizes=input_data.kernel_sizes,
-            loss_function_name=loss_function_name
+            loss_function=loss_function
         )
 
         best_model_file_path = os.path.join(
@@ -183,10 +178,11 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
             keras.callbacks.EarlyStopping(monitor="val_loss", patience=50, verbose=1),
         ]
 
-        # shuffle train data
-        if input_data.shuffle:
+        # shuffle train data before splitting to train and val
+        if x_val is None and y_val is None:
             x_train, y_train = self._shuffle_data(x_train, y_train)
 
+        self.logger.info('Training model...')
         history = m.fit(
             x_train,
             y_train,
@@ -194,7 +190,7 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
             epochs=input_data.epochs,
             callbacks=callbacks,
             verbose=1,
-            shuffle=input_data.shuffle_before_epoch,
+            shuffle=input_data.shuffle,
             **(
                 {
                     'validation_data': (x_val, y_val),
@@ -204,19 +200,22 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
             )
         )
 
+        self.logger.info('Saving model...')
         last_model_file_path = os.path.join(
             Path(self.results_path),
             OutputModel.model_fields['last_model_file_path'].default
         )
         m.save(last_model_file_path)
+        self.logger.info('Model saved.')
 
+        self.logger.info('Producing training report...')
         metrics = ['sparse_categorical_accuracy', 'loss']
 
         # Create a single figure with one subplot per metric
         fig, axes = plt.subplots(len(metrics), 1, figsize=(8, 6))  # stacked vertically
 
         for i, metric in enumerate(metrics):
-            metric_label = f'loss ({loss_function_name})' if metric == 'loss' else metric
+            metric_label = f'loss ({loss_function.name})' if metric == 'loss' else metric
             ax = axes[i] if len(metrics) > 1 else axes
             ax.plot(history.history[metric])
             ax.plot(history.history["val_" + metric])
@@ -238,13 +237,10 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
             'file_path': fig_path
         }
 
+        self.logger.info('Training report created.')
+
         # Return output
         return OutputModel(
             best_model_file_path=best_model_file_path,
             last_model_file_path=last_model_file_path,
-            **(
-                {
-                    'label_mapping_file_path': label_mapping_file_path
-                } if input_data.standardize_labels else {}
-            ),
         )
