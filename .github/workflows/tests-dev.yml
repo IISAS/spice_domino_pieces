@@ -59,7 +59,6 @@ jobs:
         env:
           GHCR_USERNAME: ${{ github.actor }}
           DOCKER_CLIENT_TIMEOUT: 600
-          COMPOSE_HTTP_TIMEOUT: 600
         run: domino piece-repository publish-images --registry-token ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit files
