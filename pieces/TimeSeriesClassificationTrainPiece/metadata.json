@@ -13,7 +13,8 @@
     "limits": {
       "cpu": 500,
       "memory": 512
-    }
+    },
+    "use_gpu": true
   },
   "tags": [
     "AI",
