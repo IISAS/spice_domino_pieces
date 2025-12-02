@@ -44,11 +44,17 @@ class KafkaConsumerPiece(BasePiece):
             'auto.offset.reset': input_data.auto_offset_reset,
             'bootstrap.servers': input_data.bootstrap_servers,
             'group.id': input_data.group_id,
-            'security.protocol': input_data.security_protocol,
-            'ssl.ca.pem': secrets_data.KAFKA_CA_CERT_PEM.get_secret_value(),
-            'ssl.certificate.pem': secrets_data.KAFKA_CERT_PEM.get_secret_value(),
-            'ssl.endpoint.identification.algorithm': 'none',  # https://github.com/confluentinc/librdkafka/issues/4349
-            'ssl.key.pem': secrets_data.KAFKA_KEY_PEM.get_secret_value(),
+            **(
+                {
+                    'security.protocol': input_data.security_protocol,
+                    'ssl.ca.pem': secrets_data.KAFKA_CA_CERT_PEM.get_secret_value(),
+                    'ssl.certificate.pem': secrets_data.KAFKA_CERT_PEM.get_secret_value(),
+                    'ssl.endpoint.identification.algorithm': 'none',  # https://github.com/confluentinc/librdkafka/issues/4349
+                    'ssl.key.pem': secrets_data.KAFKA_KEY_PEM.get_secret_value(),
+                } if input_data.security_protocol is not None \
+                    and input_data.security_protocol.lower().strip() == 'ssl' \
+                else {}
+            ),
         }
 
         c = Consumer(conf)
