@@ -233,7 +233,7 @@ class TimeSeriesClassificationTrainPiece(BasePiece):
 
         # Set display result
         self.display_result = {
-            'file_type': 'image/png',
+            'file_type': 'png',
             'file_path': fig_path
         }
 
