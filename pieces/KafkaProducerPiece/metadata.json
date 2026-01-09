@@ -1,0 +1,26 @@
+{
+    "name": "KafkaProducerPiece",
+    "description": "Producer for Kafka to write streaming data",
+    "dependency": {
+        "requirements_file": "requirements_0.txt"
+    },
+    "container_resources": {
+        "requests": {
+            "cpu": 100,
+            "memory": 128
+        },
+        "limits": {
+            "cpu": 500,
+            "memory": 512
+        }
+    },
+    "tags": [
+        "Kafka",
+        "producer",
+        "stream"
+    ],
+    "style": {
+        "node_label": "Kafka Producer Piece",
+        "icon_class_name": "fa-duotone fa-solid fa-left-to-bracket"
+    }
+}
