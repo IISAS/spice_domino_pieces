@@ -50,7 +50,7 @@ class InputModel(BaseModel):
 
     messages_filename: str = Field(
         title="messages filename",
-        default=["default-topic"],
+        default="messages.jsonl",
         description="Topic name",
     )
 
