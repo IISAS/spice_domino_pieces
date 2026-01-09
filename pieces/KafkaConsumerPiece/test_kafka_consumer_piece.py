@@ -1,3 +1,4 @@
+import base64
 import os
 from datetime import datetime
 from random import randint
@@ -19,7 +20,8 @@ def run_piece(
     topics: List[str],
     bootstrap_servers: List[str],
     group_id: str,
-    security_protocol: str
+    security_protocol: str,
+    msg_value_encoding: str,
 ):
     KAFKA_CA_CERT_PEM = os.environ.get('KAFKA_CA_CERT_PEM', '').replace("\\n", "\n")
     KAFKA_CERT_PEM = os.environ.get('KAFKA_CERT_PEM', '').replace("\\n", "\n")
@@ -34,6 +36,7 @@ def run_piece(
             'security_protocol': security_protocol,
             'message_polling_timeout': 10.0,
             'no_message_timeout': 60.0,
+            'message_value_encoding': msg_value_encoding,
         },
         secrets_data={
             'KAFKA_CA_CERT_PEM': KAFKA_CA_CERT_PEM,
@@ -43,13 +46,24 @@ def run_piece(
     )
 
 
+def encode_msg_value(msg_value, encoding):
+    if msg_value is None:
+        return None
+    if encoding == "base64":
+        return base64.b64encode(bytes(msg_value, "utf-8"))
+    elif encoding == "utf-8":
+        return msg_value.encode('utf-8')
+    return msg_value
+
+
 @skip_envs('github')
 def test_kafka_consumer_piece():
     piece_kwargs = {
         "topics": ['test-topic1', 'test-topic2'],
-        "bootstrap_servers": 'spice-kafka-broker-1.stevo.fedcloud.eu:9093',
+        "bootstrap_servers": 'fake-broker',
         "group_id": "test-group",
         "security_protocol": "SSL",
+        "msg_value_encoding": "",
     }
 
     num_partitions = 5
@@ -65,7 +79,7 @@ def test_kafka_consumer_piece():
     for i in range(0, 10):
         topic = piece_kwargs['topics'][randint(0, len(piece_kwargs['topics']) - 1)]
         key = f'test_key{randint(0, 3)}'
-        value = f'test_value{i}'
+        value = encode_msg_value(f'test_value{i}', piece_kwargs['msg_value_encoding'])
         partition = randint(0, num_partitions - 1)
         timestamp = int(datetime.now().timestamp() * 1000)
         producer.produce(

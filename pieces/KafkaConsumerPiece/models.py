@@ -60,6 +60,11 @@ class InputModel(BaseModel):
         description="Timeout in seconds to stop polling if there are no messages arriving.",
     )
 
+    msg_value_encoding: Literal["utf-8", "base64"] = Field(
+        default="utf-8",
+        description="Encoding of messages",
+    )
+
 
 class OutputModel(BaseModel):
     """

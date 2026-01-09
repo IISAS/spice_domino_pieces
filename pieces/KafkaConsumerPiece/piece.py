@@ -1,3 +1,4 @@
+import base64
 import json
 import time
 from pathlib import Path
@@ -6,6 +7,16 @@ from confluent_kafka import Consumer, KafkaError
 from domino.base_piece import BasePiece
 
 from .models import _DEFAULT_NO_MESSAGE_TIMEOUT, _DEFAULT_MESSAGE_POLLING_TIMEOUT, InputModel, OutputModel, SecretsModel
+
+
+def decode_msg_value(msg_value, encoding):
+    if msg_value is None:
+        return None
+    if encoding == "base64":
+        return base64.b64decode(msg_value)
+    elif encoding == "utf-8":
+        return msg_value.decode('utf-8')
+    return msg_value
 
 
 class KafkaConsumerPiece(BasePiece):
@@ -49,10 +60,11 @@ class KafkaConsumerPiece(BasePiece):
                     'security.protocol': input_data.security_protocol,
                     'ssl.ca.pem': secrets_data.KAFKA_CA_CERT_PEM.get_secret_value(),
                     'ssl.certificate.pem': secrets_data.KAFKA_CERT_PEM.get_secret_value(),
-                    'ssl.endpoint.identification.algorithm': 'none',  # https://github.com/confluentinc/librdkafka/issues/4349
+                    # https://github.com/confluentinc/librdkafka/issues/4349
+                    'ssl.endpoint.identification.algorithm': 'none',
                     'ssl.key.pem': secrets_data.KAFKA_KEY_PEM.get_secret_value(),
-                } if input_data.security_protocol is not None \
-                    and input_data.security_protocol.lower().strip() == 'ssl' \
+                } if input_data.security_protocol is not None
+                     and input_data.security_protocol.lower().strip() == 'ssl'
                 else {}
             ),
         }
@@ -82,7 +94,7 @@ class KafkaConsumerPiece(BasePiece):
                     break
             else:
                 msg_value = msg.value()
-                msg_value_decoded = msg_value.decode('utf-8') if msg_value else None
+                msg_value_decoded = decode_msg_value(msg_value, input_data.msg_value_encoding)
                 self.logger.info(f"Consumed message: {msg_value_decoded} from topic {msg.topic()}")
                 data = {
                     'timestamp': msg.timestamp(),
