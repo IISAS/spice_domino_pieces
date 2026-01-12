@@ -105,7 +105,7 @@ class KafkaConsumerPiece(BasePiece):
                     'leader_epoch': msg.leader_epoch(),
                     'offset': msg.offset(),
                     'partition': msg.partition(),
-                    'value': msg_value_decoded
+                    'value': msg_value_decoded,
                 }
                 fp.write(json.dumps(data) + '\n')
 
@@ -116,10 +116,13 @@ class KafkaConsumerPiece(BasePiece):
         self.display_result = {
             "group.id": input_data.group_id,
             "messages_file_path": messages_file_path,
-            "duration": time.time() - start_time
+            "duration": time.time() - start_time,
         }
 
         # Return output
         return OutputModel(
-            messages_file_path=messages_file_path
+            messages_file_path=messages_file_path,
+            topics=input_data.topics,
+            group_id=input_data.group_id,
+            msg_value_encoding=input_data.msg_value_encoding,
         )

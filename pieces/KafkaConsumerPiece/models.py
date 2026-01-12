@@ -5,6 +5,9 @@ from pydantic import BaseModel, Field, SecretStr
 _DEFAULT_MESSAGE_POLLING_TIMEOUT = 5.0
 _DEFAULT_NO_MESSAGE_TIMEOUT = 10.0
 
+_AutoOffsetReset = Literal["smallest", "earliest", "beginning", "largest", "latest", "end", "error"]
+_MessageEncodings = Literal["utf-8", "base64"]
+
 
 class SecretsModel(BaseModel):
     KAFKA_CA_CERT_PEM: SecretStr = Field(
@@ -45,7 +48,7 @@ class InputModel(BaseModel):
         description="Kafka consumer group",
     )
 
-    auto_offset_reset: Literal["smallest", "earliest", "beginning", "largest", "latest", "end", "error"] = Field(
+    auto_offset_reset: _AutoOffsetReset = Field(
         default="earliest",
         description="Kafka consumer auto reset offset",
     )
@@ -60,7 +63,7 @@ class InputModel(BaseModel):
         description="Timeout in seconds to stop polling if there are no messages arriving.",
     )
 
-    msg_value_encoding: Literal["utf-8", "base64"] = Field(
+    msg_value_encoding: _MessageEncodings = Field(
         default="utf-8",
         description="Encoding of messages",
     )
@@ -71,5 +74,19 @@ class OutputModel(BaseModel):
     KafkaConsumer Piece Output Model
     """
     messages_file_path: str = Field(
+        default="consumed_messages.jsonl",
         description="File with consumed messages."
+    )
+    topics: List[str] = Field(
+        title="topic name",
+        default=["default-topic"],
+        description="Topic name",
+    )
+    group_id: str = Field(
+        default="default-group",
+        description="Kafka consumer group",
+    )
+    msg_value_encoding: _MessageEncodings = Field(
+        default="utf-8",
+        description="Encoding of messages",
     )
