@@ -1448,9 +1448,7 @@
                     "type": "boolean"
                 },
                 "messages_filename": {
-                    "default": [
-                        "default-topic"
-                    ],
+                    "default": "messages.jsonl",
                     "description": "Topic name",
                     "title": "messages filename",
                     "type": "string"
