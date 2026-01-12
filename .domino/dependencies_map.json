@@ -19,15 +19,16 @@
             "InputDataSEPSPiece",
             "RemoveUnusedMeteoPiece",
             "AddSunPiece",
+            "KafkaProducerPiece",
             "CiselnikyPiece",
             "AddAdvancedMeteoPiece",
             "TrainRandomForestRegressorPiece",
             "Meteo_FVEPiece"
         ],
         "secrets": [
-            "KAFKA_KEY_PEM",
             "KAFKA_CA_CERT_PEM",
-            "KAFKA_CERT_PEM"
+            "KAFKA_CERT_PEM",
+            "KAFKA_KEY_PEM"
         ],
         "source_image": "ghcr.io/iisas/spice_domino_pieces:development-group0"
     },
