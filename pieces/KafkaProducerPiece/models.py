@@ -30,7 +30,7 @@ class InputModel(BaseModel):
         # json_schema_extra={"from_upstream": "always"}
     )
 
-    partition: int = Field(
+    partition: int | None = Field(
         title="partition",
         default=None,
         description="Partition number",
