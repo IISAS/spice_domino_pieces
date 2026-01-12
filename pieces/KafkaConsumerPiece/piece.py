@@ -37,13 +37,13 @@ class KafkaConsumerPiece(BasePiece):
                 raise Exception(
                     "KAFKA_KEY_PEM not found in ENV vars. Please add it to the secrets section of the Piece.")
 
-        if input_data.message_polling_timeout is not None or input_data.message_polling_timeout <= 0.0:
+        if input_data.message_polling_timeout is None or input_data.message_polling_timeout <= 0.0:
             self.logger.warning(
                 "message_polling_timeout was set to infinite and will be set to {} seconds".format(
                     _DEFAULT_MESSAGE_POLLING_TIMEOUT))
             input_data.message_polling_timeout = _DEFAULT_MESSAGE_POLLING_TIMEOUT
 
-        if input_data.no_message_timeout is not None or input_data.no_message_timeout < input_data.message_polling_timeout:
+        if input_data.no_message_timeout is None or input_data.no_message_timeout < input_data.message_polling_timeout:
             self.logger.warning(
                 "no_message_timeout was set to lower than message_polling_timeout and will be set to {} seconds".format(
                     _DEFAULT_NO_MESSAGE_TIMEOUT))
