@@ -55,7 +55,7 @@ class InputModel(BaseModel):
     )
 
     bootstrap_servers: str = Field(
-        default="localhost:9093",
+        default="spice.stevo.fedcloud.eu:9093",
         description="The Kafka broker address",
     )
 
