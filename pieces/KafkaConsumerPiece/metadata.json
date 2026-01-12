@@ -2,7 +2,7 @@
     "name": "KafkaConsumerPiece",
     "description": "Consumer for Kafka to read streaming data",
     "dependency": {
-        "requirements_file": "requirements_0.txt"
+        "requirements_file": "requirements_kafka.txt"
     },
     "container_resources": {
         "requests": {
