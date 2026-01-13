@@ -684,8 +684,8 @@
     "KafkaConsumerPiece": {
         "name": "KafkaConsumerPiece",
         "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_kafka.txt"
+            "dockerfile": "Dockerfile.kafka",
+            "requirements_file": null
         },
         "tags": [
             "Kafka",
@@ -1409,8 +1409,8 @@
     "KafkaProducerPiece": {
         "name": "KafkaProducerPiece",
         "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_kafka.txt"
+            "dockerfile": "Dockerfile.kafka",
+            "requirements_file": null
         },
         "tags": [
             "Kafka",
