@@ -36,7 +36,7 @@ class InputModel(BaseModel):
         description="Partition number",
     )
 
-    acks: Literal["fire_and_forget", "wait_for_leader", "all"] = Field(
+    acks_raw: Literal["fire_and_forget", "wait_for_leader", "all"] = Field(
         title="acks",
         default="fire_and_forget",
         description="The number of acknowledgments the producer requires the leader to have received before considering a request complete.",
@@ -63,6 +63,14 @@ class InputModel(BaseModel):
         default="SSL",
         description="Security protocol",
     )
+
+    @property
+    def acks(self) -> str:
+        return {
+            "fire_and_forget": "0",
+            "wait_for_leader": "1",
+            "all": "all",
+        }[self.acks_raw]
 
 
 class OutputModel(BaseModel):
