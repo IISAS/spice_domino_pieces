@@ -1462,7 +1462,7 @@
                     "description": "Partition number",
                     "title": "partition"
                 },
-                "acks": {
+                "acks_raw": {
                     "default": "fire_and_forget",
                     "description": "The number of acknowledgments the producer requires the leader to have received before considering a request complete.",
                     "enum": [
