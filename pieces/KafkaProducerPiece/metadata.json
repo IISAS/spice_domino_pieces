@@ -2,7 +2,7 @@
     "name": "KafkaProducerPiece",
     "description": "Producer for Kafka to write streaming data",
     "dependency": {
-        "requirements_file": "requirements_kafka.txt"
+        "dockerfile": "Dockerfile.kafka"
     },
     "container_resources": {
         "requests": {
