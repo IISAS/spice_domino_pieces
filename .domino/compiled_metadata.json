@@ -685,7 +685,7 @@
         "name": "KafkaConsumerPiece",
         "dependency": {
             "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
+            "requirements_file": "requirements_kafka.txt"
         },
         "tags": [
             "Kafka",
@@ -730,7 +730,7 @@
                     "type": "array"
                 },
                 "bootstrap_servers": {
-                    "default": "localhost:9093",
+                    "default": "spice.stevo.fedcloud.eu:9093",
                     "description": "The Kafka broker address",
                     "title": "Bootstrap Servers",
                     "type": "string"
@@ -792,14 +792,39 @@
             "description": "KafkaConsumer Piece Output Model",
             "properties": {
                 "messages_file_path": {
+                    "default": "consumed_messages.jsonl",
                     "description": "File with consumed messages.",
                     "title": "Messages File Path",
                     "type": "string"
+                },
+                "topics": {
+                    "default": [
+                        "default-topic"
+                    ],
+                    "description": "Topic name",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "topic name",
+                    "type": "array"
+                },
+                "group_id": {
+                    "default": "default-group",
+                    "description": "Kafka consumer group",
+                    "title": "Group Id",
+                    "type": "string"
+                },
+                "msg_value_encoding": {
+                    "default": "utf-8",
+                    "description": "Encoding of messages",
+                    "enum": [
+                        "utf-8",
+                        "base64"
+                    ],
+                    "title": "Msg Value Encoding",
+                    "type": "string"
                 }
             },
-            "required": [
-                "messages_file_path"
-            ],
             "title": "OutputModel",
             "type": "object"
         },
@@ -1385,7 +1410,7 @@
         "name": "KafkaProducerPiece",
         "dependency": {
             "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
+            "requirements_file": "requirements_kafka.txt"
         },
         "tags": [
             "Kafka",
@@ -1425,10 +1450,17 @@
                     "type": "string"
                 },
                 "partition": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
                     "default": null,
                     "description": "Partition number",
-                    "title": "partition",
-                    "type": "integer"
+                    "title": "partition"
                 },
                 "acks": {
                     "default": "fire_and_forget",
@@ -1454,7 +1486,7 @@
                     "type": "string"
                 },
                 "bootstrap_servers": {
-                    "default": "localhost:9093",
+                    "default": "spice.stevo.fedcloud.eu:9093",
                     "description": "The Kafka broker address",
                     "title": "Bootstrap Servers",
                     "type": "string"
