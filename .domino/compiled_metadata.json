@@ -526,6 +526,160 @@
         "secrets_schema": null,
         "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/FVEPiece"
     },
+    "KafkaTopicCreatorPiece": {
+        "name": "KafkaTopicCreatorPiece",
+        "dependency": {
+            "dockerfile": "Dockerfile.kafka",
+            "requirements_file": null
+        },
+        "tags": [
+            "Kafka",
+            "admin",
+            "stream"
+        ],
+        "style": {
+            "node_label": "Kafka Topic Creator Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-duotone fa-solid fa-left-to-bracket",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Topic creation for Kafka",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "KafkaTopicCreator Piece Input Model",
+            "properties": {
+                "bootstrap.servers": {
+                    "default": "localhost:9093",
+                    "description": "The Kafka broker address",
+                    "title": "Bootstrap.Servers",
+                    "type": "string"
+                },
+                "security.protocol": {
+                    "default": "SSL",
+                    "description": "Security protocol",
+                    "title": "Security.Protocol",
+                    "type": "string"
+                },
+                "topics": {
+                    "default": [
+                        "test-topic1",
+                        "test-topic2"
+                    ],
+                    "description": "Topic names",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Topics",
+                    "type": "array"
+                },
+                "num_partitions": {
+                    "default": 6,
+                    "description": "Number of partitions per topic",
+                    "title": "Num Partitions",
+                    "type": "integer"
+                },
+                "replication_factor": {
+                    "default": 3,
+                    "description": "Number of replications",
+                    "title": "Replication Factor",
+                    "type": "integer"
+                },
+                "cleanup.policy": {
+                    "default": [
+                        "delete"
+                    ],
+                    "description": "This config designates the retention policy to use on log segments. The \"delete\" policy (which is the default) will discard old segments when their retention time or size limit has been reached. The \"compact\" policy will enable log compaction, which retains the latest value for each key. It is also possible to specify both policies in a comma-separated list (e.g. \"delete,compact\"). In this case, old segments will be discarded per the retention time and size configuration, while retained segments will be compacted.",
+                    "items": {
+                        "enum": [
+                            "compact",
+                            "delete"
+                        ],
+                        "type": "string"
+                    },
+                    "title": "Cleanup.Policy",
+                    "type": "array"
+                },
+                "retention.ms": {
+                    "default": 604800000,
+                    "description": "This configuration controls the maximum time we will retain a log before we will discard old log segments to free up space if we are using the \"delete\" retention policy. This represents an SLA on how soon consumers must read their data. If set to -1, no time limit is applied. Additionally, retention.ms configuration operates independently of \"segment.ms\" and \"segment.bytes\" configurations. Moreover, it triggers the rolling of new segment if the retention.ms condition is satisfied.",
+                    "title": "Retention.Ms",
+                    "type": "integer"
+                },
+                "min.insync.replicas": {
+                    "default": 2,
+                    "description": "Specifies the minimum number of in-sync replicas (including the leader) required for a write to succeed when a producer sets acks to \"all\" (or \"-1\"). In the acks=all case, every in-sync replica must acknowledge a write for it to be considered successful. E.g., if a topic has replication.factor of 3 and the ISR set includes all three replicas, then all three replicas must acknowledge an acks=all write for it to succeed, even if min.insync.replicas happens to be less than 3. If acks=all and the current ISR set contains fewer than min.insync.replicas members, then the producer will raise an exception (either NotEnoughReplicas or NotEnoughReplicasAfterAppend).\nRegardless of the acks setting, the messages will not be visible to the consumers until they are replicated to all in-sync replicas and the min.insync.replicas condition is met.\nWhen used together, min.insync.replicas and acks allow you to enforce greater durability guarantees. A typical scenario would be to create a topic with a replication factor of 3, set min.insync.replicas to 2, and produce with acks of \"all\". This ensures that a majority of replicas must persist a write before it's considered successful by the producer and it's visible to consumers.\n\nNote that when the Eligible Leader Replicas feature is enabled, the semantics of this config changes. Please refer to the ELR section for more info.",
+                    "title": "Min.Insync.Replicas",
+                    "type": "integer"
+                }
+            },
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "KafkaTopicCreator Piece Output Model",
+            "properties": {
+                "topics_created": {
+                    "default": [],
+                    "description": "Names of created topics",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Topics Created",
+                    "type": "array"
+                }
+            },
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": {
+            "properties": {
+                "ssl.ca.pem": {
+                    "description": "CA certificate in PEM format",
+                    "format": "password",
+                    "title": "Ssl.Ca.Pem",
+                    "type": "string",
+                    "writeOnly": true
+                },
+                "ssl.certificate.pem": {
+                    "description": "Client's certificate in PEM format",
+                    "format": "password",
+                    "title": "Ssl.Certificate.Pem",
+                    "type": "string",
+                    "writeOnly": true
+                },
+                "ssl.key.pem": {
+                    "description": "Client's private key in PEM format",
+                    "format": "password",
+                    "title": "Ssl.Key.Pem",
+                    "type": "string",
+                    "writeOnly": true
+                }
+            },
+            "required": [
+                "ssl.ca.pem",
+                "ssl.certificate.pem",
+                "ssl.key.pem"
+            ],
+            "title": "SecretsModel",
+            "type": "object"
+        },
+        "source_url": "https://github.com/IISAS/spice_domino_pieces/tree/main/pieces/KafkaTopicCreatorPiece"
+    },
     "ExecuteShellPiece": {
         "name": "ExecuteShellPiece",
         "dependency": {
