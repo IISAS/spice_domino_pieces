@@ -1,25 +1,25 @@
-from typing import List, Literal
+from typing import List
 
 from pydantic import BaseModel, Field, SecretStr
 
 _DEFAULT_MESSAGE_POLLING_TIMEOUT = 5.0
 _DEFAULT_NO_MESSAGE_TIMEOUT = 10.0
 
-_AutoOffsetReset = Literal["smallest", "earliest", "beginning", "largest", "latest", "end", "error"]
-_MessageEncodings = Literal["utf-8", "base64"]
-
 
 class SecretsModel(BaseModel):
     ssl_ca_pem: SecretStr = Field(
         alias="ssl.ca.pem",
+        default="",
         description="CA certificate in PEM format",
     )
     ssl_certificate_pem: SecretStr = Field(
         alias="ssl.certificate.pem",
+        default="",
         description="Client's certificate in PEM format"
     )
     ssl_key_pem: SecretStr = Field(
         alias="ssl.key.pem",
+        default="",
         description="Client's private key in PEM format",
     )
 
@@ -30,6 +30,7 @@ class InputModel(BaseModel):
     """
 
     topics: List[str] = Field(
+        alias="topics",
         default=["default-topic"],
         description="Topic name",
         # json_schema_extra={"from_upstream": "always"}
@@ -53,10 +54,10 @@ class InputModel(BaseModel):
         description="Kafka consumer group",
     )
 
-    auto_offset_reset: _AutoOffsetReset = Field(
+    auto_offset_reset: str = Field(
         alias="auto.offset.reset",
         default="earliest",
-        description="Kafka consumer auto reset offset",
+        description="Kafka consumer auto reset offset; i.e. 'smallest', 'earliest', 'beginning', 'largest', 'latest', 'end', 'error'",
     )
 
     message_polling_timeout: float = Field(
@@ -71,7 +72,7 @@ class InputModel(BaseModel):
         description="Timeout in seconds to stop polling if there are no messages arriving.",
     )
 
-    msg_value_encoding: _MessageEncodings = Field(
+    msg_value_encoding: str = Field(
         alias="msg.value.encoding",
         default="utf-8",
         description="Encoding of messages",
@@ -94,7 +95,7 @@ class OutputModel(BaseModel):
         default="default-group",
         description="Kafka consumer group",
     )
-    msg_value_encoding: _MessageEncodings = Field(
+    msg_value_encoding: str = Field(
         default="utf-8",
-        description="Encoding of messages",
+        description="Encoding of messages; i.e., 'utf-8', 'base64'",
     )
