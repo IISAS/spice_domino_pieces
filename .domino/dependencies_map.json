@@ -28,6 +28,26 @@
     },
     "group1": {
         "dependency": {
+            "dockerfile": "Dockerfile.kafka",
+            "requirements_file": null
+        },
+        "pieces": [
+            "KafkaTopicCreatorPiece",
+            "KafkaConsumerPiece",
+            "KafkaProducerPiece"
+        ],
+        "secrets": [
+            "ssl.key.pem",
+            "ssl.ca.pem",
+            "KAFKA_CA_CERT_PEM",
+            "KAFKA_CERT_PEM",
+            "ssl.certificate.pem",
+            "KAFKA_KEY_PEM"
+        ],
+        "source_image": "ghcr.io/iisas/spice_domino_pieces:development-group1"
+    },
+    "group2": {
+        "dependency": {
             "dockerfile": "Dockerfile_1",
             "requirements_file": null
         },
@@ -35,22 +55,6 @@
             "ExecuteShellPiece"
         ],
         "secrets": [],
-        "source_image": "ghcr.io/iisas/spice_domino_pieces:development-group1"
-    },
-    "group2": {
-        "dependency": {
-            "dockerfile": "Dockerfile.kafka",
-            "requirements_file": null
-        },
-        "pieces": [
-            "KafkaConsumerPiece",
-            "KafkaProducerPiece"
-        ],
-        "secrets": [
-            "KAFKA_KEY_PEM",
-            "KAFKA_CERT_PEM",
-            "KAFKA_CA_CERT_PEM"
-        ],
         "source_image": "ghcr.io/iisas/spice_domino_pieces:development-group2"
     },
     "group3": {
