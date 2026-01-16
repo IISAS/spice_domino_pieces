@@ -35,17 +35,17 @@ def encode_msg_value(msg_value, encoding):
 
 def test_with_fake_kafka_cluster():
     input_data = {
-        "topics": ['test-topic1', 'test-topic2'],
-        "bootstrap.servers": ['fake-broker'],
-        "security.protocol": "none",
-        "group.id": "test.group",
-        "msg.value.encoding": "utf-8",
+        "topics": ['topic.default1', 'topic.default2'],
+        "bootstrap_servers": ['fake.broker'],
+        "security_protocol": "none",
+        "group_id": "group.default",
+        "msg_value_encoding": "utf-8",
     }
 
     secrets_data = {
-        'ssl.ca.pem': "",
-        'ssl.certificate.pem': "",
-        'ssl.key.pem': "",
+        'ssl_ca_pem': "",
+        'ssl_certificate_pem': "",
+        'ssl_key_pem': "",
     }
 
     num_partitions = 5
@@ -61,7 +61,7 @@ def test_with_fake_kafka_cluster():
     for i in range(0, 10):
         topic = input_data['topics'][randint(0, len(input_data['topics']) - 1)]
         key = f'test_key{randint(0, 3)}'
-        value = encode_msg_value(f'test_value{i}', input_data['msg.value.encoding'])
+        value = encode_msg_value(f'test_value{i}', input_data['msg_value_encoding'])
         partition = randint(0, num_partitions - 1)
         timestamp = int(datetime.now().timestamp() * 1000)
         producer.produce(
@@ -89,16 +89,16 @@ def test_with_fake_kafka_cluster():
 @skip_envs('github')
 def test_with_real_kafka_cluster():
     input_data = {
-        "bootstrap.servers": os.getenv("bootstrap.servers", "").split(","),
-        "security.protocol": "SSL",
-        "topics": ["test.topic"],
-        "group.id": "test.group",
-        "msg.value.encoding": "utf-8",
+        "bootstrap_servers": os.getenv("bootstrap_servers", "").split(","),
+        "security_protocol": "SSL",
+        "topics": ["topic.default1", "topic.default2"],
+        "group_id": "group.default",
+        "msg_value_encoding": "utf-8",
     }
     secrets_data = {
-        "ssl.ca.pem": os.environ.get('ssl.ca.pem', '').replace("\\n", "\n"),
-        "ssl.certificate.pem": os.environ.get('ssl.certificate.pem', '').replace("\\n", "\n"),
-        "ssl.key.pem": os.environ.get('ssl.key.pem', '').replace("\\n", "\n"),
+        "ssl_ca_pem": os.environ.get('ssl_ca_pem', '').replace("\\n", "\n"),
+        "ssl_certificate_pem": os.environ.get('ssl_certificate_pem', '').replace("\\n", "\n"),
+        "ssl_key_pem": os.environ.get('ssl_key_pem', '').replace("\\n", "\n"),
     }
 
     output = piece_dry_run(

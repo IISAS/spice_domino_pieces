@@ -121,7 +121,7 @@ class KafkaConsumerPiece(BasePiece):
 
         # Set display result
         self.display_result = {
-            "group.id": input_data.group_id,
+            "group_id": input_data.group_id,
             "messages_file_path": messages_file_path,
             "duration": time.time() - start_time,
         }
