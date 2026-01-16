@@ -8,7 +8,7 @@ from domino.testing import piece_dry_run
 from domino.testing.utils import skip_envs
 from pydantic import BaseModel
 
-piece_name = "KafkaTopicCreatorPiece"
+from .models import InputModel, SecretsModel
 
 logging.basicConfig(
     level=logging.INFO,
@@ -47,17 +47,20 @@ def test_kafka_topic_creator_piece():
         "retention.ms": 1000,
     }
 
+    input_model = InputModel(**piece_conf)
+    secrets_model = SecretsModel(**piece_conf)
+
     admin = AdminClient(conf=admin_conf)
 
     # 1) Send delete request
-    fs = admin.delete_topics(piece_conf["topics"], operation_timeout=10)
+    fs = admin.delete_topics(input_model.topics, operation_timeout=10)
     for t, f in fs.items():
         try:
             f.result()
             logger.info(f"Delete request sent for topic: {t}")
         except Exception as e:
             if e.args[0].code() == KafkaError.UNKNOWN_TOPIC_OR_PART:
-                logger.warning(f"At least one of the topics '{piece_conf['topics']}' does not exist")
+                logger.warning(f"At least one of the topics '{input_model.topics}' does not exist")
                 continue
             logger.error(f"Delete request error: {e}")
             raise
@@ -71,26 +74,17 @@ def test_kafka_topic_creator_piece():
         md = admin.list_topics(timeout=10)  # fetch cluster metadata
         topics = md.topics.keys()  # existing topic names
 
-        if all(topic not in topics for topic in piece_conf["topics"]):
-            logger.info(f"Topics '{piece_conf['topics']}' have been removed.")
+        if all(topic not in topics for topic in input_model.topics):
+            logger.info(f"Topics '{input_model.topics}' have been removed.")
             break
 
-        logger.info(f"At least one of the topics '{piece_conf['topics']}' still exists, waiting…")
+        logger.info(f"At least one of the topics '{input_model.topics}' still exists, waiting…")
         time.sleep(1)  # wait a bit before retrying
 
     output = piece_dry_run(
-        piece_name=piece_name,
-        input_data={
-            "bootstrap.servers": piece_conf["bootstrap.servers"],
-            "security.protocol": piece_conf["security.protocol"],
-            "topics": piece_conf["topics"],
-            "ssl.endpoint.identification.algorithm": piece_conf["ssl.endpoint.identification.algorithm"],
-        },
-        secrets_data={
-            "ssl.ca.pem": piece_conf["ssl.ca.pem"],
-            "ssl.certificate.pem": piece_conf["ssl.certificate.pem"],
-            "ssl.key.pem": piece_conf["ssl.key.pem"],
-        },
+        piece_name="KafkaTopicCreatorPiece",
+        input_data=input_model.model_dump(by_alias=True),
+        secrets_data=dump_with_secrets(secrets_model, by_alias=True),
     )
 
     # Assertions
@@ -105,9 +99,9 @@ def test_kafka_topic_creator_piece():
         md = admin.list_topics(timeout=10)  # fetch cluster metadata
         topics = md.topics.keys()  # existing topic names
 
-        if all(topic in topics for topic in piece_conf["topics"]):
-            logger.info(f"Topics '{piece_conf['topics']}' have been created.")
+        if all(topic in topics for topic in input_model.topics):
+            logger.info(f"Topics '{input_model.topics}' have been created.")
             break
 
-        logger.info(f"At least one of the topics '{piece_conf['topics']}' is not yet created, waiting…")
+        logger.info(f"At least one of the topics '{input_model.topics}' is not yet created, waiting…")
         time.sleep(1)  # wait a bit before retrying

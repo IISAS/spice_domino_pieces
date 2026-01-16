@@ -3,10 +3,11 @@ from unittest.mock import patch
 
 from confluent_kafka.admin import ClusterMetadata
 from domino.testing import piece_dry_run
+from domino.testing.utils import skip_envs
 from mockafka import FakeAdminClientImpl
 from pydantic import BaseModel
 
-piece_name = "KafkaTopicCreatorPiece"
+from .models import InputModel, SecretsModel
 
 
 def dump_with_secrets(model: BaseModel, by_alias=False) -> dict:
@@ -35,6 +36,7 @@ class FakeAdminFuture:
         return None  # success
 
 
+@skip_envs('github')
 def test_kafka_topic_creator_piece():
     admin = MyFakeAdminClientImpl(clean=True)
     with patch("confluent_kafka.admin.AdminClient", return_value=admin):
@@ -48,19 +50,13 @@ def test_kafka_topic_creator_piece():
             "ssl.endpoint.identification.algorithm": "none",
         }
 
+        input_model = InputModel(**piece_conf)
+        secrets_model = SecretsModel(**piece_conf)
+
         output = piece_dry_run(
-            piece_name=piece_name,
-            input_data={
-                "bootstrap.servers": piece_conf["bootstrap.servers"],
-                "security.protocol": piece_conf["security.protocol"],
-                "topics": piece_conf["topics"],
-                "ssl.endpoint.identification.algorithm": piece_conf["ssl.endpoint.identification.algorithm"],
-            },
-            secrets_data={
-                "ssl.ca.pem": piece_conf["ssl.ca.pem"],
-                "ssl.certificate.pem": piece_conf["ssl.certificate.pem"],
-                "ssl.key.pem": piece_conf["ssl.key.pem"],
-            },
+            piece_name="KafkaTopicCreatorPiece",
+            input_data=input_model.model_dump(by_alias=True),
+            secrets_data=dump_with_secrets(secrets_model, by_alias=True),
         )
 
         # Assertions
