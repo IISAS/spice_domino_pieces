@@ -1,3 +1,4 @@
+import importlib
 import logging
 import os
 import time
@@ -8,7 +9,7 @@ from domino.testing import piece_dry_run
 from domino.testing.utils import skip_envs
 from pydantic import BaseModel
 
-from pieces.KafkaTopicCreatorPiece.models import InputModel, SecretsModel
+piece_name = "KafkaTopicCreatorPiece"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -47,6 +48,10 @@ def test_kafka_topic_creator_piece():
         "retention.ms": 1000,
     }
 
+    piece_model_module = importlib.import_module(f"{piece_name}.models")
+    InputModel = getattr(piece_model_module, "InputModel")
+    SecretsModel = getattr(piece_model_module, "SecretsModel")
+
     input_model = InputModel(**piece_conf)
     secrets_model = SecretsModel(**piece_conf)
 
@@ -82,7 +87,7 @@ def test_kafka_topic_creator_piece():
         time.sleep(1)  # wait a bit before retrying
 
     output = piece_dry_run(
-        piece_name="KafkaTopicCreatorPiece",
+        piece_name=piece_name,
         input_data=input_model.model_dump(by_alias=True),
         secrets_data=dump_with_secrets(secrets_model, by_alias=True),
     )

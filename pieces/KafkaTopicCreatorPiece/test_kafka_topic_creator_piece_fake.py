@@ -1,3 +1,4 @@
+import importlib
 import os
 from unittest.mock import patch
 
@@ -6,7 +7,7 @@ from domino.testing import piece_dry_run
 from mockafka import FakeAdminClientImpl
 from pydantic import BaseModel
 
-from .models import InputModel, SecretsModel
+piece_name = "KafkaTopicCreatorPiece"
 
 
 def dump_with_secrets(model: BaseModel, by_alias=False) -> dict:
@@ -48,11 +49,15 @@ def test_kafka_topic_creator_piece():
             "ssl.endpoint.identification.algorithm": "none",
         }
 
+        piece_model_module = importlib.import_module(f"{piece_name}.models")
+        InputModel = getattr(piece_model_module, "InputModel")
+        SecretsModel = getattr(piece_model_module, "SecretsModel")
+
         input_model = InputModel(**piece_conf)
         secrets_model = SecretsModel(**piece_conf)
 
         output = piece_dry_run(
-            piece_name="KafkaTopicCreatorPiece",
+            piece_name=piece_name,
             input_data=input_model.model_dump(by_alias=True),
             secrets_data=dump_with_secrets(secrets_model, by_alias=True),
         )
