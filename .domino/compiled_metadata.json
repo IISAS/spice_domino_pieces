@@ -853,7 +853,7 @@
                 "backgroundColor": "#ebebeb"
             },
             "useIcon": true,
-            "icon_class_name": "fa-duotone fa-solid fa-right-to-bracket",
+            "icon_class_name": "fa-solid:right-to-bracket",
             "iconStyle": {
                 "cursor": "pointer"
             }
@@ -908,16 +908,7 @@
                 },
                 "auto.offset.reset": {
                     "default": "earliest",
-                    "description": "Kafka consumer auto reset offset",
-                    "enum": [
-                        "smallest",
-                        "earliest",
-                        "beginning",
-                        "largest",
-                        "latest",
-                        "end",
-                        "error"
-                    ],
+                    "description": "Kafka consumer auto reset offset; i.e. 'smallest', 'earliest', 'beginning', 'largest', 'latest', 'end', 'error'",
                     "title": "Auto.Offset.Reset",
                     "type": "string"
                 },
@@ -936,10 +927,6 @@
                 "msg.value.encoding": {
                     "default": "utf-8",
                     "description": "Encoding of messages",
-                    "enum": [
-                        "utf-8",
-                        "base64"
-                    ],
                     "title": "Msg.Value.Encoding",
                     "type": "string"
                 }
@@ -975,11 +962,7 @@
                 },
                 "msg_value_encoding": {
                     "default": "utf-8",
-                    "description": "Encoding of messages",
-                    "enum": [
-                        "utf-8",
-                        "base64"
-                    ],
+                    "description": "Encoding of messages; i.e., 'utf-8', 'base64'",
                     "title": "Msg Value Encoding",
                     "type": "string"
                 }
@@ -990,6 +973,7 @@
         "secrets_schema": {
             "properties": {
                 "ssl.ca.pem": {
+                    "default": "",
                     "description": "CA certificate in PEM format",
                     "format": "password",
                     "title": "Ssl.Ca.Pem",
@@ -997,6 +981,7 @@
                     "writeOnly": true
                 },
                 "ssl.certificate.pem": {
+                    "default": "",
                     "description": "Client's certificate in PEM format",
                     "format": "password",
                     "title": "Ssl.Certificate.Pem",
@@ -1004,6 +989,7 @@
                     "writeOnly": true
                 },
                 "ssl.key.pem": {
+                    "default": "",
                     "description": "Client's private key in PEM format",
                     "format": "password",
                     "title": "Ssl.Key.Pem",
@@ -1011,11 +997,6 @@
                     "writeOnly": true
                 }
             },
-            "required": [
-                "ssl.ca.pem",
-                "ssl.certificate.pem",
-                "ssl.key.pem"
-            ],
             "title": "SecretsModel",
             "type": "object"
         },
