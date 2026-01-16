@@ -1,4 +1,3 @@
-import importlib
 import os
 from unittest.mock import patch
 
@@ -49,17 +48,19 @@ def test_kafka_topic_creator_piece():
             "ssl.endpoint.identification.algorithm": "none",
         }
 
-        piece_model_module = importlib.import_module(f"{piece_name}.models")
-        InputModel = getattr(piece_model_module, "InputModel")
-        SecretsModel = getattr(piece_model_module, "SecretsModel")
-
-        input_model = InputModel(**piece_conf)
-        secrets_model = SecretsModel(**piece_conf)
-
         output = piece_dry_run(
             piece_name=piece_name,
-            input_data=input_model.model_dump(by_alias=True),
-            secrets_data=dump_with_secrets(secrets_model, by_alias=True),
+            input_data={
+                "bootstrap.servers": piece_conf["bootstrap.servers"],
+                "security.protocol": piece_conf["security.protocol"],
+                "topics": piece_conf["topics"],
+                "ssl.endpoint.identification.algorithm": piece_conf["ssl.endpoint.identification.algorithm"],
+            },
+            secrets_data={
+                "ssl.ca.pem": piece_conf["ssl.ca.pem"],
+                "ssl.certificate.pem": piece_conf["ssl.certificate.pem"],
+                "ssl.key.pem": piece_conf["ssl.key.pem"],
+            },
         )
 
         # Assertions
