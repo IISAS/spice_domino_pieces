@@ -1,0 +1,26 @@
+{
+    "name": "KafkaTopicCreatorPiece",
+    "description": "Topic creation for Kafka",
+    "dependency": {
+        "dockerfile": "Dockerfile.kafka"
+    },
+    "container_resources": {
+        "requests": {
+            "cpu": 100,
+            "memory": 128
+        },
+        "limits": {
+            "cpu": 500,
+            "memory": 512
+        }
+    },
+    "tags": [
+        "Kafka",
+        "admin",
+        "stream"
+    ],
+    "style": {
+        "node_label": "Kafka Topic Creator Piece",
+        "icon_class_name": "fa-duotone fa-solid fa-left-to-bracket"
+    }
+}
