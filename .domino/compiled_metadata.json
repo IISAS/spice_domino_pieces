@@ -880,28 +880,33 @@
                     "items": {
                         "type": "string"
                     },
-                    "title": "topic name",
+                    "title": "Topics",
                     "type": "array"
                 },
-                "bootstrap_servers": {
-                    "default": "spice.stevo.fedcloud.eu:9093",
-                    "description": "The Kafka broker address",
-                    "title": "Bootstrap Servers",
-                    "type": "string"
+                "bootstrap.servers": {
+                    "default": [
+                        "spice-kafka-broker-1.stevo.fedcloud.eu:9093"
+                    ],
+                    "description": "Kafka broker addresses",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Bootstrap.Servers",
+                    "type": "array"
                 },
-                "security_protocol": {
+                "security.protocol": {
                     "default": "SSL",
                     "description": "Security protocol",
-                    "title": "Security Protocol",
+                    "title": "Security.Protocol",
                     "type": "string"
                 },
-                "group_id": {
+                "group.id": {
                     "default": "default-group",
                     "description": "Kafka consumer group",
-                    "title": "Group Id",
+                    "title": "Group.Id",
                     "type": "string"
                 },
-                "auto_offset_reset": {
+                "auto.offset.reset": {
                     "default": "earliest",
                     "description": "Kafka consumer auto reset offset",
                     "enum": [
@@ -913,29 +918,29 @@
                         "end",
                         "error"
                     ],
-                    "title": "Auto Offset Reset",
+                    "title": "Auto.Offset.Reset",
                     "type": "string"
                 },
-                "message_polling_timeout": {
+                "message.polling.timeout": {
                     "default": 5.0,
                     "description": "Timeout in seconds for polling messages.",
-                    "title": "Message Polling Timeout",
+                    "title": "Message.Polling.Timeout",
                     "type": "number"
                 },
-                "no_message_timeout": {
+                "no.message.timeout": {
                     "default": 10.0,
                     "description": "Timeout in seconds to stop polling if there are no messages arriving.",
-                    "title": "No Message Timeout",
+                    "title": "No.Message.Timeout",
                     "type": "number"
                 },
-                "msg_value_encoding": {
+                "msg.value.encoding": {
                     "default": "utf-8",
                     "description": "Encoding of messages",
                     "enum": [
                         "utf-8",
                         "base64"
                     ],
-                    "title": "Msg Value Encoding",
+                    "title": "Msg.Value.Encoding",
                     "type": "string"
                 }
             },
@@ -959,7 +964,7 @@
                     "items": {
                         "type": "string"
                     },
-                    "title": "topic name",
+                    "title": "Topics",
                     "type": "array"
                 },
                 "group_id": {
@@ -984,32 +989,32 @@
         },
         "secrets_schema": {
             "properties": {
-                "KAFKA_CA_CERT_PEM": {
+                "ssl.ca.pem": {
                     "description": "CA certificate in PEM format",
                     "format": "password",
-                    "title": "Kafka Ca Cert Pem",
+                    "title": "Ssl.Ca.Pem",
                     "type": "string",
                     "writeOnly": true
                 },
-                "KAFKA_CERT_PEM": {
+                "ssl.certificate.pem": {
                     "description": "Client's certificate in PEM format",
                     "format": "password",
-                    "title": "Kafka Cert Pem",
+                    "title": "Ssl.Certificate.Pem",
                     "type": "string",
                     "writeOnly": true
                 },
-                "KAFKA_KEY_PEM": {
+                "ssl.key.pem": {
                     "description": "Client's private key in PEM format",
                     "format": "password",
-                    "title": "Kafka Key Pem",
+                    "title": "Ssl.Key.Pem",
                     "type": "string",
                     "writeOnly": true
                 }
             },
             "required": [
-                "KAFKA_CA_CERT_PEM",
-                "KAFKA_CERT_PEM",
-                "KAFKA_KEY_PEM"
+                "ssl.ca.pem",
+                "ssl.certificate.pem",
+                "ssl.key.pem"
             ],
             "title": "SecretsModel",
             "type": "object"
