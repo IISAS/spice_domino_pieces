@@ -874,16 +874,17 @@
             "properties": {
                 "topics": {
                     "default": [
-                        "default-topic"
+                        "topic.default1",
+                        "topic.default2"
                     ],
-                    "description": "Topic name",
+                    "description": "Topic names",
                     "items": {
                         "type": "string"
                     },
                     "title": "Topics",
                     "type": "array"
                 },
-                "bootstrap.servers": {
+                "bootstrap_servers": {
                     "default": [
                         "spice-kafka-broker-1.stevo.fedcloud.eu:9093"
                     ],
@@ -891,43 +892,43 @@
                     "items": {
                         "type": "string"
                     },
-                    "title": "Bootstrap.Servers",
+                    "title": "Bootstrap Servers",
                     "type": "array"
                 },
-                "security.protocol": {
+                "security_protocol": {
                     "default": "SSL",
                     "description": "Security protocol",
-                    "title": "Security.Protocol",
+                    "title": "Security Protocol",
                     "type": "string"
                 },
-                "group.id": {
-                    "default": "default-group",
+                "group_id": {
+                    "default": "group.default",
                     "description": "Kafka consumer group",
-                    "title": "Group.Id",
+                    "title": "Group Id",
                     "type": "string"
                 },
-                "auto.offset.reset": {
+                "auto_offset_reset": {
                     "default": "earliest",
                     "description": "Kafka consumer auto reset offset; i.e. 'smallest', 'earliest', 'beginning', 'largest', 'latest', 'end', 'error'",
-                    "title": "Auto.Offset.Reset",
+                    "title": "Auto Offset Reset",
                     "type": "string"
                 },
-                "message.polling.timeout": {
+                "message_polling_timeout": {
                     "default": 5.0,
                     "description": "Timeout in seconds for polling messages.",
-                    "title": "Message.Polling.Timeout",
+                    "title": "Message Polling Timeout",
                     "type": "number"
                 },
-                "no.message.timeout": {
+                "no_message_timeout": {
                     "default": 10.0,
                     "description": "Timeout in seconds to stop polling if there are no messages arriving.",
-                    "title": "No.Message.Timeout",
+                    "title": "No Message Timeout",
                     "type": "number"
                 },
-                "msg.value.encoding": {
+                "msg_value_encoding": {
                     "default": "utf-8",
                     "description": "Encoding of messages",
-                    "title": "Msg.Value.Encoding",
+                    "title": "Msg Value Encoding",
                     "type": "string"
                 }
             },
@@ -938,14 +939,15 @@
             "description": "KafkaConsumer Piece Output Model",
             "properties": {
                 "messages_file_path": {
-                    "default": "consumed_messages.jsonl",
+                    "default": "messages.jsonl",
                     "description": "File with consumed messages.",
                     "title": "Messages File Path",
                     "type": "string"
                 },
                 "topics": {
                     "default": [
-                        "default-topic"
+                        "topic.default1",
+                        "topic.default2"
                     ],
                     "description": "Topic name",
                     "items": {
@@ -955,7 +957,7 @@
                     "type": "array"
                 },
                 "group_id": {
-                    "default": "default-group",
+                    "default": "group.default",
                     "description": "Kafka consumer group",
                     "title": "Group Id",
                     "type": "string"
@@ -972,27 +974,27 @@
         },
         "secrets_schema": {
             "properties": {
-                "ssl.ca.pem": {
+                "ssl_ca_pem": {
                     "default": "",
                     "description": "CA certificate in PEM format",
                     "format": "password",
-                    "title": "Ssl.Ca.Pem",
+                    "title": "Ssl Ca Pem",
                     "type": "string",
                     "writeOnly": true
                 },
-                "ssl.certificate.pem": {
+                "ssl_certificate_pem": {
                     "default": "",
                     "description": "Client's certificate in PEM format",
                     "format": "password",
-                    "title": "Ssl.Certificate.Pem",
+                    "title": "Ssl Certificate Pem",
                     "type": "string",
                     "writeOnly": true
                 },
-                "ssl.key.pem": {
+                "ssl_key_pem": {
                     "default": "",
                     "description": "Client's private key in PEM format",
                     "format": "password",
-                    "title": "Ssl.Key.Pem",
+                    "title": "Ssl Key Pem",
                     "type": "string",
                     "writeOnly": true
                 }
