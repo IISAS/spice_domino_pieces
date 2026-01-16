@@ -27,50 +27,57 @@ class KafkaConsumerPiece(BasePiece):
             raise Exception("topics cannot be empty, contain empty strings or None elements")
 
         if input_data.security_protocol is not None and input_data.security_protocol.lower().strip() == "ssl":
-            if secrets_data.KAFKA_CA_CERT_PEM is None:
-                raise Exception(
-                    "KAFKA_CA_CERT_PEM not found in ENV vars. Please add it to the secrets section of the Piece.")
-            if secrets_data.KAFKA_CERT_PEM is None:
-                raise Exception(
-                    "KAFKA_CERT_PEM not found in ENV vars. Please add it to the secrets section of the Piece.")
-            if secrets_data.KAFKA_KEY_PEM is None:
-                raise Exception(
-                    "KAFKA_KEY_PEM not found in ENV vars. Please add it to the secrets section of the Piece.")
+            if secrets_data.ssl_ca_pem is None:
+                raise Exception("Please, set the 'ssl_ca_pem' in the Repository Secrets section.")
+            else:
+                self.logger.info('ssl_ca_pem: %s' % secrets_data.ssl_ca_pem)
+            if secrets_data.ssl_certificate_pem is None:
+                raise Exception("Please, set the 'ssl_certificate_pem' in the Repository Secrets section.")
+            else:
+                self.logger.info('ssl_certificate_pem: %s' % secrets_data.ssl_certificate_pem)
+            if secrets_data.ssl_key_pem is None:
+                raise Exception("Please, set the 'ssl_key_pem' in the Repository Secrets section.")
+            else:
+                self.logger.info('ssl_key_pem: %s' % secrets_data.ssl_key_pem)
 
         if input_data.message_polling_timeout is None or input_data.message_polling_timeout <= 0.0:
             self.logger.warning(
                 "message_polling_timeout was set to infinite and will be set to {} seconds".format(
-                    _DEFAULT_MESSAGE_POLLING_TIMEOUT))
+                    _DEFAULT_MESSAGE_POLLING_TIMEOUT
+                )
+            )
             input_data.message_polling_timeout = _DEFAULT_MESSAGE_POLLING_TIMEOUT
 
         if input_data.no_message_timeout is None or input_data.no_message_timeout < input_data.message_polling_timeout:
             self.logger.warning(
                 "no_message_timeout was set to lower than message_polling_timeout and will be set to {} seconds".format(
-                    _DEFAULT_NO_MESSAGE_TIMEOUT))
+                    _DEFAULT_NO_MESSAGE_TIMEOUT
+                )
+            )
             input_data.no_message_timeout = _DEFAULT_NO_MESSAGE_TIMEOUT
 
-        conf = {
+        consumer_conf = {
             # 'debug': 'security,broker,conf',
             # 'log_level': 7,
             'auto.offset.reset': input_data.auto_offset_reset,
-            'bootstrap.servers': input_data.bootstrap_servers,
+            'bootstrap.servers': ','.join(input_data.bootstrap_servers),
             'group.id': input_data.group_id,
             **(
                 {
                     'security.protocol': input_data.security_protocol,
-                    'ssl.ca.pem': secrets_data.KAFKA_CA_CERT_PEM.get_secret_value(),
-                    'ssl.certificate.pem': secrets_data.KAFKA_CERT_PEM.get_secret_value(),
+                    'ssl.ca.pem': secrets_data.ssl_ca_pem.get_secret_value(),
+                    'ssl.certificate.pem': secrets_data.ssl_certificate_pem.get_secret_value(),
                     # https://github.com/confluentinc/librdkafka/issues/4349
                     'ssl.endpoint.identification.algorithm': 'none',
-                    'ssl.key.pem': secrets_data.KAFKA_KEY_PEM.get_secret_value(),
+                    'ssl.key.pem': secrets_data.ssl_key_pem.get_secret_value(),
                 } if input_data.security_protocol is not None
                      and input_data.security_protocol.lower().strip() == 'ssl'
                 else {}
             ),
         }
 
-        c = Consumer(conf)
-        c.subscribe(topics=input_data.topics)
+        consumer = Consumer(consumer_conf)
+        consumer.subscribe(topics=input_data.topics)
 
         messages_file_path = str(Path(self.results_path) / "messages.jsonl")
         self.logger.info("creating output file for polled messages: {}".format(messages_file_path))
@@ -80,7 +87,7 @@ class KafkaConsumerPiece(BasePiece):
         start_time = time.time()
 
         while True:
-            msg = c.poll(timeout=input_data.message_polling_timeout)  # wait up to message_polling_timeout seconds
+            msg = consumer.poll(timeout=input_data.message_polling_timeout)  # wait up to message_polling_timeout seconds
             if msg is None:
                 if time.time() - start_time > input_data.no_message_timeout:  # stop after no_message_timeout seconds with no messages
                     self.logger.info("No messages received.")
@@ -110,7 +117,7 @@ class KafkaConsumerPiece(BasePiece):
                 fp.write(json.dumps(data) + '\n')
 
         fp.close()
-        c.close()
+        consumer.close()
 
         # Set display result
         self.display_result = {

@@ -1,9 +1,9 @@
 import base64
+import logging
 import os
 from datetime import datetime
 from random import randint
 from time import sleep
-from typing import List
 from unittest.mock import patch
 
 from domino.testing import piece_dry_run
@@ -11,39 +11,16 @@ from domino.testing.utils import skip_envs
 from mockafka import FakeConsumer, FakeProducer, FakeAdminClientImpl
 from mockafka.admin_client import NewTopic
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+)
+
+logger = logging.getLogger(__name__)
+
 
 def get_cls_full_name(cls):
     return cls.__module__ + '.' + cls.__name__
-
-
-def run_piece(
-    topics: List[str],
-    bootstrap_servers: List[str],
-    group_id: str,
-    security_protocol: str,
-    msg_value_encoding: str,
-):
-    KAFKA_CA_CERT_PEM = os.environ.get('KAFKA_CA_CERT_PEM', '').replace("\\n", "\n")
-    KAFKA_CERT_PEM = os.environ.get('KAFKA_CERT_PEM', '').replace("\\n", "\n")
-    KAFKA_KEY_PEM = os.environ.get('KAFKA_KEY_PEM', '').replace("\\n", "\n")
-
-    return piece_dry_run(
-        piece_name="KafkaConsumerPiece",
-        input_data={
-            'topics': topics,
-            'bootstrap_servers': bootstrap_servers,
-            'group_id': group_id,
-            'security_protocol': security_protocol,
-            'message_polling_timeout': 10.0,
-            'no_message_timeout': 60.0,
-            'message_value_encoding': msg_value_encoding,
-        },
-        secrets_data={
-            'KAFKA_CA_CERT_PEM': KAFKA_CA_CERT_PEM,
-            'KAFKA_CERT_PEM': KAFKA_CERT_PEM,
-            'KAFKA_KEY_PEM': KAFKA_KEY_PEM
-        }
-    )
 
 
 def encode_msg_value(msg_value, encoding):
@@ -56,14 +33,19 @@ def encode_msg_value(msg_value, encoding):
     return msg_value
 
 
-@skip_envs('github')
-def test_kafka_consumer_piece():
-    piece_kwargs = {
+def test_with_fake_kafka_cluster():
+    input_data = {
         "topics": ['test-topic1', 'test-topic2'],
-        "bootstrap_servers": 'fake-broker',
-        "group_id": "test-group",
-        "security_protocol": "SSL",
-        "msg_value_encoding": "",
+        "bootstrap.servers": ['fake-broker'],
+        "security.protocol": "none",
+        "group.id": "test.group",
+        "msg.value.encoding": "utf-8",
+    }
+
+    secrets_data = {
+        'ssl.ca.pem': "",
+        'ssl.certificate.pem': "",
+        'ssl.key.pem': "",
     }
 
     num_partitions = 5
@@ -71,15 +53,15 @@ def test_kafka_consumer_piece():
     # Create topics
     admin = FakeAdminClientImpl()
     admin.create_topics([
-        NewTopic(topic=topic, num_partitions=num_partitions) for topic in piece_kwargs['topics']
+        NewTopic(topic=topic, num_partitions=num_partitions) for topic in input_data['topics']
     ])
 
     # Produce messages
     producer = FakeProducer()
     for i in range(0, 10):
-        topic = piece_kwargs['topics'][randint(0, len(piece_kwargs['topics']) - 1)]
+        topic = input_data['topics'][randint(0, len(input_data['topics']) - 1)]
         key = f'test_key{randint(0, 3)}'
-        value = encode_msg_value(f'test_value{i}', piece_kwargs['msg_value_encoding'])
+        value = encode_msg_value(f'test_value{i}', input_data['msg.value.encoding'])
         partition = randint(0, num_partitions - 1)
         timestamp = int(datetime.now().timestamp() * 1000)
         producer.produce(
@@ -93,10 +75,36 @@ def test_kafka_consumer_piece():
 
     # Subscribe consumer
     consumer = FakeConsumer()
-    consumer.subscribe(topics=piece_kwargs['topics'])
+    consumer.subscribe(topics=input_data['topics'])
 
     with patch('confluent_kafka.Consumer', new=FakeConsumer):
-        output = run_piece(
-            **piece_kwargs
+        output = piece_dry_run(
+            piece_name="KafkaConsumerPiece",
+            input_data=input_data,
+            secrets_data=secrets_data,
         )
-        print(output)
+        logger.info(f"piece output: {output}")
+
+
+@skip_envs('github')
+def test_with_real_kafka_cluster():
+    input_data = {
+        "bootstrap.servers": os.getenv("bootstrap.servers", "").split(","),
+        "security.protocol": "SSL",
+        "topics": ["test.topic"],
+        "group.id": "test.group",
+        "msg.value.encoding": "utf-8",
+    }
+    secrets_data = {
+        "ssl.ca.pem": os.environ.get('ssl.ca.pem', '').replace("\\n", "\n"),
+        "ssl.certificate.pem": os.environ.get('ssl.certificate.pem', '').replace("\\n", "\n"),
+        "ssl.key.pem": os.environ.get('ssl.key.pem', '').replace("\\n", "\n"),
+    }
+
+    output = piece_dry_run(
+        piece_name="KafkaConsumerPiece",
+        input_data=input_data,
+        secrets_data=secrets_data,
+    )
+
+    logger.info(f"piece output: {output}")
