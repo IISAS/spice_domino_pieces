@@ -8,7 +8,7 @@ from domino.testing import piece_dry_run
 from domino.testing.utils import skip_envs
 from pydantic import BaseModel
 
-from .models import InputModel, SecretsModel
+from pieces.KafkaTopicCreatorPiece.models import InputModel, SecretsModel
 
 logging.basicConfig(
     level=logging.INFO,
