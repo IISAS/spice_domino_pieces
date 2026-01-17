@@ -85,6 +85,7 @@ class KafkaConsumerPiece(BasePiece):
 
         self.logger.info("Waiting for messages...")
         start_time = time.time()
+        num_messages = 0
 
         while True:
             msg = consumer.poll(timeout=input_data.message_polling_timeout)  # wait up to message_polling_timeout seconds
@@ -115,15 +116,31 @@ class KafkaConsumerPiece(BasePiece):
                     'value': msg_value_decoded,
                 }
                 fp.write(json.dumps(data) + '\n')
+                num_messages += 1
 
         fp.close()
         consumer.close()
+
+        result = {
+            "messages_file_path": messages_file_path,
+            "msg_value_encoding": input_data.msg_value_encoding,
+            "topics": input_data.topics,
+            "group_id": input_data.group_id,
+            "duration": time.time() - start_time,
+            "num_messages": num_messages,
+        }
+
+        result_file_path = os.path.join(Path(self.results_path), "result.json")
+        with open(result_file_path, 'w', encoding='utf-8') as f:
+            json.dump(result, f)
 
         # Set display result
         self.display_result = {
             "group_id": input_data.group_id,
             "messages_file_path": messages_file_path,
             "duration": time.time() - start_time,
+            "file_type": "json",
+            "file_path": result_file_path
         }
 
         # Return output
