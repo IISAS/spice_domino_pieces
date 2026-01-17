@@ -65,11 +65,11 @@ class KafkaConsumerPiece(BasePiece):
             **(
                 {
                     'security.protocol': input_data.security_protocol,
-                    'ssl.ca.pem': secrets_data.ssl_ca_pem.get_secret_value(),
-                    'ssl.certificate.pem': secrets_data.ssl_certificate_pem.get_secret_value(),
+                    'ssl.ca.pem': secrets_data.ssl_ca_pem.get_secret_value().replace("\\n", "\n"),
+                    'ssl.certificate.pem': secrets_data.ssl_certificate_pem.get_secret_value().replace("\\n", "\n"),
+                    'ssl.key.pem': secrets_data.ssl_key_pem.get_secret_value().replace("\\n", "\n"),
                     # https://github.com/confluentinc/librdkafka/issues/4349
                     'ssl.endpoint.identification.algorithm': 'none',
-                    'ssl.key.pem': secrets_data.ssl_key_pem.get_secret_value(),
                 } if input_data.security_protocol is not None
                      and input_data.security_protocol.lower().strip() == 'ssl'
                 else {}

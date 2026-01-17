@@ -96,9 +96,9 @@ def test_with_real_kafka_cluster():
         "msg_value_encoding": "utf-8",
     }
     secrets_data = {
-        "ssl_ca_pem": os.environ.get('ssl_ca_pem', '').replace("\\n", "\n"),
-        "ssl_certificate_pem": os.environ.get('ssl_certificate_pem', '').replace("\\n", "\n"),
-        "ssl_key_pem": os.environ.get('ssl_key_pem', '').replace("\\n", "\n"),
+        "ssl_ca_pem": os.environ.get('ssl_ca_pem', ''),
+        "ssl_certificate_pem": os.environ.get('ssl_certificate_pem', ''),
+        "ssl_key_pem": os.environ.get('ssl_key_pem', ''),
     }
 
     output = piece_dry_run(
