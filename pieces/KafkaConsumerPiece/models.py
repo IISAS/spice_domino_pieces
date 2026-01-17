@@ -9,15 +9,15 @@ _DEFAULT_NO_MESSAGE_TIMEOUT = 10.0
 class SecretsModel(BaseModel):
     ssl_ca_pem: SecretStr = Field(
         default="",
-        description="CA certificate in PEM format",
+        description="CA certificate in PEM format as a single line string with new line characters replaced with \\n.",
     )
     ssl_certificate_pem: SecretStr = Field(
         default="",
-        description="Client's certificate in PEM format"
+        description="Client's certificate in PEM format as a single line string with new line characters replaced with \\n."
     )
     ssl_key_pem: SecretStr = Field(
         default="",
-        description="Client's private key in PEM format",
+        description="Client's private key in PEM format as a single line string with new line characters replaced with \\n.",
     )
 
 
