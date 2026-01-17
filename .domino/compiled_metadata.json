@@ -976,7 +976,7 @@
             "properties": {
                 "ssl_ca_pem": {
                     "default": "",
-                    "description": "CA certificate in PEM format",
+                    "description": "CA certificate in PEM format as a single line string with new line characters replaced with \\n.",
                     "format": "password",
                     "title": "Ssl Ca Pem",
                     "type": "string",
@@ -984,7 +984,7 @@
                 },
                 "ssl_certificate_pem": {
                     "default": "",
-                    "description": "Client's certificate in PEM format",
+                    "description": "Client's certificate in PEM format as a single line string with new line characters replaced with \\n.",
                     "format": "password",
                     "title": "Ssl Certificate Pem",
                     "type": "string",
@@ -992,7 +992,7 @@
                 },
                 "ssl_key_pem": {
                     "default": "",
-                    "description": "Client's private key in PEM format",
+                    "description": "Client's private key in PEM format as a single line string with new line characters replaced with \\n.",
                     "format": "password",
                     "title": "Ssl Key Pem",
                     "type": "string",

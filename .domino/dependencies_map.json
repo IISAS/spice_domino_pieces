@@ -37,15 +37,15 @@
             "KafkaProducerPiece"
         ],
         "secrets": [
-            "KAFKA_CERT_PEM",
-            "KAFKA_CA_CERT_PEM",
-            "ssl_key_pem",
             "ssl_certificate_pem",
-            "ssl.ca.pem",
+            "ssl.key.pem",
+            "KAFKA_CA_CERT_PEM",
             "ssl.certificate.pem",
             "KAFKA_KEY_PEM",
-            "ssl.key.pem",
-            "ssl_ca_pem"
+            "ssl_ca_pem",
+            "ssl.ca.pem",
+            "ssl_key_pem",
+            "KAFKA_CERT_PEM"
         ],
         "source_image": "ghcr.io/iisas/spice_domino_pieces:development-group1"
     },
