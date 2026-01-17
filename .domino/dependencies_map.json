@@ -38,14 +38,14 @@
         ],
         "secrets": [
             "KAFKA_CERT_PEM",
-            "ssl.ca.pem",
-            "KAFKA_KEY_PEM",
             "ssl_ca_pem",
-            "ssl.key.pem",
             "ssl_certificate_pem",
-            "ssl.certificate.pem",
             "ssl_key_pem",
-            "KAFKA_CA_CERT_PEM"
+            "ssl.ca.pem",
+            "KAFKA_CA_CERT_PEM",
+            "ssl.key.pem",
+            "ssl.certificate.pem",
+            "KAFKA_KEY_PEM"
         ],
         "source_image": "ghcr.io/iisas/spice_domino_pieces:development-group1"
     },
