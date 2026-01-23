@@ -4,10 +4,10 @@ import os
 import time
 from pathlib import Path
 
-from confluent_kafka import Consumer, KafkaError
+from confluent_kafka import Consumer
 from domino.base_piece import BasePiece
 
-from .models import _DEFAULT_NO_MESSAGE_TIMEOUT, _DEFAULT_MESSAGE_POLLING_TIMEOUT, InputModel, OutputModel, SecretsModel
+from .models import InputModel, OutputModel, SecretsModel
 
 
 def decode_msg_value(msg_value, encoding):
@@ -22,86 +22,83 @@ def decode_msg_value(msg_value, encoding):
 
 class KafkaConsumerPiece(BasePiece):
 
+    def validate_ssl_secrets(self, input: InputModel, secrets: SecretsModel) -> None:
+        protocol = input.security_protocol.upper()
+
+        if protocol == "SSL":
+            if secrets is None:
+                raise ValueError(
+                    "Secrets must be provided when security.protocol is 'SSL'"
+                )
+
+            missing = [
+                name for name, value in {
+                    "ssl.ca.pem": secrets.ssl_ca_pem,
+                    "ssl.certificate.pem": secrets.ssl_certificate_pem,
+                    "ssl.key.pem": secrets.ssl_key_pem.get_secret_value() if secrets.ssl_key_pem else None,
+                }.items()
+                if value is None or value.strip() == ""
+            ]
+
+            if missing:
+                raise ValueError(
+                    f"When security.protocol='SSL', the following secrets must be set: "
+                    f"{', '.join(missing)}"
+                )
+
     def piece_function(self, input_data: InputModel, secrets_data: SecretsModel):
 
-        if input_data.topics is None or any(x is None or x.strip() == "" for x in input_data.topics):
-            raise Exception("topics cannot be empty, contain empty strings or None elements")
+        self.validate_ssl_secrets(input_data, secrets_data)
 
-        if input_data.security_protocol is not None and input_data.security_protocol.lower().strip() == "ssl":
-            if secrets_data.ssl_ca_pem is None:
-                raise Exception("Please, set the 'ssl_ca_pem' in the Repository Secrets section.")
-            else:
-                self.logger.info('ssl_ca_pem: %s' % secrets_data.ssl_ca_pem)
-            if secrets_data.ssl_certificate_pem is None:
-                raise Exception("Please, set the 'ssl_certificate_pem' in the Repository Secrets section.")
-            else:
-                self.logger.info('ssl_certificate_pem: %s' % secrets_data.ssl_certificate_pem)
-            if secrets_data.ssl_key_pem is None:
-                raise Exception("Please, set the 'ssl_key_pem' in the Repository Secrets section.")
-            else:
-                self.logger.info('ssl_key_pem: %s' % secrets_data.ssl_key_pem)
-
-        if input_data.message_polling_timeout is None or input_data.message_polling_timeout <= 0.0:
-            self.logger.warning(
-                "message_polling_timeout was set to infinite and will be set to {} seconds".format(
-                    _DEFAULT_MESSAGE_POLLING_TIMEOUT
-                )
-            )
-            input_data.message_polling_timeout = _DEFAULT_MESSAGE_POLLING_TIMEOUT
-
-        if input_data.no_message_timeout is None or input_data.no_message_timeout < input_data.message_polling_timeout:
-            self.logger.warning(
-                "no_message_timeout was set to lower than message_polling_timeout and will be set to {} seconds".format(
-                    _DEFAULT_NO_MESSAGE_TIMEOUT
-                )
-            )
-            input_data.no_message_timeout = _DEFAULT_NO_MESSAGE_TIMEOUT
+        print(input_data.group_id)
 
         consumer_conf = {
             # 'debug': 'security,broker,conf',
             # 'log_level': 7,
             'auto.offset.reset': input_data.auto_offset_reset,
             'bootstrap.servers': ','.join(input_data.bootstrap_servers),
+            'client.id': input_data.client_id,
+            'enable.partition.eof': str(False),  # if true, KafkaError._PARTITION_EOF is raised, otherwise nothing
             'group.id': input_data.group_id,
+            'security.protocol': input_data.security_protocol,
             **(
                 {
-                    'security.protocol': input_data.security_protocol,
-                    'ssl.ca.pem': secrets_data.ssl_ca_pem.get_secret_value().replace("\\n", "\n"),
-                    'ssl.certificate.pem': secrets_data.ssl_certificate_pem.get_secret_value().replace("\\n", "\n"),
+                    'ssl.ca.pem': secrets_data.ssl_ca_pem.replace("\\n", "\n"),
+                    'ssl.certificate.pem': secrets_data.ssl_certificate_pem.replace("\\n", "\n"),
                     'ssl.key.pem': secrets_data.ssl_key_pem.get_secret_value().replace("\\n", "\n"),
                     # https://github.com/confluentinc/librdkafka/issues/4349
-                    'ssl.endpoint.identification.algorithm': 'none',
+                    'ssl.endpoint.identification.algorithm': input_data.ssl_endpoint_identification_algorithm,
                 } if input_data.security_protocol is not None
                      and input_data.security_protocol.lower().strip() == 'ssl'
                 else {}
             ),
         }
 
-        consumer = Consumer(consumer_conf)
+        consumer = Consumer(consumer_conf, logger=self.logger)
         consumer.subscribe(topics=input_data.topics)
 
         messages_file_path = str(Path(self.results_path) / "messages.jsonl")
         self.logger.info("creating output file for polled messages: {}".format(messages_file_path))
         fp = open(messages_file_path, "w", encoding="utf-8")
 
-        self.logger.info("Waiting for messages...")
-        start_time = time.time()
         num_messages = 0
 
-        while True:
-            msg = consumer.poll(timeout=input_data.message_polling_timeout)  # wait up to message_polling_timeout seconds
+        poll_timeout = input_data.poll_timeout
+        start_time = time.time()
+
+        while poll_timeout > 0:
+            self.logger.debug(f"poll(timeout={poll_timeout})")
+            last_poll_time = time.time()
+            msg = consumer.poll(timeout=poll_timeout)
             if msg is None:
-                if time.time() - start_time > input_data.no_message_timeout:  # stop after no_message_timeout seconds with no messages
-                    self.logger.info("No messages received.")
-                    break
-                continue
-            if msg.error():
-                if msg.error().code() == KafkaError._PARTITION_EOF:
-                    continue
-                else:
+                self.logger.debug("no message received")
+            else:
+                if msg.error():
+                    # handle KafkaError._PARTITION_EOF error if enable.partition.eof is True
+                    # if msg.error().code() == KafkaError._PARTITION_EOF:
+                    #     continue
                     self.logger.error(f"Consumer error: {msg.error()}")
                     break
-            else:
                 msg_value = msg.value()
                 msg_value_decoded = decode_msg_value(msg_value, input_data.msg_value_encoding)
                 self.logger.info(f"Consumed message: {msg_value_decoded} from topic {msg.topic()}")
@@ -118,6 +115,10 @@ class KafkaConsumerPiece(BasePiece):
                 }
                 fp.write(json.dumps(data) + '\n')
                 num_messages += 1
+            time_delta = time.time() - last_poll_time
+            poll_timeout -= time_delta
+
+        duration = time.time() - start_time
 
         fp.close()
         consumer.close()
@@ -127,7 +128,7 @@ class KafkaConsumerPiece(BasePiece):
             "msg_value_encoding": input_data.msg_value_encoding,
             "topics": input_data.topics,
             "group_id": input_data.group_id,
-            "duration": time.time() - start_time,
+            "duration": duration,
             "num_messages": num_messages,
         }
 

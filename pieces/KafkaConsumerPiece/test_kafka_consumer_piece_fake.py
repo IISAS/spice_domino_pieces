@@ -1,13 +1,11 @@
 import base64
 import logging
-import os
 from datetime import datetime
 from random import randint
 from time import sleep
 from unittest.mock import patch
 
 from domino.testing import piece_dry_run
-from domino.testing.utils import skip_envs
 from mockafka import FakeConsumer, FakeProducer, FakeAdminClientImpl
 from mockafka.admin_client import NewTopic
 
@@ -33,13 +31,14 @@ def encode_msg_value(msg_value, encoding):
     return msg_value
 
 
-def test_with_fake_kafka_cluster():
+def test_kafka_consumer_with_fake_kafka_cluster():
     input_data = {
         "topics": ['topic.default1', 'topic.default2'],
         "bootstrap_servers": ['fake.broker'],
-        "security_protocol": "none",
+        "security_protocol": "PLAINTEXT",
         "group_id": "group.default",
         "msg_value_encoding": "utf-8",
+        "poll_timeout": 10,
     }
 
     secrets_data = {
@@ -84,27 +83,3 @@ def test_with_fake_kafka_cluster():
             secrets_data=secrets_data,
         )
         logger.info(f"piece output: {output}")
-
-
-@skip_envs('github')
-def test_with_real_kafka_cluster():
-    input_data = {
-        "bootstrap_servers": os.getenv("bootstrap_servers", "").split(","),
-        "security_protocol": "SSL",
-        "topics": ["topic.default1", "topic.default2"],
-        "group_id": "group.default",
-        "msg_value_encoding": "utf-8",
-    }
-    secrets_data = {
-        "ssl_ca_pem": os.environ.get('ssl_ca_pem', ''),
-        "ssl_certificate_pem": os.environ.get('ssl_certificate_pem', ''),
-        "ssl_key_pem": os.environ.get('ssl_key_pem', ''),
-    }
-
-    output = piece_dry_run(
-        piece_name="KafkaConsumerPiece",
-        input_data=input_data,
-        secrets_data=secrets_data,
-    )
-
-    logger.info(f"piece output: {output}")

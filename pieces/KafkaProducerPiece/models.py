@@ -1,67 +1,63 @@
-from typing import Literal
+from typing import Literal, List
 
-from pydantic import BaseModel, Field, SecretStr
-
-_DEFAULT_MESSAGE_POLLING_TIMEOUT = 5.0
-_DEFAULT_NO_MESSAGE_TIMEOUT = 10.0
+from pydantic import BaseModel, Field, SecretStr, field_validator
 
 
 class SecretsModel(BaseModel):
-    KAFKA_CA_CERT_PEM: SecretStr = Field(
-        description="CA certificate in PEM format",
+    ssl_ca_pem: str | None = Field(
+        title="ssl.ca.pem",
+        default=None,
+        description="CA certificate in PEM format as a single line string with new line characters replaced with \\n.",
     )
-    KAFKA_CERT_PEM: SecretStr = Field(
-        description="Client's certificate in PEM format"
+    ssl_certificate_pem: str | None = Field(
+        title="ssl.certificate.pem",
+        default=None,
+        description="Client's certificate in PEM format as a single line string with new line characters replaced with \\n."
     )
-    KAFKA_KEY_PEM: SecretStr = Field(
-        description="Client's private key in PEM format",
+    ssl_key_pem: SecretStr | None = Field(
+        title="ssl.key.pem",
+        default=None,
+        description="Client's private key in PEM format as a single line string with new line characters replaced with \\n.",
     )
 
 
 class InputModel(BaseModel):
-    """
-    KafkaProducer Piece Input Model
-    """
-
-    topic: str = Field(
-        title="topic name",
-        default="default-output-topic",
-        description="Topic name",
-        # json_schema_extra={"from_upstream": "always"}
-    )
-
-    partition: int | None = Field(
-        title="partition",
-        default=None,
-        description="Partition number",
-    )
-
-    acks_raw: Literal["fire_and_forget", "wait_for_leader", "all"] = Field(
-        title="acks",
-        default="fire_and_forget",
-        description="The number of acknowledgments the producer requires the leader to have received before considering a request complete.",
-    )
-
-    enable_idempotence: bool = Field(
-        title="enable.idempotence",
-        default=True,
-        description="Whether to ensure that exactly one copy of each message is written in the stream.",
-    )
-
-    messages_filename: str = Field(
-        title="messages filename",
-        default="messages.jsonl",
-        description="Topic name",
-    )
-
-    bootstrap_servers: str = Field(
-        default="spice.stevo.fedcloud.eu:9093",
+    bootstrap_servers: List[str] = Field(
+        title="bootstrap.servers",
+        default=["spice-kafka-broker-1.stevo.fedcloud.eu:9093"],
         description="The Kafka broker address",
     )
 
-    security_protocol: str = Field(
+    # https://kafka.apache.org/41/configuration/consumer-configs/#consumerconfigs_security.protocol
+    # https://docs.confluent.io/platform/current/installation/configuration/consumer-configs.html#security-protocol
+    security_protocol: Literal["PLAINTEXT", "SSL"] = Field(
+        title="security.protocol",
         default="SSL",
-        description="Security protocol",
+        description="Protocol used to communicate with brokers.",
+    )
+
+    @field_validator("security_protocol", mode="before")
+    def validate_security_protocol(cls, v: str) -> str:
+        allowed = {"PLAINTEXT", "SSL"}
+        normalized = v.upper()  # normalize to uppercase
+        if normalized not in allowed:
+            raise ValueError(f"Invalid security protocol: {v}. Must be one of (case insensitive) {allowed}")
+        return normalized  # return normalized value
+
+    # https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#ssl-endpoint-identification-algorithm
+    # https://kafka.apache.org/41/configuration/producer-configs/#producerconfigs_ssl.endpoint.identification.algorithm
+    ssl_endpoint_identification_algorithm: str = Field(
+        title="ssl.endpoint.identification.algorithm",
+        default="none",
+        description="The endpoint identification algorithm to validate server hostname using server certificate.",
+    )
+
+    # https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#acks
+    # https://kafka.apache.org/41/configuration/producer-configs/#producerconfigs_acks
+    acks_raw: Literal["fire_and_forget", "wait_for_leader", "all"] = Field(
+        title="acks",
+        default="all",
+        description="The number of acknowledgments the producer requires the leader to have received before considering a request complete.",
     )
 
     @property
@@ -72,11 +68,27 @@ class InputModel(BaseModel):
             "all": "all",
         }[self.acks_raw]
 
+    # https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence
+    # https://kafka.apache.org/41/configuration/producer-configs/#producerconfigs_enable.idempotence
+    enable_idempotence_bool: bool = Field(
+        title="enable.idempotence",
+        default=True,
+        description="Whether to ensure that exactly one copy of each message is written in the stream.",
+    )
+
+    @property
+    def enable_idempotence(self) -> str:
+        return str(self.enable_idempotence_bool)
+
+    messages_file_path: str = Field(
+        title="messages.file.path",
+        default="messages.jsonl",
+        description="Path to a file containing messages to produce by this producer.",
+    )
+
 
 class OutputModel(BaseModel):
-    """
-    KafkaProducer Piece Output Model
-    """
     num_produced_messages: int = Field(
+        title="num.produced.messages",
         description="The number of produced messages."
     )

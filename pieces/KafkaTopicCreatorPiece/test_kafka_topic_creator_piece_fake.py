@@ -1,24 +1,16 @@
+import logging
 import os
 from unittest.mock import patch
 
-from confluent_kafka.admin import ClusterMetadata
 from domino.testing import piece_dry_run
-from domino.testing.utils import skip_envs
-from mockafka import FakeAdminClientImpl
-from pydantic import BaseModel
+from mockafka import FakeAdminClientImpl, FakeConsumer
 
-from .models import InputModel, SecretsModel
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+)
 
-
-def dump_with_secrets(model: BaseModel, by_alias=False) -> dict:
-    data = {}
-    for k, v in model.__dict__.items():
-        k = model.model_fields[k].alias if by_alias else k
-        if hasattr(v, "get_secret_value"):
-            data[k] = v.get_secret_value()
-        else:
-            data[k] = v
-    return data
+logger = logging.getLogger(__name__)
 
 
 class MyFakeAdminClientImpl(FakeAdminClientImpl):
@@ -36,32 +28,40 @@ class FakeAdminFuture:
         return None  # success
 
 
-@skip_envs('github')
-def test_kafka_topic_creator_piece():
+def test_with_fake_kafka_cluster():
+    input_data = {
+        "bootstrap_servers": os.getenv("bootstrap.servers", "").split(","),
+        "ssl_endpoint_identification_algorithm": "none",
+        "security_protocol": "SSL",
+        "exists_ok": True,
+        "topics": ["topic.test1", "topic.test2", "topic.test3"],
+        "cleanup_policy": ["delete"],
+        "retention.ms": 1000,
+    }
+
+    secrets_data = {
+        "ssl_ca_pem": os.environ.get('ssl.ca.pem', ''),
+        "ssl_certificate_pem": os.environ.get('ssl.certificate.pem', ''),
+        "ssl_key_pem": os.environ.get('ssl.key.pem', ''),
+    }
+
     admin = MyFakeAdminClientImpl(clean=True)
-    with patch("confluent_kafka.admin.AdminClient", return_value=admin):
-        piece_conf = {
-            "bootstrap.servers": os.getenv("kafka.bootstrap.servers", ""),
-            "security.protocol": "SSL",
-            "ssl.ca.pem": os.getenv("kafka.ssl.ca.pem", "").replace("\\n", "\n"),
-            "ssl.certificate.pem": os.getenv("kafka.ssl.certificate.pem", "").replace("\\n", "\n"),
-            "ssl.key.pem": os.environ.get("kafka.ssl.key.pem", "").replace("\\n", "\n"),
-            "topics": ["fake-topic1", "fake-topic2"],
-            "ssl.endpoint.identification.algorithm": "none",
-        }
 
-        input_model = InputModel(**piece_conf)
-        secrets_model = SecretsModel(**piece_conf)
-
+    with (
+        patch('confluent_kafka.Consumer', new=FakeConsumer),
+        patch('confluent_kafka.admin.AdminClient', return_value=admin),
+    ):
         output = piece_dry_run(
             piece_name="KafkaTopicCreatorPiece",
-            input_data=input_model.model_dump(by_alias=True),
-            secrets_data=dump_with_secrets(secrets_model, by_alias=True),
+            input_data=input_data,
+            secrets_data=secrets_data,
         )
+
+        logger.info(f"piece output: {output}")
 
         # Assertions
         assert output is not None
 
-        cluster_metadata: ClusterMetadata = admin.list_topics()
-        for topic in piece_conf['topics']:
-            assert topic in cluster_metadata.topics
+        md = admin.list_topics(timeout=60)
+        topics = list(md.topics.keys())
+        assert all(topic in topics for topic in input_data["topics"])
