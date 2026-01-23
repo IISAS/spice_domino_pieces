@@ -88,6 +88,11 @@ class InputModel(BaseModel):
 
 
 class OutputModel(BaseModel):
+    topics: List[str] = Field(
+        title="topics",
+        default=["topic.default1", "topic.default2"],
+        description="Topic name",
+    )
     num_produced_messages: int = Field(
         title="num.produced.messages",
         description="The number of produced messages."

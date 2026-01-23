@@ -140,9 +140,10 @@ def test_kafka_producer_piece_fake_kafka():
             while True:
                 msg = consumer.poll(timeout=60)
                 if msg is None:
-                    continue
-                assert msg.error() is not None
+                    break
+                assert msg.error() is None
                 messages.append(msg)
+
             assert len(messages) == num_messages
 
             # Check consumed messages

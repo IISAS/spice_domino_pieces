@@ -138,9 +138,6 @@ class KafkaConsumerPiece(BasePiece):
 
         # Set display result
         self.display_result = {
-            "group_id": input_data.group_id,
-            "messages_file_path": messages_file_path,
-            "duration": time.time() - start_time,
             "file_type": "json",
             "file_path": result_file_path
         }

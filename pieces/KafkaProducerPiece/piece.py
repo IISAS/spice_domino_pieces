@@ -1,4 +1,5 @@
 import json
+import os
 import time
 from pathlib import Path
 
@@ -104,15 +105,26 @@ class KafkaProducerPiece(BasePiece):
         self.logger.info("Flushing producer...")
         producer.flush()
 
+        duration = time.time() - start_time
+
+        result = {
+            "messages_file_path": str(messages_file_path),
+            "num_delivered_messages": num_delivered_messages,
+            "duration": duration
+        }
+
+        result_file_path = os.path.join(Path(self.results_path), "result.json")
+        with open(result_file_path, 'w', encoding='utf-8') as f:
+            json.dump(result, f)
+
         # Set display result
         self.display_result = {
-            "topics": topics,
-            "num_delivered_messages": num_delivered_messages,
-            "messages_file_path": str(messages_file_path),
-            "duration": time.time() - start_time
+            "file_type": "json",
+            "file_path": result_file_path
         }
 
         # Return output
         return OutputModel(
-            num_produced_messages=num_delivered_messages
+            num_produced_messages=num_delivered_messages,
+            topics=list(topics),
         )
