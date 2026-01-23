@@ -7,7 +7,7 @@ from confluent_kafka import Producer
 from domino.base_piece import BasePiece
 
 from .models import InputModel, OutputModel, SecretsModel
-
+from confluent_kafka.serialization import StringSerializer
 
 class KafkaProducerPiece(BasePiece):
 
@@ -55,6 +55,7 @@ class KafkaProducerPiece(BasePiece):
 
         num_delivered_messages = 0
         num_undelivered_messages = 0
+        num_invalid_json_message_lines = 0
         start_time = time.time()
 
         def delivery_report(err, msg):
@@ -71,46 +72,50 @@ class KafkaProducerPiece(BasePiece):
                 )
 
         topics = set()
-        with open(messages_file_path, "r", encoding="utf-8") as fp:
+        encoding = "utf-8"
+        serializer = StringSerializer(encoding)
+        with open(messages_file_path, "r", encoding=encoding) as fp:
 
             self.logger.info(f"Producing messages from file: {messages_file_path}")
 
+            line = 0
             for msg_line in fp:
-                if not msg_line.strip():
+                # Serve on_delivery callbacks from previous calls to produce()
+                producer.poll(0.0)
+                line += 1
+                if len(msg_line.strip()) < 1 or msg_line.lstrip().startswith('#'):
                     continue
 
                 try:
                     record = json.loads(msg_line)
-                except json.JSONDecodeError:
-                    self.logger.warning(f"Skipping invalid JSON line: {msg_line}")
+                    keys = {"topic", "value"}
+                    msg = {k: record[k] for k in keys}
+                except json.JSONDecodeError as e:
+                    num_invalid_json_message_lines+=1
+                    self.logger.warning(f"Failed to parse JSON message on line {line}: '{msg_line}'\n{e}")
                     continue
 
-                topic = record.get("topic")
-                value = record.get("value")
-                key = record.get("key")
-                partition = record.get("partition")
+                keys_optional = {"key", "partition"}
+                msg.update({k: record[k] for k in keys_optional if k in record})
+                msg.update(dict(on_delivery=delivery_report))
 
-                producer.produce(
-                    topic=topic,
-                    value=value.encode("utf-8") if value is not None else None,
-                    key=key.encode("utf-8") if key is not None else None,
-                    partition=partition if partition is not None else 0,
-                    on_delivery=delivery_report
-                )
-                topics.add(topic)
-                self.logger.info(
-                    f"Produced message to topic {topic} with key {key}, partition {partition} and value {value}"
-                )
+                keys_serialize = {"key", "value"}
+                msg.update({k: serializer(msg[k]) for k in keys_serialize})
 
-        self.logger.info("Flushing producer...")
-        producer.flush()
+                producer.produce(**msg)
+
+                self.logger.debug("Flushing producer...")
+                producer.flush()
+                topics.add(msg.get("topic"))
 
         duration = time.time() - start_time
 
         result = {
             "messages_file_path": str(messages_file_path),
             "num_delivered_messages": num_delivered_messages,
-            "duration": duration
+            "num_undelivered_messages": num_undelivered_messages,
+            "num_invalid_json_message_lines": num_invalid_json_message_lines,
+            "duration": duration,
         }
 
         result_file_path = os.path.join(Path(self.results_path), "result.json")
