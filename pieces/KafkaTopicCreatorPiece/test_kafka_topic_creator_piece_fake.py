@@ -1,12 +1,9 @@
 import logging
-import os
 from unittest.mock import patch
 
 from domino.testing import piece_dry_run
 from domino.testing.utils import skip_envs
 from mockafka import FakeAdminClientImpl, FakeConsumer
-
-from pieces.KafkaTopicCreatorPiece.piece import KafkaTopicCreatorPiece
 
 logging.basicConfig(
     level=logging.INFO,

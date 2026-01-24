@@ -54,12 +54,12 @@ def generate_key_name(num_keys, id) -> str:
 
 
 def generate_messages(
-    filename: str,
-    num_messages: int,
-    num_topics: int,
-    num_partitions: int,
-    num_keys: int | None,
-    create_topics: bool = False,
+        filename: str,
+        num_messages: int,
+        num_topics: int,
+        num_partitions: int,
+        num_keys: int | None,
+        create_topics: bool = False,
 ):
     """
     Create a JSONL file compatible with KafkaConsumerPiece output.
@@ -123,7 +123,8 @@ def test_kafka_producer_piece_fake_kafka():
         consumer = FakeConsumer()
 
         with patch(
-            "confluent_kafka.Producer", return_value=producer
+                "confluent_kafka.Producer",
+                return_value=producer
         ):
 
             output = piece_dry_run(

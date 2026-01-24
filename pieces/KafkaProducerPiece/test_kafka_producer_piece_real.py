@@ -11,6 +11,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+
 @skip_envs('github')
 def test_kafka_producer_piece_real_kafka():
     input_data = {
