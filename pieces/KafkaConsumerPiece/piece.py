@@ -23,9 +23,8 @@ def decode_msg_value(msg_value, encoding):
 class KafkaConsumerPiece(BasePiece):
 
     def validate_ssl_secrets(self, input: InputModel, secrets: SecretsModel) -> None:
-        protocol = input.security_protocol.upper()
 
-        if protocol == "SSL":
+        if input.security_protocol and input.security_protocol.upper() == "SSL":
             if secrets is None:
                 raise ValueError(
                     "Secrets must be provided when security.protocol is 'SSL'"

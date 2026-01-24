@@ -22,6 +22,29 @@ def decode_msg_value(msg_value, encoding):
 
 class KafkaTopicCreatorPiece(BasePiece):
 
+    def validate_ssl_secrets(self, input: InputModel, secrets: SecretsModel) -> None:
+
+        if input.security_protocol and input.security_protocol.upper() == "SSL":
+            if secrets is None:
+                raise ValueError(
+                    "Secrets must be provided when security.protocol is 'SSL'"
+                )
+
+            missing = [
+                name for name, value in {
+                    "ssl.ca.pem": secrets.ssl_ca_pem,
+                    "ssl.certificate.pem": secrets.ssl_certificate_pem,
+                    "ssl.key.pem": secrets.ssl_key_pem.get_secret_value() if secrets.ssl_key_pem else None,
+                }.items()
+                if value is None or value.strip() == ""
+            ]
+
+            if missing:
+                raise ValueError(
+                    f"When security.protocol='SSL', the following secrets must be set: "
+                    f"{', '.join(missing)}"
+                )
+
     def piece_function(
         self,
         input_data: InputModel,
@@ -33,30 +56,7 @@ class KafkaTopicCreatorPiece(BasePiece):
 
         with tempfile.TemporaryDirectory() as tmp_dir:
 
-            if input_data.topics is None or any(x is None or x.strip() == "" for x in input_data.topics):
-                msg = "Topics cannot be empty, contain empty strings or None elements."
-                self.logger.error(msg)
-                raise Exception(msg)
-
-            if input_data.security_protocol is not None and input_data.security_protocol.lower().strip() == "ssl":
-                if secrets_data.ssl_ca_pem is None:
-                    msg = "Please, set the 'ssl_ca_pem' in the Repository Secrets section."
-                    self.logger.error(msg)
-                    raise Exception(msg)
-                else:
-                    self.logger.info('ssl_ca_pem: %s' % secrets_data.ssl_ca_pem)
-                if secrets_data.ssl_certificate_pem is None:
-                    msg = "Please, set the 'ssl_certificate_pem' in the Repository Secrets section."
-                    self.logger.error(msg)
-                    raise Exception(msg)
-                else:
-                    self.logger.info('ssl_certificate_pem: %s' % secrets_data.ssl_certificate_pem)
-                if secrets_data.ssl_key_pem is None:
-                    msg = "Please, set the 'ssl_key_pem' in the Repository Secrets section."
-                    self.logger.error(msg)
-                    raise Exception(msg)
-                else:
-                    self.logger.info('ssl_key_pem: %s' % secrets_data.ssl_key_pem)
+            self.validate_ssl_secrets(input_data, secrets_data)
 
             admin_client_conf = {
                 # 'debug': 'security,broker,conf',

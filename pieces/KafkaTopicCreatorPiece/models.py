@@ -1,20 +1,23 @@
-from typing import List, Literal
+from typing import List, Literal, Optional
 
-from pydantic import BaseModel, Field, SecretStr
+from pydantic import BaseModel, Field, SecretStr, field_validator
 
 
 class SecretsModel(BaseModel):
-    ssl_ca_pem: str = Field(
+    ssl_ca_pem: Optional[str | None] = Field(
         title="ssl.ca.pem",
-        description="CA certificate in PEM format",
+        default=None,
+        description="CA certificate in PEM format as a single line string with new line characters replaced with \\n.",
     )
-    ssl_certificate_pem: str = Field(
+    ssl_certificate_pem: Optional[str | None] = Field(
         title="ssl.certificate.pem",
-        description="Client's certificate in PEM format"
+        default=None,
+        description="Client's certificate in PEM format as a single line string with new line characters replaced with \\n."
     )
-    ssl_key_pem: SecretStr = Field(
+    ssl_key_pem: Optional[SecretStr | None] = Field(
         title="ssl.key.pem",
-        description="Client's private key in PEM format",
+        default=None,
+        description="Client's private key in PEM format as a single line string with new line characters replaced with \\n.",
     )
 
 
@@ -25,9 +28,9 @@ class InputModel(BaseModel):
         description="Kafka broker addresses",
     )
 
-    security_protocol: str = Field(
+    security_protocol: Optional[str | None] = Field(
         title="security.protocol",
-        default="SSL",
+        default=None,
         description="Security protocol",
     )
 
@@ -43,8 +46,13 @@ class InputModel(BaseModel):
         title="topics",
         default=["topic.test1", "topic.test2"],
         description="Topic names",
-        # json_schema_extra={"from_upstream": "always"}
     )
+
+    @field_validator("topics")
+    def validate_topics(cls, value: List[str]) -> List[str]:
+        if value is None or len(value) == 0 or any(topic is None or topic.strip() == "" for topic in value):
+            raise ValueError("topics cannot be empty, contain empty strings or None elements")
+        return value
 
     exists_ok: bool = Field(
         title="exists.ok",

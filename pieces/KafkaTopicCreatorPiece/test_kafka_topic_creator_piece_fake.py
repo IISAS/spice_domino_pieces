@@ -30,9 +30,8 @@ class FakeAdminFuture:
 
 def test_with_fake_kafka_cluster():
     input_data = {
-        "bootstrap_servers": os.getenv("bootstrap.servers", "").split(","),
+        "bootstrap_servers": ["fake-broker"],
         "ssl_endpoint_identification_algorithm": "none",
-        "security_protocol": "SSL",
         "exists_ok": True,
         "topics": ["topic.test1", "topic.test2", "topic.test3"],
         "cleanup_policy": ["delete"],
@@ -40,9 +39,6 @@ def test_with_fake_kafka_cluster():
     }
 
     secrets_data = {
-        "ssl_ca_pem": os.environ.get('ssl.ca.pem', ''),
-        "ssl_certificate_pem": os.environ.get('ssl.certificate.pem', ''),
-        "ssl_key_pem": os.environ.get('ssl.key.pem', ''),
     }
 
     admin = MyFakeAdminClientImpl(clean=True)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import List, Literal
+from typing import List, Literal, Optional
 
 from pydantic import BaseModel, Field, SecretStr, field_validator
 
@@ -12,17 +12,17 @@ ISO8601_DURATION_REGEX = re.compile(
 
 
 class SecretsModel(BaseModel):
-    ssl_ca_pem: str | None = Field(
+    ssl_ca_pem: Optional[str | None] = Field(
         title="ssl.ca.pem",
         default=None,
         description="CA certificate in PEM format as a single line string with new line characters replaced with \\n.",
     )
-    ssl_certificate_pem: str | None = Field(
+    ssl_certificate_pem: Optional[str | None] = Field(
         title="ssl.certificate.pem",
         default=None,
         description="Client's certificate in PEM format as a single line string with new line characters replaced with \\n."
     )
-    ssl_key_pem: SecretStr | None = Field(
+    ssl_key_pem: Optional[SecretStr | None] = Field(
         title="ssl.key.pem",
         default=None,
         description="Client's private key in PEM format as a single line string with new line characters replaced with \\n.",
