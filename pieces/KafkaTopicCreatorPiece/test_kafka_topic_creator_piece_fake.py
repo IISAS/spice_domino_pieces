@@ -3,7 +3,10 @@ import os
 from unittest.mock import patch
 
 from domino.testing import piece_dry_run
+from domino.testing.utils import skip_envs
 from mockafka import FakeAdminClientImpl, FakeConsumer
+
+from pieces.KafkaTopicCreatorPiece.piece import KafkaTopicCreatorPiece
 
 logging.basicConfig(
     level=logging.INFO,
@@ -13,6 +16,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+@skip_envs('github')
 class MyFakeAdminClientImpl(FakeAdminClientImpl):
     def __init__(self, clean: bool = False, conf=None, **kwargs):
         super().__init__(clean, conf, **kwargs)

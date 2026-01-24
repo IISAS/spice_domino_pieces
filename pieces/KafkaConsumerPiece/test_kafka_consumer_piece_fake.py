@@ -42,9 +42,6 @@ def test_kafka_consumer_with_fake_kafka_cluster():
     }
 
     secrets_data = {
-        'ssl_ca_pem': "",
-        'ssl_certificate_pem': "",
-        'ssl_key_pem': "",
     }
 
     num_partitions = 5

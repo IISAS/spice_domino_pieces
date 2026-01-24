@@ -7,6 +7,7 @@ from random import randint
 from unittest.mock import patch
 
 from domino.testing import piece_dry_run
+from domino.testing.utils import skip_envs
 from mockafka import FakeAdminClientImpl, FakeConsumer, FakeProducer
 from mockafka.admin_client import NewTopic
 
@@ -89,6 +90,7 @@ def generate_messages(
             fp.write(json.dumps(msg) + "\n")
 
 
+@skip_envs('github')
 def test_kafka_producer_piece_fake_kafka():
     num_messages = 10
     num_topics = 1
