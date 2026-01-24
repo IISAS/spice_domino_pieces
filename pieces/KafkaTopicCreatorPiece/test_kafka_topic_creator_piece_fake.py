@@ -13,7 +13,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-@skip_envs('github')
 class MyFakeAdminClientImpl(FakeAdminClientImpl):
     def __init__(self, clean: bool = False, conf=None, **kwargs):
         super().__init__(clean, conf, **kwargs)
@@ -29,6 +28,7 @@ class FakeAdminFuture:
         return None  # success
 
 
+@skip_envs('github')
 def test_with_fake_kafka_cluster():
     input_data = {
         "bootstrap_servers": ["fake-broker"],
