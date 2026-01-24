@@ -32,9 +32,9 @@
             "requirements_file": null
         },
         "pieces": [
+            "KafkaTopicCreatorPiece",
             "KafkaConsumerPiece",
-            "KafkaProducerPiece",
-            "KafkaTopicCreatorPiece"
+            "KafkaProducerPiece"
         ],
         "secrets": [
             "ssl_ca_pem",
