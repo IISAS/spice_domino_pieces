@@ -544,7 +544,7 @@
                 "backgroundColor": "#ebebeb"
             },
             "useIcon": true,
-            "icon_class_name": "fa:left-to-bracket",
+            "icon_class_name": "fa7-solid:folder-plus",
             "iconStyle": {
                 "cursor": "pointer"
             }
@@ -676,13 +676,13 @@
                     "title": "security.protocol",
                     "type": "string"
                 },
-                "topics": {
+                "topics_created": {
                     "default": [],
                     "description": "Names of created topics",
                     "items": {
                         "type": "string"
                     },
-                    "title": "topics",
+                    "title": "topics_created",
                     "type": "array"
                 }
             },
@@ -915,7 +915,7 @@
                 "backgroundColor": "#ebebeb"
             },
             "useIcon": true,
-            "icon_class_name": "fa-solid:right-to-bracket",
+            "icon_class_name": "fa7-solid:right-to-bracket",
             "iconStyle": {
                 "cursor": "pointer"
             }
@@ -1671,7 +1671,7 @@
                 "backgroundColor": "#ebebeb"
             },
             "useIcon": true,
-            "icon_class_name": "fa-solid:left-to-bracket",
+            "icon_class_name": "fa7-solid:right-from-bracket",
             "iconStyle": {
                 "cursor": "pointer"
             }
