@@ -122,8 +122,8 @@ class OutputModel(BaseModel):
         title="security.protocol",
         description="Protocol used to communicate with brokers.",
     )
-    topics: List[str] = Field(
-        title="topics",
+    topics_created: List[str] = Field(
+        title="topics_created",
         default=[],
         description="Names of created topics",
     )

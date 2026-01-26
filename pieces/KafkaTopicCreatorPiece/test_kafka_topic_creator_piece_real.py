@@ -56,3 +56,4 @@ def test_with_real_kafka_cluster():
     md = admin.list_topics(timeout=60)
     topics = md.topics.keys()
     assert all(topic in topics for topic in input_data["topics"])
+    assert all(topic in output["topics_created"] for topic in input_data["topics"])

@@ -32,6 +32,7 @@ class FakeAdminFuture:
 def test_with_fake_kafka_cluster():
     input_data = {
         "bootstrap_servers": ["fake-broker"],
+        "security_protocol": "PLAINTEXT",
         "ssl_endpoint_identification_algorithm": "none",
         "exists_ok": True,
         "topics": ["topic.test1", "topic.test2", "topic.test3"],

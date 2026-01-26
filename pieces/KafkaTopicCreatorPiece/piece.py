@@ -1,6 +1,9 @@
 import base64
+import json
+import os
 import tempfile
 import time
+from pathlib import Path
 
 from confluent_kafka import KafkaError
 from confluent_kafka.admin import AdminClient
@@ -90,28 +93,42 @@ class KafkaTopicCreatorPiece(BasePiece):
                 ) for topic_name in input_data.topics
             ]
 
-            topics = []
+            topics_created = []
             futures = admin.create_topics(new_topics)
             for topic, future in futures.items():
                 try:
                     future.result()
-                    topics.append(topic)
+                    topics_created.append(topic)
                 except KafkaException as e:
                     if e.args[0].code() == KafkaError.TOPIC_ALREADY_EXISTS and input_data.exists_ok:
                         self.logger.warning(f"Topic '{topic}' already exists, skipping topic creation.")
+                        self.logger.warning(f"Topic '{topic}' already exists.")
+                        topics_created.append(topic)
                         pass
                     else:
                         self.logger.error(f"Could not create topic '{topic}': {e}")
                         raise e
 
+            duration = time.time() - start_time
+
+            result = {
+                "topics_created": topics_created,
+                "duration": duration,
+            }
+
+            result_file_path = os.path.join(Path(self.results_path), "result.json")
+            with open(result_file_path, 'w', encoding='utf-8') as f:
+                json.dump(result, f)
+
             # Set display result
             self.display_result = {
-                "duration": time.time() - start_time,
+                "file_type": "json",
+                "file_path": result_file_path,
             }
 
             # Return output
             return OutputModel(
                 bootstrap_servers=input_data.bootstrap_servers,
                 security_protocol=input_data.security_protocol,
-                topics=topics,
+                topics_created=topics_created,
             )
