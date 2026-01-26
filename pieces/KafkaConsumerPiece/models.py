@@ -12,17 +12,17 @@ ISO8601_DURATION_REGEX = re.compile(
 
 
 class SecretsModel(BaseModel):
-    ssl_ca_pem: Optional[str | None] = Field(
+    ssl_ca_pem: Optional[str] = Field(
         title="ssl.ca.pem",
         default=None,
         description="CA certificate in PEM format as a single line string with new line characters replaced with \\n.",
     )
-    ssl_certificate_pem: Optional[str | None] = Field(
+    ssl_certificate_pem: Optional[str] = Field(
         title="ssl.certificate.pem",
         default=None,
         description="Client's certificate in PEM format as a single line string with new line characters replaced with \\n."
     )
-    ssl_key_pem: Optional[SecretStr | None] = Field(
+    ssl_key_pem: Optional[SecretStr] = Field(
         title="ssl.key.pem",
         default=None,
         description="Client's private key in PEM format as a single line string with new line characters replaced with \\n.",
@@ -36,6 +36,22 @@ class InputModel(BaseModel):
         description="Kafka broker addresses",
     )
 
+    # https://kafka.apache.org/41/configuration/consumer-configs/#consumerconfigs_security.protocol
+    # https://docs.confluent.io/platform/current/installation/configuration/consumer-configs.html#security-protocol
+    security_protocol: Literal["PLAINTEXT", "SSL"] = Field(
+        title="security.protocol",
+        default="PLAINTEXT",
+        description="Protocol used to communicate with brokers.",
+    )
+
+    @field_validator("security_protocol")
+    def validate_security_protocol(cls, value: str) -> str:
+        allowed = {"PLAINTEXT", "SSL"}
+        normalized = value.upper()  # normalize to uppercase
+        if normalized not in allowed:
+            raise ValueError(f"Invalid security protocol: {value}. Must be one of (case insensitive) {allowed}")
+        return normalized  # return normalized value
+
     topics: List[str] = Field(
         title="topics",
         default=["topic.default1", "topic.default2"],
@@ -47,22 +63,6 @@ class InputModel(BaseModel):
         if value is None or len(value) == 0 or any(topic is None or topic.strip() == "" for topic in value):
             raise ValueError("topics cannot be empty, contain empty strings or None elements")
         return value
-
-    # https://kafka.apache.org/41/configuration/consumer-configs/#consumerconfigs_security.protocol
-    # https://docs.confluent.io/platform/current/installation/configuration/consumer-configs.html#security-protocol
-    security_protocol: Literal["PLAINTEXT", "SSL"] = Field(
-        title="security.protocol",
-        default="SSL",
-        description="Protocol used to communicate with brokers.",
-    )
-
-    @field_validator("security_protocol")
-    def validate_security_protocol(cls, value: str) -> str:
-        allowed = {"PLAINTEXT", "SSL"}
-        normalized = value.upper()  # normalize to uppercase
-        if normalized not in allowed:
-            raise ValueError(f"Invalid security protocol: {value}. Must be one of (case insensitive) {allowed}")
-        return normalized  # return normalized value
 
     # https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#ssl-endpoint-identification-algorithm
     # https://kafka.apache.org/41/configuration/producer-configs/#producerconfigs_ssl.endpoint.identification.algorithm
@@ -144,23 +144,27 @@ anything else: throw exception to the consumer."""
 
 
 class OutputModel(BaseModel):
+    bootstrap_servers: List[str] = Field(
+        title="bootstrap.servers",
+        description="Kafka broker addresses",
+    )
+    security_protocol: Literal["PLAINTEXT", "SSL"] = Field(
+        title="security.protocol",
+        description="Protocol used to communicate with brokers.",
+    )
     messages_file_path: str = Field(
         title="messages.file.path",
-        default="messages.jsonl",
         description="File with consumed messages."
     )
     topics: List[str] = Field(
         title="topics",
-        default=["topic.default1", "topic.default2"],
         description="Topic name",
     )
     group_id: str = Field(
         title="group.id",
-        default="test-consumer-group",
         description="Kafka consumer group",
     )
     msg_value_encoding: str = Field(
         title="msg.value.encoding",
-        default="utf-8",
         description="Encoding of messages; i.e., 'utf-8', 'base64'",
     )

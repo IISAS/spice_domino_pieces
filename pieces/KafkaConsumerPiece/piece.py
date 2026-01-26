@@ -143,6 +143,8 @@ class KafkaConsumerPiece(BasePiece):
 
         # Return output
         return OutputModel(
+            bootstrap_servers=input_data.bootstrap_servers,
+            security_protocol=input_data.security_protocol,
             messages_file_path=messages_file_path,
             topics=input_data.topics,
             group_id=input_data.group_id,

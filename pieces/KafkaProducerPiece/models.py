@@ -1,20 +1,20 @@
-from typing import Literal, List
+from typing import Literal, List, Optional
 
 from pydantic import BaseModel, Field, SecretStr, field_validator
 
 
 class SecretsModel(BaseModel):
-    ssl_ca_pem: str | None = Field(
+    ssl_ca_pem: Optional[str] = Field(
         title="ssl.ca.pem",
         default=None,
         description="CA certificate in PEM format as a single line string with new line characters replaced with \\n.",
     )
-    ssl_certificate_pem: str | None = Field(
+    ssl_certificate_pem: Optional[str] = Field(
         title="ssl.certificate.pem",
         default=None,
         description="Client's certificate in PEM format as a single line string with new line characters replaced with \\n."
     )
-    ssl_key_pem: SecretStr | None = Field(
+    ssl_key_pem: Optional[SecretStr] = Field(
         title="ssl.key.pem",
         default=None,
         description="Client's private key in PEM format as a single line string with new line characters replaced with \\n.",
@@ -32,16 +32,16 @@ class InputModel(BaseModel):
     # https://docs.confluent.io/platform/current/installation/configuration/consumer-configs.html#security-protocol
     security_protocol: Literal["PLAINTEXT", "SSL"] = Field(
         title="security.protocol",
-        default="SSL",
+        default="PLAINTEXT",
         description="Protocol used to communicate with brokers.",
     )
 
     @field_validator("security_protocol", mode="before")
-    def validate_security_protocol(cls, v: str) -> str:
+    def validate_security_protocol(cls, value: str) -> str:
         allowed = {"PLAINTEXT", "SSL"}
-        normalized = v.upper()  # normalize to uppercase
+        normalized = value.upper()  # normalize to uppercase
         if normalized not in allowed:
-            raise ValueError(f"Invalid security protocol: {v}. Must be one of (case insensitive) {allowed}")
+            raise ValueError(f"Invalid security protocol: {value}. Must be one of (case insensitive) {allowed}")
         return normalized  # return normalized value
 
     # https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#ssl-endpoint-identification-algorithm
@@ -88,9 +88,16 @@ class InputModel(BaseModel):
 
 
 class OutputModel(BaseModel):
+    bootstrap_servers: List[str] = Field(
+        title="bootstrap.servers",
+        description="Kafka broker addresses",
+    )
+    security_protocol: Literal["PLAINTEXT", "SSL"] = Field(
+        title="security.protocol",
+        description="Protocol used to communicate with brokers.",
+    )
     topics: List[str] = Field(
         title="topics",
-        default=["topic.default1", "topic.default2"],
         description="Topic name",
     )
     num_produced_messages: int = Field(

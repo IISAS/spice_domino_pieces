@@ -20,7 +20,7 @@ def test_consumer_piece_real_kafka():
         ],
         "group_id": "test-consumer-group1",
         "client_id": "test-client1",
-        "security.protocol": "SSL",
+        "security_protocol": "SSL",
         "topics": [
             "topic.test1",
             "topic.test2",

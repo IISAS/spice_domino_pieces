@@ -111,5 +111,7 @@ class KafkaTopicCreatorPiece(BasePiece):
 
             # Return output
             return OutputModel(
+                bootstrap_servers=input_data.bootstrap_servers,
+                security_protocol=input_data.security_protocol,
                 topics=topics,
             )

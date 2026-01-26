@@ -4,10 +4,11 @@ import time
 from pathlib import Path
 
 from confluent_kafka import Producer
+from confluent_kafka.serialization import StringSerializer
 from domino.base_piece import BasePiece
 
 from .models import InputModel, OutputModel, SecretsModel
-from confluent_kafka.serialization import StringSerializer
+
 
 class KafkaProducerPiece(BasePiece):
 
@@ -90,8 +91,8 @@ class KafkaProducerPiece(BasePiece):
                     record = json.loads(msg_line)
                     keys = {"topic", "value"}
                     msg = {k: record[k] for k in keys}
-                except json.JSONDecodeError as e:
-                    num_invalid_json_message_lines+=1
+                except Exception as e:
+                    num_invalid_json_message_lines += 1
                     self.logger.warning(f"Failed to parse JSON message on line {line}: '{msg_line}'\n{e}")
                     continue
 
@@ -130,6 +131,8 @@ class KafkaProducerPiece(BasePiece):
 
         # Return output
         return OutputModel(
+            bootstrap_servers=input_data.bootstrap_servers,
+            security_protocol=input_data.security_protocol,
             num_produced_messages=num_delivered_messages,
             topics=list(topics),
         )
