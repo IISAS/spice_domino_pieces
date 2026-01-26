@@ -576,6 +576,10 @@
                 "security_protocol": {
                     "anyOf": [
                         {
+                            "enum": [
+                                "PLAINTEXT",
+                                "SSL"
+                            ],
                             "type": "string"
                         },
                         {
@@ -583,7 +587,7 @@
                         }
                     ],
                     "default": null,
-                    "description": "Security protocol",
+                    "description": "Protocol used to communicate with brokers.",
                     "title": "security.protocol"
                 },
                 "ssl_endpoint_identification_algorithm": {
@@ -655,6 +659,23 @@
         },
         "output_schema": {
             "properties": {
+                "bootstrap_servers": {
+                    "description": "Kafka broker addresses",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "bootstrap.servers",
+                    "type": "array"
+                },
+                "security_protocol": {
+                    "description": "Protocol used to communicate with brokers.",
+                    "enum": [
+                        "PLAINTEXT",
+                        "SSL"
+                    ],
+                    "title": "security.protocol",
+                    "type": "string"
+                },
                 "topics": {
                     "default": [],
                     "description": "Names of created topics",
@@ -665,6 +686,10 @@
                     "type": "array"
                 }
             },
+            "required": [
+                "bootstrap_servers",
+                "security_protocol"
+            ],
             "title": "OutputModel",
             "type": "object"
         },
@@ -919,6 +944,16 @@
                     "title": "bootstrap.servers",
                     "type": "array"
                 },
+                "security_protocol": {
+                    "default": "PLAINTEXT",
+                    "description": "Protocol used to communicate with brokers.",
+                    "enum": [
+                        "PLAINTEXT",
+                        "SSL"
+                    ],
+                    "title": "security.protocol",
+                    "type": "string"
+                },
                 "topics": {
                     "default": [
                         "topic.default1",
@@ -930,16 +965,6 @@
                     },
                     "title": "topics",
                     "type": "array"
-                },
-                "security_protocol": {
-                    "default": "SSL",
-                    "description": "Protocol used to communicate with brokers.",
-                    "enum": [
-                        "PLAINTEXT",
-                        "SSL"
-                    ],
-                    "title": "security.protocol",
-                    "type": "string"
                 },
                 "ssl_endpoint_identification_algorithm": {
                     "default": "none",
@@ -983,17 +1008,29 @@
         },
         "output_schema": {
             "properties": {
+                "bootstrap_servers": {
+                    "description": "Kafka broker addresses",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "bootstrap.servers",
+                    "type": "array"
+                },
+                "security_protocol": {
+                    "description": "Protocol used to communicate with brokers.",
+                    "enum": [
+                        "PLAINTEXT",
+                        "SSL"
+                    ],
+                    "title": "security.protocol",
+                    "type": "string"
+                },
                 "messages_file_path": {
-                    "default": "messages.jsonl",
                     "description": "File with consumed messages.",
                     "title": "messages.file.path",
                     "type": "string"
                 },
                 "topics": {
-                    "default": [
-                        "topic.default1",
-                        "topic.default2"
-                    ],
                     "description": "Topic name",
                     "items": {
                         "type": "string"
@@ -1002,18 +1039,24 @@
                     "type": "array"
                 },
                 "group_id": {
-                    "default": "test-consumer-group",
                     "description": "Kafka consumer group",
                     "title": "group.id",
                     "type": "string"
                 },
                 "msg_value_encoding": {
-                    "default": "utf-8",
                     "description": "Encoding of messages; i.e., 'utf-8', 'base64'",
                     "title": "msg.value.encoding",
                     "type": "string"
                 }
             },
+            "required": [
+                "bootstrap_servers",
+                "security_protocol",
+                "messages_file_path",
+                "topics",
+                "group_id",
+                "msg_value_encoding"
+            ],
             "title": "OutputModel",
             "type": "object"
         },
@@ -1658,7 +1701,7 @@
                     "type": "array"
                 },
                 "security_protocol": {
-                    "default": "SSL",
+                    "default": "PLAINTEXT",
                     "description": "Protocol used to communicate with brokers.",
                     "enum": [
                         "PLAINTEXT",
@@ -1702,11 +1745,24 @@
         },
         "output_schema": {
             "properties": {
-                "topics": {
-                    "default": [
-                        "topic.default1",
-                        "topic.default2"
+                "bootstrap_servers": {
+                    "description": "Kafka broker addresses",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "bootstrap.servers",
+                    "type": "array"
+                },
+                "security_protocol": {
+                    "description": "Protocol used to communicate with brokers.",
+                    "enum": [
+                        "PLAINTEXT",
+                        "SSL"
                     ],
+                    "title": "security.protocol",
+                    "type": "string"
+                },
+                "topics": {
                     "description": "Topic name",
                     "items": {
                         "type": "string"
@@ -1721,6 +1777,9 @@
                 }
             },
             "required": [
+                "bootstrap_servers",
+                "security_protocol",
+                "topics",
                 "num_produced_messages"
             ],
             "title": "OutputModel",
