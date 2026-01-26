@@ -101,7 +101,6 @@ class KafkaTopicCreatorPiece(BasePiece):
                     topics_created.append(topic)
                 except KafkaException as e:
                     if e.args[0].code() == KafkaError.TOPIC_ALREADY_EXISTS and input_data.exists_ok:
-                        self.logger.warning(f"Topic '{topic}' already exists, skipping topic creation.")
                         self.logger.warning(f"Topic '{topic}' already exists.")
                         topics_created.append(topic)
                         pass
