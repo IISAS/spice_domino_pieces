@@ -1,20 +1,20 @@
-from typing import Literal, List
+from typing import Literal, List, Optional
 
 from pydantic import BaseModel, Field, SecretStr, field_validator
 
 
 class SecretsModel(BaseModel):
-    ssl_ca_pem: str | None = Field(
+    ssl_ca_pem: Optional[str | None] = Field(
         title="ssl.ca.pem",
         default=None,
         description="CA certificate in PEM format as a single line string with new line characters replaced with \\n.",
     )
-    ssl_certificate_pem: str | None = Field(
+    ssl_certificate_pem: Optional[str | None] = Field(
         title="ssl.certificate.pem",
         default=None,
         description="Client's certificate in PEM format as a single line string with new line characters replaced with \\n."
     )
-    ssl_key_pem: SecretStr | None = Field(
+    ssl_key_pem: Optional[SecretStr | None] = Field(
         title="ssl.key.pem",
         default=None,
         description="Client's private key in PEM format as a single line string with new line characters replaced with \\n.",
@@ -30,9 +30,9 @@ class InputModel(BaseModel):
 
     # https://kafka.apache.org/41/configuration/consumer-configs/#consumerconfigs_security.protocol
     # https://docs.confluent.io/platform/current/installation/configuration/consumer-configs.html#security-protocol
-    security_protocol: Literal["PLAINTEXT", "SSL"] = Field(
+    security_protocol: Optional[Literal["PLAINTEXT", "SSL"]] = Field(
         title="security.protocol",
-        default="SSL",
+        default=None,
         description="Protocol used to communicate with brokers.",
     )
 
@@ -96,4 +96,14 @@ class OutputModel(BaseModel):
     num_produced_messages: int = Field(
         title="num.produced.messages",
         description="The number of produced messages."
+    )
+    bootstrap_servers: Optional[List[str] | None] = Field(
+        title="bootstrap.servers",
+        default=None,
+        description="Kafka broker addresses",
+    )
+    security_protocol: Optional[Literal["PLAINTEXT", "SSL"]] = Field(
+        title="security.protocol",
+        default=None,
+        description="Protocol used to communicate with brokers.",
     )

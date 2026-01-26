@@ -1,6 +1,9 @@
 import base64
+import json
+import os
 import tempfile
 import time
+from pathlib import Path
 
 from confluent_kafka import KafkaError
 from confluent_kafka.admin import AdminClient
@@ -46,9 +49,9 @@ class KafkaTopicCreatorPiece(BasePiece):
                 )
 
     def piece_function(
-        self,
-        input_data: InputModel,
-        secrets_data: SecretsModel
+            self,
+            input_data: InputModel,
+            secrets_data: SecretsModel
     ):
 
         self.logger.info("Creating topics...")
@@ -104,9 +107,20 @@ class KafkaTopicCreatorPiece(BasePiece):
                         self.logger.error(f"Could not create topic '{topic}': {e}")
                         raise e
 
+            duration = time.time() - start_time
+
+            result = {
+                "duration": duration,
+            }
+
+            result_file_path = os.path.join(Path(self.results_path), "result.json")
+            with open(result_file_path, 'w', encoding='utf-8') as f:
+                json.dump(result, f)
+
             # Set display result
             self.display_result = {
-                "duration": time.time() - start_time,
+                'file_type': 'json',
+                'file_path': result_file_path,
             }
 
             # Return output

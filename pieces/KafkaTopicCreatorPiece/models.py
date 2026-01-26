@@ -28,10 +28,12 @@ class InputModel(BaseModel):
         description="Kafka broker addresses",
     )
 
-    security_protocol: Optional[str | None] = Field(
+    # https://kafka.apache.org/41/configuration/consumer-configs/#consumerconfigs_security.protocol
+    # https://docs.confluent.io/platform/current/installation/configuration/consumer-configs.html#security-protocol
+    security_protocol: Optional[Literal["PLAINTEXT", "SSL"]] = Field(
         title="security.protocol",
         default=None,
-        description="Security protocol",
+        description="Protocol used to communicate with brokers.",
     )
 
     # https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#ssl-endpoint-identification-algorithm
@@ -108,4 +110,14 @@ class OutputModel(BaseModel):
         title="topics",
         default=[],
         description="Names of created topics",
+    )
+    bootstrap_servers: Optional[List[str] | None] = Field(
+        title="bootstrap.servers",
+        default=None,
+        description="Kafka broker addresses",
+    )
+    security_protocol: Optional[Literal["PLAINTEXT", "SSL"]] = Field(
+        title="security.protocol",
+        default=None,
+        description="Protocol used to communicate with brokers.",
     )

@@ -50,9 +50,9 @@ class InputModel(BaseModel):
 
     # https://kafka.apache.org/41/configuration/consumer-configs/#consumerconfigs_security.protocol
     # https://docs.confluent.io/platform/current/installation/configuration/consumer-configs.html#security-protocol
-    security_protocol: Literal["PLAINTEXT", "SSL"] = Field(
+    security_protocol: Optional[Literal["PLAINTEXT", "SSL"]] = Field(
         title="security.protocol",
-        default="SSL",
+        default=None,
         description="Protocol used to communicate with brokers.",
     )
 

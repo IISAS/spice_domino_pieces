@@ -90,7 +90,7 @@ class KafkaProducerPiece(BasePiece):
                     record = json.loads(msg_line)
                     keys = {"topic", "value"}
                     msg = {k: record[k] for k in keys}
-                except json.JSONDecodeError as e:
+                except Exception as e:
                     num_invalid_json_message_lines+=1
                     self.logger.warning(f"Failed to parse JSON message on line {line}: '{msg_line}'\n{e}")
                     continue
