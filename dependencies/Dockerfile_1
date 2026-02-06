@@ -1,7 +1,7 @@
 FROM ghcr.io/iisas/domino-base-piece:latest
 # Install specific requirements to run ShellExecute Piece
-RUN apt-get update
-RUN apt install net-tools
+# RUN apt-get update
+# RUN apt install net-tools
 # RUN apt install iputils-ping
 
 # Need to copy pieces source code
