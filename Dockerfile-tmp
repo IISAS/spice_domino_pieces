@@ -1,0 +1,11 @@
+FROM ghcr.io/iisas/domino-base-piece:tensorflow-gpu
+
+
+# Need to copy pieces source code
+COPY config.toml domino/pieces_repository/
+COPY pieces domino/pieces_repository/pieces
+COPY .domino domino/pieces_repository/.domino
+
+COPY dependencies/requirements_TimeSeriesClassification-gpu.txt domino/pieces_repository/dependencies/
+COPY dependencies/requirements_TimeSeriesClassification.txt domino/pieces_repository/dependencies/
+RUN pip install --no-cache-dir -r domino/pieces_repository/dependencies/requirements_TimeSeriesClassification-gpu.txt
