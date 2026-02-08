@@ -5,30 +5,31 @@
             "requirements_file": "requirements_0.txt"
         },
         "pieces": [
-            "AddAdvancedMeteoPiece",
+            "TrainTestSplitPiece",
+            "MinOfTheDayPiece",
+            "DayOfTheYearPiece",
+            "IsDayPiece",
+            "MeteoPiece",
+            "InferenceModelPiece",
+            "FVEPiece",
+            "RenameColumnPiece",
+            "KafkaConsumerPiece",
+            "ConvertTimePiece",
+            "SelectDatesPiece",
+            "InputDataSEPSPiece",
+            "RemoveUnusedMeteoPiece",
             "AddSunPiece",
             "CiselnikyPiece",
-            "ConvertTimePiece",
-            "DayOfTheYearPiece",
-            "FVEPiece",
-            "InferenceModelPiece",
-            "InputDataSEPSPiece",
-            "IsDayPiece",
-            "KafkaConsumerPiece",
-            "MeteoPiece",
-            "Meteo_FVEPiece",
-            "MinOfTheDayPiece",
-            "RemoveUnusedMeteoPiece",
-            "RenameColumnPiece",
-            "SelectDatesPiece",
+            "AddAdvancedMeteoPiece",
             "TrainRandomForestRegressorPiece",
-            "TrainTestSplitPiece"
+            "Meteo_FVEPiece"
         ],
         "secrets": [
             "KAFKA_CA_CERT_PEM",
             "KAFKA_KEY_PEM",
             "KAFKA_CERT_PEM"
-        ]
+        ],
+        "source_image": "ghcr.io/iisas/spice_domino_pieces:0.2.0-group0"
     },
     "group1": {
         "dependency": {
@@ -38,7 +39,8 @@
         "pieces": [
             "ExecuteShellPiece"
         ],
-        "secrets": []
+        "secrets": [],
+        "source_image": "ghcr.io/iisas/spice_domino_pieces:0.2.0-group1"
     },
     "group2": {
         "dependency": {
@@ -48,6 +50,7 @@
         "pieces": [
             "TimeSeriesClassificationTrainPiece"
         ],
-        "secrets": []
+        "secrets": [],
+        "source_image": "ghcr.io/iisas/spice_domino_pieces:0.2.0-group2"
     }
 }
