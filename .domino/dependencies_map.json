@@ -5,24 +5,24 @@
             "requirements_file": "requirements_0.txt"
         },
         "pieces": [
-            "TrainTestSplitPiece",
-            "MinOfTheDayPiece",
-            "DayOfTheYearPiece",
-            "IsDayPiece",
-            "MeteoPiece",
-            "InferenceModelPiece",
             "FVEPiece",
+            "DayOfTheYearPiece",
+            "CiselnikyPiece",
+            "AddSunPiece",
+            "Meteo_FVEPiece",
+            "IsDayPiece",
+            "AddAdvancedMeteoPiece",
+            "InferenceModelPiece",
+            "MeteoPiece",
+            "ConvertTimePiece",
+            "TrainTestSplitPiece",
+            "SelectDatesPiece",
+            "TrainRandomForestRegressorPiece",
+            "InputDataSEPSPiece",
+            "MinOfTheDayPiece",
             "RenameColumnPiece",
             "KafkaConsumerPiece",
-            "ConvertTimePiece",
-            "SelectDatesPiece",
-            "InputDataSEPSPiece",
-            "RemoveUnusedMeteoPiece",
-            "AddSunPiece",
-            "CiselnikyPiece",
-            "AddAdvancedMeteoPiece",
-            "TrainRandomForestRegressorPiece",
-            "Meteo_FVEPiece"
+            "RemoveUnusedMeteoPiece"
         ],
         "secrets": [
             "KAFKA_KEY_PEM",
@@ -33,22 +33,22 @@
     },
     "group1": {
         "dependency": {
-            "dockerfile": "Dockerfile_1",
-            "requirements_file": null
+            "dockerfile": "Dockerfile.tensorflow-gpu",
+            "requirements_file": "requirements_TimeSeriesClassification-gpu.txt"
         },
         "pieces": [
-            "ExecuteShellPiece"
+            "TimeSeriesClassificationTrainPiece"
         ],
         "secrets": [],
         "source_image": "ghcr.io/iisas/spice_domino_pieces:0.2.0-group1"
     },
     "group2": {
         "dependency": {
-            "dockerfile": "Dockerfile.tensorflow-gpu",
-            "requirements_file": "requirements_TimeSeriesClassification-gpu.txt"
+            "dockerfile": "Dockerfile_1",
+            "requirements_file": null
         },
         "pieces": [
-            "TimeSeriesClassificationTrainPiece"
+            "ExecuteShellPiece"
         ],
         "secrets": [],
         "source_image": "ghcr.io/iisas/spice_domino_pieces:0.2.0-group2"
