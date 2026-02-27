@@ -11,7 +11,7 @@ class ConvertTimePiece(BasePiece):
         df_sel_data = pd.read_csv(input_data.meteo_fve_input_file)
         df_sel_data['DateTime'] = pd.to_datetime(df_sel_data['DateTime'], format="%d.%m.%Y %H:%M")
 
-        message = f"Meteo and FVE data DateTime column changed successfully"
+        message = "Meteo and FVE data DateTime column changed successfully"
         file_path = str(Path(self.results_path) / "converted dataset.csv")
         df_sel_data.to_csv(file_path, index=False)
 

@@ -38,7 +38,7 @@ class AddAdvancedMeteoPiece(BasePiece):
         df_sel_data = pd.read_csv(input_data.meteo_fve_input_file)
         df_sel_data[["Near1_Adv_vlhkost", "Near2_Adv_vlhkost", "Near3_Adv_vlhkost", "Near4_Adv_vlhkost", "Near1_Adv_teplota", "Near2_Adv_teplota", "Near3_Adv_teplota", "Near4_Adv_teplota", "Near1_Adv_ziarenie", "Near3_Adv_ziarenie", "Near3_Adv_ziarenie", "Near4_Adv_ziarenie"]] = df_sel_data.apply(add_advanced_meteo_attr, axis='columns', result_type='expand')
 
-        message = f"Meteo and FVE data advanced meteo columns added successfully"
+        message = "Meteo and FVE data advanced meteo columns added successfully"
         file_path = str(Path(self.results_path) / "FVE.csv")
         df_sel_data.to_csv(file_path, index=False)
 

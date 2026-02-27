@@ -13,7 +13,7 @@ class Meteo_FVEPiece(BasePiece):
 
         df_sel_data = pd.merge(df_meteo, df_fve, on='DateTime', how='inner')
 
-        message = f"SQl joined Meteo and FVE executed successfully"
+        message = "SQl joined Meteo and FVE executed successfully"
         file_path = str(Path(self.results_path) / "FVE_Data_joined.csv")
         df_sel_data.to_csv(file_path, index=False)
 

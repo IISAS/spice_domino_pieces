@@ -16,7 +16,7 @@ class SelectDatesPiece(BasePiece):
 
         df_sel_data = df_data.loc[mask]
 
-        message = f"Data successfully filtered by start and end dates"
+        message = "Data successfully filtered by start and end dates"
         file_path = str(Path(self.results_path) / "data_filtered.csv")
         df_sel_data.to_csv(file_path, index=False)
 

@@ -73,7 +73,7 @@ class InferenceModelPiece(BasePiece):
         #     'file_path': results_path
         # }
 
-        message = f"Inference finished successfully"
+        message = "Inference finished successfully"
 
         # Return output
         return OutputModel(

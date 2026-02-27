@@ -3,6 +3,7 @@ from .models import InputModel, OutputModel
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from pathlib import Path
+#from domino.logger import get_configured_logger
 
 
 class TrainTestSplitPiece(BasePiece):
@@ -23,6 +24,7 @@ class TrainTestSplitPiece(BasePiece):
         Split the data into training and test sets.
         """
         df = self.read_data_from_file(path=input_data.data_path)
+        self.logger.info("Data loaded successfully")
 
         if input_data.target_column not in df.columns:
             raise ValueError("Target column not found in data with name '" + input_data.target_column + "'." +
@@ -39,7 +41,7 @@ class TrainTestSplitPiece(BasePiece):
         df_train.to_csv(train_data_path, index=False)
         df_test.to_csv(test_data_path, index=False)
 
-        message = f"Data set split to train and test data successfully"
+        message = "Data set split to train and test data successfully"
 
         # Return output
         return OutputModel(

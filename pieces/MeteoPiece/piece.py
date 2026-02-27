@@ -20,7 +20,7 @@ class MeteoPiece(BasePiece):
 
         sel_meteo_data.columns = ['DateTime', 'Near1_ziarenie', 'Near2_ziarenie', 'Near3_ziarenie', 'Near4_ziarenie', 'Near1_teplota', 'Near2_teplota', 'Near3_teplota', 'Near4_teplota', 'Near1_vlhkost', 'Near2_vlhkost', 'Near3_vlhkost', 'Near4_vlhkost',]
 
-        message = f"Meteo filtered for Ciselniky executed successfully"
+        message = "Meteo filtered for Ciselniky executed successfully"
         file_path = str(Path(self.results_path) / "Meteo_Data_filtered.csv")
         sel_meteo_data.to_csv(file_path, index=False)
 

@@ -11,7 +11,7 @@ class FVEPiece(BasePiece):
         df_fve = pd.read_csv(input_data.fve_input_file)
         df_sel_fve_data = df_fve.filter(['DateTime', input_data.location])
 
-        message = f"FVE filtered for location: {input_data.location} executed successfully"
+        message = "FVE filtered for location: {input_data.location} executed successfully"
         file_path = str(Path(self.results_path) / "FVE_Data_filtered.csv")
         df_sel_fve_data.to_csv(file_path, index=False)
 

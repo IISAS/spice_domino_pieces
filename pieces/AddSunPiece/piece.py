@@ -26,7 +26,7 @@ class AddSunPiece(BasePiece):
         df_sel_data = pd.read_csv(input_data.meteo_fve_input_file)
         df_sel_data['isDayProb'] = df_sel_data.apply(add_sun_attr, axis=1)
 
-        message = f"Meteo and FVE data is day probability column added successfully"
+        message = "Meteo and FVE data is day probability column added successfully"
         file_path = str(Path(self.results_path) / "FVE.csv")
         df_sel_data.to_csv(file_path, index=False)
 

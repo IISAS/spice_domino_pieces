@@ -72,7 +72,7 @@ class TrainRandomForestRegressorPiece(BasePiece):
         with open(model_path, "wb") as f:
             pk.dump(regressor, f)
 
-        message = f"Regressor mode successfully"
+        message = "Regressor mode successfully"
 
         # Return output
         return OutputModel(
